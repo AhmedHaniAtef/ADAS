@@ -1,0 +1,5 @@
+../ECU_Layer/src/motor.c:71:14:motor_init	24	static
+../ECU_Layer/src/motor.c:95:14:motor_move_forward	24	static
+../ECU_Layer/src/motor.c:116:14:motor_move_backward	24	static
+../ECU_Layer/src/motor.c:136:14:motor_stop	24	static
+../ECU_Layer/src/motor.c:158:14:motor_change_speed	32	static
