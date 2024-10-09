@@ -94,6 +94,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
 	for(uint8_t duty = 0; duty <= 100; duty+=5)

@@ -40,28 +40,26 @@
 /***********************************************************************************************************************
 *                                                     GLOBAL OBJECTS                                                   *
 ***********************************************************************************************************************/
-// motor_t MotorFrontLeft =
-// {
+motor_t MotorFrontLeft =
+{
+	.SelectedChannel = TIM_CHANNEL_1,
+	.SelectedTimer = &htim4,
+};
 
-// };
+motor_t MotorFrontRight =
+{
 
-// motor_t MotorFrontLeft =
-// {
+};
 
-// };
+motor_t MotorRearLeft =
+{
 
-// motor_t MotorFrontLeft =
-// {
+};
 
-// };
+motor_t MotorRearRight =
+{
 
-// motor_t MotorFrontLeft =
-// {
-
-// };
-
-
-
+};
 
 /***********************************************************************************************************************
 *                                                     STATIC OBJECTS                                                   *

@@ -101,6 +101,7 @@ ecu_status_t motor_move_forward(motor_t *p_Motor , float_t p_Speed)
     }
     else
     {
+    	l_EcuStatus = motor_change_speed(p_Motor , p_Speed);
         HAL_GPIO_WritePin(p_Motor->GpioxMotor[0] , p_Motor->GpioPinMotor[0] , GPIO_PIN_SET);
         HAL_GPIO_WritePin(p_Motor->GpioxMotor[1] , p_Motor->GpioPinMotor[1] , GPIO_PIN_RESET);
     }
@@ -122,6 +123,7 @@ ecu_status_t motor_move_backward(motor_t *p_Motor , float_t p_Speed)
     }
     else
     {
+    	l_EcuStatus = motor_change_speed(p_Motor , p_Speed);
         HAL_GPIO_WritePin(p_Motor->GpioxMotor[0] , p_Motor->GpioPinMotor[0] , GPIO_PIN_RESET);
         HAL_GPIO_WritePin(p_Motor->GpioxMotor[1] , p_Motor->GpioPinMotor[1] , GPIO_PIN_SET);
     }
@@ -142,6 +144,7 @@ ecu_status_t motor_stop(motor_t *p_Motor)
     }
     else
     {
+    	l_EcuStatus = motor_change_speed(p_Motor , ZERO);
         HAL_GPIO_WritePin(p_Motor->GpioxMotor[0] , p_Motor->GpioPinMotor[0] , GPIO_PIN_RESET);
         HAL_GPIO_WritePin(p_Motor->GpioxMotor[1] , p_Motor->GpioPinMotor[1] , GPIO_PIN_RESET);
     }

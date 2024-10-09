@@ -32,11 +32,11 @@
 ***********************************************************************************************************************/
 extern motor_t MotorFrontLeft;
 
-extern motor_t MotorFrontLeft;
+extern motor_t MotorFrontRight;
 
-extern motor_t MotorFrontLeft;
+extern motor_t MotorRearLeft;
 
-extern motor_t MotorFrontLeft;
+extern motor_t MotorRearRight;
 
 
 

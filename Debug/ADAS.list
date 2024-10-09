@@ -39,13 +39,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_line   0000ae19  00000000  00000000  0002414b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008717a  00000000  00000000  0002ef64  2**0
+ 18 .debug_str    00087167  00000000  00000000  0002ef64  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000b60de  2**0
+ 19 .comment      00000043  00000000  00000000  000b60cb  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00002858  00000000  00000000  000b6124  2**2
+ 20 .debug_frame  00002858  00000000  00000000  000b6110  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000005c  00000000  00000000  000b897c  2**0
+ 21 .debug_line_str 00000049  00000000  00000000  000b8968  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1107,9 +1107,9 @@ int main(void)
  8000d6e:	2100      	movs	r1, #0
  8000d70:	481b      	ldr	r0, [pc, #108]	@ (8000de0 <main+0x88>)
  8000d72:	f001 f967 	bl	8002044 <HAL_TIM_PWM_Start>
-
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
 	for(uint8_t duty = 0; duty <= 100; duty+=5)
