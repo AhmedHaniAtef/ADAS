@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../ECU_Layer/inc/ecu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,15 +94,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+  ecu_status_t l_EcuStatus = ECU_OK;
+  l_EcuStatus |= motor_init(&MotorFrontLeft);
+  float_t counter = 0 ;
   while (1)
   {
-	for(uint8_t duty = 0; duty <= 100; duty+=5)
-	{
-		uint32_t duty_cycle = (uint32_t)((float)(4200.0 * duty / 100.0));
-		__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, duty_cycle);
-		HAL_Delay(100);
-	}
+	  if (counter == 100)
+		  counter = 0 ;
+	  l_EcuStatus |= motor_move_forward(&MotorFrontLeft , 100);
+	  counter += 10;
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

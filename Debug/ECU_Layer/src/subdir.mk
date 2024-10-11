@@ -6,15 +6,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../ECU_Layer/src/ecu.c \
-../ECU_Layer/src/motor.c 
+../ECU_Layer/src/motor.c \
+../ECU_Layer/src/robot.c 
 
 OBJS += \
 ./ECU_Layer/src/ecu.o \
-./ECU_Layer/src/motor.o 
+./ECU_Layer/src/motor.o \
+./ECU_Layer/src/robot.o 
 
 C_DEPS += \
 ./ECU_Layer/src/ecu.d \
-./ECU_Layer/src/motor.d 
+./ECU_Layer/src/motor.d \
+./ECU_Layer/src/robot.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -24,7 +27,7 @@ ECU_Layer/src/%.o ECU_Layer/src/%.su ECU_Layer/src/%.cyclo: ../ECU_Layer/src/%.c
 clean: clean-ECU_Layer-2f-src
 
 clean-ECU_Layer-2f-src:
-	-$(RM) ./ECU_Layer/src/ecu.cyclo ./ECU_Layer/src/ecu.d ./ECU_Layer/src/ecu.o ./ECU_Layer/src/ecu.su ./ECU_Layer/src/motor.cyclo ./ECU_Layer/src/motor.d ./ECU_Layer/src/motor.o ./ECU_Layer/src/motor.su
+	-$(RM) ./ECU_Layer/src/ecu.cyclo ./ECU_Layer/src/ecu.d ./ECU_Layer/src/ecu.o ./ECU_Layer/src/ecu.su ./ECU_Layer/src/motor.cyclo ./ECU_Layer/src/motor.d ./ECU_Layer/src/motor.o ./ECU_Layer/src/motor.su ./ECU_Layer/src/robot.cyclo ./ECU_Layer/src/robot.d ./ECU_Layer/src/robot.o ./ECU_Layer/src/robot.su
 
 .PHONY: clean-ECU_Layer-2f-src
 

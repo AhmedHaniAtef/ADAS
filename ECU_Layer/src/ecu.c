@@ -44,6 +44,10 @@ motor_t MotorFrontLeft =
 {
 	.SelectedChannel = TIM_CHANNEL_1,
 	.SelectedTimer = &htim4,
+	.GpioxMotor[0] = IN1_GPIO_Port,
+	.GpioxMotor[1] = IN2_GPIO_Port,
+	.GpioPinMotor[0] = IN1_Pin,
+	.GpioPinMotor[1] = IN2_Pin,
 };
 
 motor_t MotorFrontRight =

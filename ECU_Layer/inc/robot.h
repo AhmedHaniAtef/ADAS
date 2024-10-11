@@ -1,26 +1,24 @@
 /**
- * @file    ecu.h
- * @author  Ahmed Hani
- * @brief   contains all configuation of the ecu layer
- * @date    2024-10-07
- * @note    nan
+ * @file    robot.h
+ * @author  Ahmed Hani & Youssef
+ * @brief
+ * @date    2024-10-11
+ * @note    N
  */
+
+
+#ifndef ROBOT_ROBOT_H_
+#define ROBOT_ROBOT_H_
 
 /***********************************************************************************************************************
 *                                                      INCLUDES                                                        *
 ***********************************************************************************************************************/
-#include "morot.h"
-#include "robot.h"
-
+#include "../inc/morot.h"
 
 
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
-#define TIMER_AUTO_RELOAD_VAL   (4200)
-#define ROBOT_LENGHT_X    (10)
-#define ROBOT_LENGHT_Y    (10)
-#define RADIUS_WHEEL      (0.03)
 
 
 
@@ -32,35 +30,51 @@
 
 
 /***********************************************************************************************************************
-*                                                   EXTERN OBJECTS                                                     *
-***********************************************************************************************************************/
-extern motor_t MotorFrontLeft;
-
-extern motor_t MotorFrontRight;
-
-extern motor_t MotorRearLeft;
-
-extern motor_t MotorRearRight;
-
-
-
-/***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *
 ***********************************************************************************************************************/
 
+typedef enum
+{
+	FORWARD = 0,
+	BACWARD = 1
+}direction_t;
 
+typedef struct
+{
+	motor_t Motor;
+	float_t Speed;
+	direction_t direction;
+}wheel_t;
 
+typedef struct
+{
+	wheel_t FL;
+	wheel_t FR;
+	wheel_t RL;
+	wheel_t RR;
+}robot_t;
 
 /***********************************************************************************************************************
 *                                                  FUNCTION DEFINITION                                                 *
 ***********************************************************************************************************************/
 
-
+/**
+  *
+  * @brief This function move the robot depending on angle and speed
+  *
+  * @param p_Angle angle of robot of motor
+  * @param p_Speed speed of motor
+  * @return ecu_status_t status of the operation
+ */
+ecu_status_t robot_move(robot_t *p_Robot , uint16_t p_Angle , float_t p_Speed);
 
 
 /***********************************************************************************************************************
 * AUTHOR                |* NOTE                                                                                        *
 ************************************************************************************************************************
-*                       |                                                                                              * 
-*                       |                                                                                              * 
+*                       |                                                                                              *
+*                       |                                                                                              *
 ***********************************************************************************************************************/
+
+
+#endif /* ROBOT_ROBOT_H_ */
