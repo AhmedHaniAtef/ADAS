@@ -3,7 +3,7 @@
  * @author  Ahmed Hani & Youssef 
  * @brief    
  * @date    2024-10-07
- * @note    Not completed - MotorCaliprate
+ * @note    could be modified if we need to add max speed for each motor - MotorCaliprate
  */
 
 
@@ -102,6 +102,13 @@ ecu_status_t motor_stop(motor_t *p_Motor);
   * @return ecu_status_t status of the operation
  */
 ecu_status_t motor_change_speed(motor_t *p_Motor , float_t p_Speed);
+
+/**
+ * @brief this function used to get the maximum speed of the motor and store it in flash memory 
+ * @param p_MaxSpeed pointer to the maximum speed of the motors
+ * @return ecu_status_t status of the operation
+ */
+ecu_status_t motor_calibrate(float_t *p_MaxSpeed);
 
 
 /***********************************************************************************************************************

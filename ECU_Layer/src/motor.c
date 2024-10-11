@@ -16,7 +16,9 @@
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
-#define DEFUALT_SPEED (100.0)
+
+#define DEFUALT_SPEED           (100.0)
+#define ADD_LAST_MAX_CAL_SPEED  (0x0803FFF8U)
 
 
 
@@ -38,7 +40,9 @@
 /***********************************************************************************************************************
 *                                                     GLOBAL OBJECTS                                                   *
 ***********************************************************************************************************************/
-float_t MaxClibratedSpeed = DEFUALT_SPEED;          // defualt speed before calibration
+
+/* defualt speed before calibration */
+float_t MaxClibratedSpeed = DEFUALT_SPEED;
 
 
 
@@ -82,6 +86,9 @@ ecu_status_t motor_init(motor_t *p_Motor)
         /* start generating pwm with zero duty cycle */
         __HAL_TIM_SetCompare(p_Motor->SelectedTimer, p_Motor->SelectedChannel, ZERO);
         HAL_TIM_PWM_Start(p_Motor->SelectedTimer, p_Motor->SelectedChannel);
+
+        /* restore the max speed of motor from flash memory */
+        MaxClibratedSpeed = *((volatile float_t *)(ADD_LAST_MAX_CAL_SPEED));
     }
     return l_EcuStatus;
 }
@@ -177,7 +184,42 @@ ecu_status_t motor_change_speed(motor_t *p_Motor , float_t p_Speed)
     return l_EcuStatus;
 }
 
+/**
+ * @brief this function used to get the maximum speed of the motor and store it in flash memory 
+ * @param p_MaxSpeed pointer to the maximum speed of the motors
+ * @return ecu_status_t status of the operation
+ */
+ecu_status_t motor_calibrate(float_t *p_MaxSpeed)
+{
+    ecu_status_t l_EcuStatus = ECU_OK;
+    HAL_StatusTypeDef l_HalStatus = HAL_OK;
 
+    /* perform the calibration */
+    MaxClibratedSpeed = *p_MaxSpeed;
+
+    /* unlock the flash memory */
+    l_HalStatus = HAL_FLASH_Unlock();
+    if (HAL_OK != l_HalStatus)
+    {
+        l_EcuStatus = ECU_ERROR;
+    }
+    else
+    {   
+        /* store the max speed in flash */
+        l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_LAST_MAX_CAL_SPEED, MaxClibratedSpeed);
+
+        /* Lock the Flash memory */
+        do
+        {
+            l_HalStatus |= HAL_FLASH_Lock();
+        } while (HAL_OK != l_HalStatus);
+
+        /* check for any error happened */
+        if (HAL_OK != l_HalStatus)
+            l_EcuStatus = ECU_ERROR;
+    }
+    return l_EcuStatus;
+}
 
 
 /***********************************************************************************************************************
