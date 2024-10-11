@@ -1,5 +1,5 @@
 ECU_Layer/src/robot.o: ../ECU_Layer/src/robot.c \
- ../ECU_Layer/src/../inc/ecu.h ../ECU_Layer/src/../inc/morot.h \
+ ../ECU_Layer/src/../inc/ecu.h ../ECU_Layer/src/../inc/motor.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -28,11 +28,11 @@ ECU_Layer/src/robot.o: ../ECU_Layer/src/robot.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
- F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h \
- ../ECU_Layer/src/../inc/robot.h ../ECU_Layer/src/../inc/../inc/morot.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h \
+ ../ECU_Layer/src/../inc/robot.h ../ECU_Layer/src/../inc/../inc/motor.h \
  ../ECU_Layer/src/../inc/robot.h
 ../ECU_Layer/src/../inc/ecu.h:
-../ECU_Layer/src/../inc/morot.h:
+../ECU_Layer/src/../inc/motor.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -61,7 +61,7 @@ ECU_Layer/src/robot.o: ../ECU_Layer/src/robot.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
-F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../ECU_Layer/src/../inc/robot.h:
-../ECU_Layer/src/../inc/../inc/morot.h:
+../ECU_Layer/src/../inc/../inc/motor.h:
 ../ECU_Layer/src/../inc/robot.h:

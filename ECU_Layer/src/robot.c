@@ -117,42 +117,42 @@ ecu_status_t robot_move(robot_t *p_Robot , uint16_t p_Angle , float_t p_Speed)
     	if(l_AngularVelocityFrontLeft < 0)
     	{
     		p_Robot->FL.direction = BACWARD;
-    		l_EcuStatus = motor_move_backward(p_Robot->FL , p_Robot->FL.Speed);
+    		l_EcuStatus = motor_move_backward(&p_Robot->FL.Motor , p_Robot->FL.Speed);
     	}
     	else
     	{
     		p_Robot->FL.direction = FORWARD;
-    		l_EcuStatus = motor_move_forward(p_Robot->FL , p_Robot->FL.Speed);
+    		l_EcuStatus = motor_move_forward(&p_Robot->FL.Motor , p_Robot->FL.Speed);
     	}
     	if(l_AngularVelocityFrontRight < 0)
     	{
     	    p_Robot->FR.direction = BACWARD;
-    	    l_EcuStatus = motor_move_backward(p_Robot->FR , p_Robot->FR.Speed);
+    	    l_EcuStatus = motor_move_backward(&p_Robot->FR.Motor , p_Robot->FR.Speed);
     	}
     	else
     	{
     	    p_Robot->FR.direction = FORWARD;
-    	    l_EcuStatus = motor_move_forward(p_Robot->FR , p_Robot->FR.Speed);
+    	    l_EcuStatus = motor_move_forward(&p_Robot->FR.Motor , p_Robot->FR.Speed);
     	}
     	if(l_AngularVelocityRearLeft < 0)
     	{
     	    p_Robot->RL.direction = BACWARD;
-    	    l_EcuStatus = motor_move_backward(p_Robot->RL , p_Robot->RL.Speed);
+    	    l_EcuStatus = motor_move_backward(&p_Robot->RL.Motor , p_Robot->RL.Speed);
     	}
     	else
     	{
     	    p_Robot->RL.direction = FORWARD;
-    	    l_EcuStatus = motor_move_forward(p_Robot->RL , p_Robot->RL.Speed);
+    	    l_EcuStatus = motor_move_forward(&p_Robot->RL.Motor , p_Robot->RL.Speed);
     	}
     	if(l_AngularVelocityRearRight < 0)
     	{
     	    p_Robot->RR.direction = BACWARD;
-    	    l_EcuStatus = motor_move_backward(p_Robot->RR , p_Robot->RR.Speed);
+    	    l_EcuStatus = motor_move_backward(&p_Robot->RR.Motor , p_Robot->RR.Speed);
     	}
     	else
     	{
     	    p_Robot->RR.direction = FORWARD;
-    	    l_EcuStatus = motor_move_forward(p_Robot->RR , p_Robot->RR.Speed);
+    	    l_EcuStatus = motor_move_forward(&p_Robot->RR.Motor , p_Robot->RR.Speed);
     	}
     }
 

@@ -7,7 +7,8 @@
                 "${workspaceFolder}/Core/Inc",
                 "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
                 "${workspaceFolder}/Drivers/CMSIS/Include",
-                "${workspaceFolder}/ECU_Layer"
+                "${workspaceFolder}/ECU_Layer",
+                "${workspaceFolder}/ECU_Layer/inc"
             ],
             "defines": [
                 "_DEBUG",

@@ -28,11 +28,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/gpio.h \
  ../Core/Src/../../ECU_Layer/inc/ecu.h \
- ../Core/Src/../../ECU_Layer/inc/morot.h \
+ ../Core/Src/../../ECU_Layer/inc/motor.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
- F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h \
  ../Core/Src/../../ECU_Layer/inc/robot.h \
- ../Core/Src/../../ECU_Layer/inc/../inc/morot.h
+ ../Core/Src/../../ECU_Layer/inc/../inc/motor.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -65,8 +65,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/main.h:
 ../Core/Inc/gpio.h:
 ../Core/Src/../../ECU_Layer/inc/ecu.h:
-../Core/Src/../../ECU_Layer/inc/morot.h:
+../Core/Src/../../ECU_Layer/inc/motor.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
-F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../Core/Src/../../ECU_Layer/inc/robot.h:
-../Core/Src/../../ECU_Layer/inc/../inc/morot.h:
+../Core/Src/../../ECU_Layer/inc/../inc/motor.h:
