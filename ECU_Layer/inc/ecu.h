@@ -20,11 +20,30 @@
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
-#define TIMER_AUTO_RELOAD_VAL   (4200)
-#define ROBOT_LENGHT_X    (10)
-#define ROBOT_LENGHT_Y    (10)
-#define RADIUS_WHEEL      (0.03)
 
+#define LAST_ADD_USED_FLASH     (0x0803FFF8U)
+#define ADD_LAST_MAX_CAL_SPEED  (LAST_ADD_USED_FLASH)
+#define ADD_Kp_VALUE            (LAST_ADD_USED_FLASH - 4)
+#define ADD_Ki_VALUE            (LAST_ADD_USED_FLASH - 8)
+#define ADD_Kd_VALUE            (LAST_ADD_USED_FLASH - 12)
+
+#define TIMER_AUTO_RELOAD_VAL   (4200)
+#define ROBOT_LENGHT_X          (10)
+#define ROBOT_LENGHT_Y          (10)
+#define RADIUS_WHEEL            (0.03)
+
+#define DEFUALT_Kp_VALUE        (0)
+#define DEFUALT_Ki_VALUE        (0)
+#define DEFUALT_Kd_VALUE        (0)
+
+#define DEFUALT_MOTOR_MAX_SPEED (100)
+
+#define ROBOT_CALIBRATE_UART    (0)
+#define ROBOT_CALIBRATE_SPI     (1)
+#define ROBOT_CALIBRATE_MANUAL  (2)
+#define ROBOT_CALIBRATE_I2C     (3)
+
+#define ROBOT_CALIBRATE_TYPE (ROBOT_CALIBRATE_MANUAL)
 
 
 /***********************************************************************************************************************
@@ -37,6 +56,7 @@
 /***********************************************************************************************************************
 *                                                   EXTERN OBJECTS                                                     *
 ***********************************************************************************************************************/
+
 extern motor_t MotorFrontLeft;
 
 extern motor_t MotorFrontRight;
