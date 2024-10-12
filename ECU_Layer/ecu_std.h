@@ -28,7 +28,10 @@
 /***********************************************************************************************************************
 *                                                   MACRO FUNCTIONS                                                    *
 ***********************************************************************************************************************/
-#define RPS_TO_RPM(number)    (number * (60 / (2 * M_PI)))  // radion per second to radion per minute
+
+/* radian per second to revolution per minute */
+#define RPS_TO_RPM(number)    (number * (60 / (2 * M_PI))) 
+/* revolution per minute to radian per second*/
 #define RPM_TO_RPS(number)    (number * ((2 * M_PI) / 60))
 
 
