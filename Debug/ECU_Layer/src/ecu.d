@@ -29,7 +29,7 @@ ECU_Layer/src/ecu.o: ../ECU_Layer/src/ecu.c ../ECU_Layer/src/../inc/ecu.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h \
- ../ECU_Layer/src/../inc/robot.h ../ECU_Layer/src/../inc/../inc/motor.h \
+ ../ECU_Layer/src/../inc/robot.h ../ECU_Layer/src/../inc/../ecu_std.h \
  ../ECU_Layer/src/../../Core/Inc/gpio.h \
  ../ECU_Layer/src/../../Core/Inc/main.h \
  ../ECU_Layer/src/../../Core/Inc/tim.h
@@ -65,7 +65,7 @@ ECU_Layer/src/ecu.o: ../ECU_Layer/src/ecu.c ../ECU_Layer/src/../inc/ecu.h \
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../ECU_Layer/src/../inc/robot.h:
-../ECU_Layer/src/../inc/../inc/motor.h:
+../ECU_Layer/src/../inc/../ecu_std.h:
 ../ECU_Layer/src/../../Core/Inc/gpio.h:
 ../ECU_Layer/src/../../Core/Inc/main.h:
 ../ECU_Layer/src/../../Core/Inc/tim.h:
