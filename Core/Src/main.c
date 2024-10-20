@@ -88,22 +88,39 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM4_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+  //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   ecu_status_t l_EcuStatus = ECU_OK;
-  l_EcuStatus |= motor_init(&MotorFrontLeft);
+  l_EcuStatus |= robot_init(&Robot);
+  l_EcuStatus |= motor_init(&Robot.FR.Motor);
   float_t counter = 0 ;
   while (1)
   {
-	  if (counter == 100)
-		  counter = 0 ;
-	  l_EcuStatus |= motor_move_forward(&MotorFrontLeft , 100);
-	  counter += 10;
+
+	  l_EcuStatus |= robot_move(&Robot , 0 , 30);
+	  HAL_Delay(3000);
+	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
 	  HAL_Delay(1000);
+	  l_EcuStatus |= robot_move(&Robot , 90 , 30);
+	  HAL_Delay(3000);
+	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
+	  HAL_Delay(1000);
+	  l_EcuStatus |= robot_move(&Robot , 180 , 30);
+	  HAL_Delay(3000);
+	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
+	  HAL_Delay(1000);
+	  l_EcuStatus |= robot_move(&Robot , 270 , 30);
+	  HAL_Delay(3000);
+	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
+	  HAL_Delay(1000);
+
+
+	  //l_EcuStatus |= motor_move_forward(&Robot.FR.Motor, 100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -132,8 +149,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 168;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 84;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -154,6 +171,10 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
+  /** Enables the Clock Security System
+  */
+  HAL_RCC_EnableCSS();
 }
 
 /* USER CODE BEGIN 4 */

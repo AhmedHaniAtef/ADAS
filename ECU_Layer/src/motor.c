@@ -87,7 +87,7 @@ ecu_status_t motor_init(motor_t *p_Motor)
         HAL_TIM_PWM_Start(p_Motor->SelectedTimer, p_Motor->SelectedChannel);
 
         /* restore the max speed of motor from flash memory */
-        MaxClibratedSpeed = *((volatile float_t *)(ADD_LAST_MAX_CAL_SPEED));
+        //MaxClibratedSpeed = *((volatile float_t *)(ADD_LAST_MAX_CAL_SPEED));
     }
     return l_EcuStatus;
 }
