@@ -16,7 +16,7 @@ this is for robot strafe and rotation
 										  |0 /
 										 _|^/
                       					| |/|
-						 Y-ve ----------|-+-|---------- Y+ve
+						 Y-VE ----------|-+-|---------- Y+VE
 										|_|_|
 										  |
 										  |

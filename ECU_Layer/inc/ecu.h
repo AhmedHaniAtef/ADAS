@@ -65,6 +65,8 @@ extern motor_t MotorRearLeft;
 
 extern motor_t MotorRearRight;
 
+extern robot_t Robot;
+
 
 
 /***********************************************************************************************************************
