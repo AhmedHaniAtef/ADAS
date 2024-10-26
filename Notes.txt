@@ -1,0 +1,2 @@
+- It is recommended to utilize Timer 2 and Timer 5 (32-bit timers) along with their respective channels, as 16-bit timers may not yet provide sufficient handling for continuous flow in this application.
+- Assigning appropriate interrupt priorities to timers used in this driver is advised for optimal performance and accuracy.

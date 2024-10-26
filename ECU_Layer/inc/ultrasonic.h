@@ -76,7 +76,7 @@ void Ultrasonic_ReadDistance(int num_sensors, ...);
  * @brief   Delays the execution by specified microseconds.
  * @param   us Number of microseconds to delay.
  */
-void delay_us(uint16_t us);
+void delay_us(TIM_HandleTypeDef *htim,uint16_t us);
 
 /**
  * @brief   Callback for input capture interrupt. Processes ECHO pulse width.

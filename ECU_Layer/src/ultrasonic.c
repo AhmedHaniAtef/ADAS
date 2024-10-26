@@ -24,10 +24,10 @@ extern TIM_HandleTypeDef htim5;
  * @brief   Delays execution by a specified number of microseconds.
  * @param   us Microseconds to delay.
  */
-void delay_us(uint16_t us) {
-    uint32_t temp = __HAL_TIM_GET_COUNTER(&htim2);
+void delay_us(TIM_HandleTypeDef *htim,uint16_t us) {
+    uint32_t temp = __HAL_TIM_GET_COUNTER(htim);
     temp += us;
-    while (__HAL_TIM_GET_COUNTER(&htim2) < temp);
+    while (__HAL_TIM_GET_COUNTER(htim) < temp);
 }
 
 /**
@@ -69,7 +69,7 @@ void Ultrasonic_ReadDistance(int num_sensors, ...) {
         HAL_GPIO_WritePin(sensors[i]->TRIG_PORT, sensors[i]->TRIG_PIN, GPIO_PIN_SET);
     }
 
-    delay_us(10);
+    delay_us(sensors[0]->htim,10);
 
     /* Set TRIG pins low for all sensors */
     for (int i = 0; i < num_sensors; i++) {
@@ -96,11 +96,11 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 
             if (expression_1 || expression_2 || expression_3 || expression_4) {
                 if (INITIAL == first_val[counter]) {
-                    first_val[counter] = (float)HAL_TIM_ReadCapturedValue(htim, channel_select__[counter]);
+                    first_val[counter]   = (float)HAL_TIM_ReadCapturedValue(htim, channel_select__[sensors[counter]->Channel]);
                 } else {
-                    second_val[counter] = (float)HAL_TIM_ReadCapturedValue(htim, channel_select__[counter]);
+                    second_val[counter]  = (float)HAL_TIM_ReadCapturedValue(htim, channel_select__[sensors[counter]->Channel]);
                     *(distance[counter]) = ((second_val[counter] - first_val[counter]) * 0.017);
-                    first_val[counter] = INITIAL;
+                    first_val[counter]   = INITIAL;
                 }
             }
         }
