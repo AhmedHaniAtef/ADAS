@@ -36,10 +36,10 @@
  * @brief Enumeration for available timer channels.
  */
 typedef enum {
-    CHANNEL_1,    /**< Timer Channel 1 */
-    CHANNEL_2,    /**< Timer Channel 2 */
-    CHANNEL_3,    /**< Timer Channel 3 */
-    CHANNEL_4     /**< Timer Channel 4 */
+	channel_1,    /**< Timer Channel 1 */
+	channel_2,    /**< Timer Channel 2 */
+	channel_3,    /**< Timer Channel 3 */
+	channel_4     /**< Timer Channel 4 */
 } channel_t;
 
 /**
