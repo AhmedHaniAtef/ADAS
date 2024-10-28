@@ -24,16 +24,44 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "../../ECU_Layer/inc/ecu.h"
+#include "ultrasonic.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+float dis_1,dis_2,dis_3,dis_4;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+UltrasonicSensor sensor_1={
+		.Channel=TIM_CHANNEL_1,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim2,
+		.Distance=&dis_1
+};
+UltrasonicSensor sensor_2={
+		.Channel=TIM_CHANNEL_2,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim2,
+		.Distance=&dis_2
+};
+UltrasonicSensor sensor_3={
+		.Channel=TIM_CHANNEL_1,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim3,
+		.Distance=&dis_3
+};
+UltrasonicSensor sensor_4={
+		.Channel=TIM_CHANNEL_3,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim3,
+		.Distance=&dis_4
+};
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -76,6 +104,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
 
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -87,39 +116,21 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_TIM4_Init();
   MX_TIM3_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  Ultrasonic_Init(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  ecu_status_t l_EcuStatus = ECU_OK;
-  l_EcuStatus |= robot_init(&Robot);
-  l_EcuStatus |= motor_init(&Robot.FR.Motor);
   while (1)
   {
-
-	  l_EcuStatus |= robot_move(&Robot , 0 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
-	  l_EcuStatus |= robot_move(&Robot , 90 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
-	  l_EcuStatus |= robot_move(&Robot , 180 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
-	  l_EcuStatus |= robot_move(&Robot , 270 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
+	      HAL_Delay(500);
+	  	  Ultrasonic_ReadDistance(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
 
 
-	  //l_EcuStatus |= motor_move_forward(&Robot.FR.Motor, 100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -144,11 +155,12 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 13;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
   RCC_OscInitStruct.PLL.PLLN = 84;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
@@ -170,10 +182,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-
-  /** Enables the Clock Security System
-  */
-  HAL_RCC_EnableCSS();
 }
 
 /* USER CODE BEGIN 4 */

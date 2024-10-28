@@ -40,27 +40,30 @@ typedef struct {
     GPIO_TypeDef *TRIG_PORT;     /**< GPIO port for TRIG pin */
     uint16_t TRIG_PIN;           /**< GPIO pin for TRIG signal */
     TIM_HandleTypeDef *htim;     /**< Timer handle for ECHO capture */
-    uint8_t Channel;           /**< Timer channel for input capture @defgroup TIM_Channel ex: TIM_CHANNEL_ */
+    uint8_t Channel;           /**< Timer channel for input capture @defgroup TIM_Channel ex: TIM_CHANNEL_1 */
     float *Distance;             /**< Pointer to store calculated distance */
 } UltrasonicSensor;
 
 /***********************************************************************************************************************
 *                                                  FUNCTION PROTOTYPES                                                 *
 ***********************************************************************************************************************/
+/**
+ * @brief   Initializes multiple ultrasonic Sensors.
+ * @param   p_NumSensors Number of Sensors to initialize.
+ * @param   ...         Variable arguments, each of type UltrasonicSensor*.
+ * @example EcuStatus |= Ultrasonic_Init(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * @return  ecu_status_t status of operation
+ */
+ecu_status_t Ultrasonic_Init(int num_sensors, ...);
 
 /**
- * @brief   Initializes multiple ultrasonic sensors.
- * @param   num_sensors Number of sensors to initialize.
- * @param   ...         Variable arguments of type UltrasonicSensor* for each sensor.
+ * @brief   Reads Distance from multiple ultrasonic Sensors.
+ * @param   p_NumSensors Number of Sensors to read from.
+ * @param   ...         Variable arguments, each of type UltrasonicSensor*.
+ * @example EcuStatus |= Ultrasonic_ReadDistance(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * @return ecu_status_t status of the operation
  */
-void Ultrasonic_Init(int num_sensors, ...);
-
-/**
- * @brief   Reads distance from multiple ultrasonic sensors.
- * @param   num_sensors Number of sensors to read from.
- * @param   ...         Variable arguments of type UltrasonicSensor* for each sensor.
- */
-void Ultrasonic_ReadDistance(int num_sensors, ...);
+ecu_status_t Ultrasonic_ReadDistance(int num_sensors, ...);
 
 /**
  * @brief   Delays the execution by specified microseconds.

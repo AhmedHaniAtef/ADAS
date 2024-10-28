@@ -30,9 +30,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Src/../../ECU_Layer/inc/ecu.h \
  ../Core/Src/../../ECU_Layer/inc/motor.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
- F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h \
+ C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/ecu_std.h \
  ../Core/Src/../../ECU_Layer/inc/robot.h \
- ../Core/Src/../../ECU_Layer/inc/../ecu_std.h
+ ../Core/Src/../../ECU_Layer/inc/../ecu_std.h \
+ C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/inc/ultrasonic.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -67,6 +68,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Src/../../ECU_Layer/inc/ecu.h:
 ../Core/Src/../../ECU_Layer/inc/motor.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
-F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h:
+C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/ecu_std.h:
 ../Core/Src/../../ECU_Layer/inc/robot.h:
 ../Core/Src/../../ECU_Layer/inc/../ecu_std.h:
+C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/inc/ultrasonic.h:

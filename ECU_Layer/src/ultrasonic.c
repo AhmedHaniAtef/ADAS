@@ -26,6 +26,7 @@
 static UltrasonicSensor* Sensors[8];
 static float* Distance[8];
 static float FirstVal[8] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
+float OverFlow[8] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
 static float SecondVal[8];
 static uint8_t SensorsToGetDistance = 1;
 
@@ -41,7 +42,7 @@ static uint8_t SensorsToGetDistance = 1;
 void delay_us(TIM_HandleTypeDef *p_Htim, uint16_t p_US) {
     uint32_t l_Temp = __HAL_TIM_GET_COUNTER(p_Htim);
     l_Temp += p_US;
-    while (__HAL_TIM_GET_COUNTER(p_Htim) < p_Htim);
+    while (__HAL_TIM_GET_COUNTER(p_Htim) < l_Temp);
 }
 
 /**
@@ -64,6 +65,7 @@ ecu_status_t Ultrasonic_Init(int p_NumSensors, ...) {
             break;
         }
         HAL_TIM_IC_Start_IT(sensor->htim, sensor->Channel);
+        HAL_TIM_Base_Start_IT(sensor->htim);
         Distance[i] = sensor->Distance;
     }
 
@@ -135,15 +137,39 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 
             if (l_Expression_1 || l_Expression_2 || l_Expression_3 || l_Expression_4) {
                 if (INITIAL == FirstVal[l_Counter]) {
-                    FirstVal[l_Counter]   = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
+                    OverFlow[l_Counter]    = 0;
+                    FirstVal[l_Counter]    = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
                 } else {
-                    SecondVal[l_Counter]  = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
-                    *(Distance[l_Counter]) = ((SecondVal[l_Counter] - FirstVal[l_Counter]) * 0.017);
-                    FirstVal[l_Counter]   = INITIAL;
+                    SecondVal[l_Counter]   = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
+                    *(Distance[l_Counter]) = (0+(SecondVal[l_Counter] - FirstVal[l_Counter]))*0.017;
+                    FirstVal[l_Counter]    = INITIAL;
+                    OverFlow[l_Counter]    = INITIAL;
                 }
             }
         }
     }
+}
+/**
+ * @brief   Callback function for calculate timer overflows.
+ * @param   htim Pointer to the timer handle where the overflow occurred.
+ */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+		static uint8_t l_Expression_1 = 0;
+	    static uint8_t l_Expression_2 = 0;
+	    static uint8_t l_Expression_3 = 0;
+	    static uint8_t l_Expression_4 = 0;
+	for (uint8_t l_Counter = 0; l_Counter < SensorsToGetDistance; l_Counter++) {
+		l_Expression_1=((Sensors[l_Counter]->htim->Instance==TIM2)&&(htim->Instance == TIM2));
+		l_Expression_2=((Sensors[l_Counter]->htim->Instance==TIM3)&&(htim->Instance == TIM3));
+		l_Expression_3=((Sensors[l_Counter]->htim->Instance==TIM4)&&(htim->Instance == TIM4));
+		l_Expression_4=((Sensors[l_Counter]->htim->Instance==TIM5)&&(htim->Instance == TIM5));
+			if(l_Expression_1||l_Expression_2||l_Expression_3||l_Expression_4){
+				if ((OverFlow[l_Counter]!=INITIAL)){
+					OverFlow[l_Counter]++;
+				}
+			}
+	    }
+
 }
 
 
