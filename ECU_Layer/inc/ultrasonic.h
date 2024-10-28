@@ -13,8 +13,9 @@
 *                                                      INCLUDES                                                        *
 ***********************************************************************************************************************/
 #include "stm32f4xx_hal.h"
-#include <stdarg.h>          // For handling variadic arguments
+#include <stdarg.h>           // For handling variadic arguments
 #include <stm32f401xc.h>      // MCU-specific header for STM32F401
+#include "ecu_std.h"
 
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
@@ -32,17 +33,6 @@
 ***********************************************************************************************************************/
 
 /**
- * @enum channel_t
- * @brief Enumeration for available timer channels.
- */
-typedef enum {
-	channel_1,    /**< Timer Channel 1 */
-	channel_2,    /**< Timer Channel 2 */
-	channel_3,    /**< Timer Channel 3 */
-	channel_4     /**< Timer Channel 4 */
-} channel_t;
-
-/**
  * @struct UltrasonicSensor
  * @brief Structure defining properties for each ultrasonic sensor.
  */
@@ -50,8 +40,8 @@ typedef struct {
     GPIO_TypeDef *TRIG_PORT;     /**< GPIO port for TRIG pin */
     uint16_t TRIG_PIN;           /**< GPIO pin for TRIG signal */
     TIM_HandleTypeDef *htim;     /**< Timer handle for ECHO capture */
-    channel_t Channel;           /**< Timer channel for input capture */
-    float *distance;             /**< Pointer to store calculated distance */
+    uint8_t Channel;           /**< Timer channel for input capture @defgroup TIM_Channel ex: TIM_CHANNEL_ */
+    float *Distance;             /**< Pointer to store calculated distance */
 } UltrasonicSensor;
 
 /***********************************************************************************************************************
@@ -83,5 +73,13 @@ void delay_us(TIM_HandleTypeDef *htim,uint16_t us);
  * @param   htim Timer handle where input capture interrupt occurred.
  */
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
+
+
+/***********************************************************************************************************************
+* AUTHOR                |* NOTE                                                                                        *
+************************************************************************************************************************
+*                       |                                                                                              * 
+*                       |                                                                                              * 
+***********************************************************************************************************************/
 
 #endif /* ULTRASONIC_H */

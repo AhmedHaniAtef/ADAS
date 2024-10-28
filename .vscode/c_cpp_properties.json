@@ -8,7 +8,9 @@
                 "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
                 "${workspaceFolder}/Drivers/CMSIS/Include",
                 "${workspaceFolder}/ECU_Layer",
-                "${workspaceFolder}/ECU_Layer/inc"
+                "${workspaceFolder}/ECU_Layer/inc",
+                "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F4xx/Include"
             ],
             "defines": [
                 "_DEBUG",

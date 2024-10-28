@@ -1,108 +1,155 @@
 /**
  * @file    motor.h
+ * @authors Eslam Sameh & Mohammed Saad
  * @brief   Implementation of ultrasonic sensor handling functions for STM32F4.
  * @date    2024-10-21
  */
 
+/***********************************************************************************************************************
+*                                                      INCLUDES                                                        *
+***********************************************************************************************************************/
 #include "ultrasonic.h"
 
-/* Global arrays and variables */
-UltrasonicSensor* sensors[8];
-float* distance[8];
-float first_val[8] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
-float second_val[8];
-uint16_t channel_select[4] = { TIM_IT_CC1, TIM_IT_CC2, TIM_IT_CC3, TIM_IT_CC4 };
-uint16_t channel_select__[4] = { TIM_CHANNEL_1, TIM_CHANNEL_2, TIM_CHANNEL_3, TIM_CHANNEL_4 };
-uint8_t sensors_to_get_distance = 1;
+/***********************************************************************************************************************
+*                                                    MACRO DEFINES                                                     *
+***********************************************************************************************************************/
 
-extern TIM_HandleTypeDef htim2;
-extern TIM_HandleTypeDef htim3;
-extern TIM_HandleTypeDef htim4;
-extern TIM_HandleTypeDef htim5;
+
+/***********************************************************************************************************************
+*                                                   MACRO FUNCTIONS                                                    *
+***********************************************************************************************************************/
+
+/***********************************************************************************************************************
+*                                                     GLOBAL OBJECTS                                                   *
+***********************************************************************************************************************/
+
+static UltrasonicSensor* Sensors[8];
+static float* Distance[8];
+static float FirstVal[8] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
+static float SecondVal[8];
+static uint8_t SensorsToGetDistance = 1;
+
+/***********************************************************************************************************************
+*                                                  FUNCTION DECLARATION                                                *
+***********************************************************************************************************************/
 
 /**
  * @brief   Delays execution by a specified number of microseconds.
- * @param   us Microseconds to delay.
+ * @param   p_Htim pointer to the timer used in delay
+ * @param   p_US Microseconds to delay.
  */
-void delay_us(TIM_HandleTypeDef *htim,uint16_t us) {
-    uint32_t temp = __HAL_TIM_GET_COUNTER(htim);
-    temp += us;
-    while (__HAL_TIM_GET_COUNTER(htim) < temp);
+void delay_us(TIM_HandleTypeDef *p_Htim, uint16_t p_US) {
+    uint32_t l_Temp = __HAL_TIM_GET_COUNTER(p_Htim);
+    l_Temp += p_US;
+    while (__HAL_TIM_GET_COUNTER(p_Htim) < p_Htim);
 }
 
 /**
- * @brief   Initializes multiple ultrasonic sensors.
- * @param   num_sensors Number of sensors to initialize.
+ * @brief   Initializes multiple ultrasonic Sensors.
+ * @param   p_NumSensors Number of Sensors to initialize.
  * @param   ...         Variable arguments, each of type UltrasonicSensor*.
+ * @example EcuStatus |= Ultrasonic_Init(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * @return  ecu_status_t status of operation
  */
-void Ultrasonic_Init(int num_sensors, ...) {
-    va_list args;
-    va_start(args, num_sensors);
+ecu_status_t Ultrasonic_Init(int p_NumSensors, ...) {
+    ecu_status_t l_EcuStatus = ECU_OK;
+    va_list l_Args;
+    va_start(l_Args, p_NumSensors);
 
-    for (int i = 0; i < num_sensors; i++) {
-        UltrasonicSensor* sensor = va_arg(args, UltrasonicSensor*);
-        HAL_TIM_IC_Start_IT(sensor->htim, channel_select__[sensor->Channel]);
-        distance[i] = sensor->distance;
+    for (int i = 0; i < p_NumSensors; i++) {
+        UltrasonicSensor* sensor = va_arg(l_Args, UltrasonicSensor*);
+        if (NULL == sensor)
+        {
+            l_EcuStatus = ECU_ERROR;
+            break;
+        }
+        HAL_TIM_IC_Start_IT(sensor->htim, sensor->Channel);
+        Distance[i] = sensor->Distance;
     }
 
-    va_end(args);
+    va_end(l_Args);
+    return l_EcuStatus;
 }
 
 /**
- * @brief   Reads distance from multiple ultrasonic sensors.
- * @param   num_sensors Number of sensors to read from.
+ * @brief   Reads Distance from multiple ultrasonic Sensors.
+ * @param   p_NumSensors Number of Sensors to read from.
  * @param   ...         Variable arguments, each of type UltrasonicSensor*.
+ * @example EcuStatus |= Ultrasonic_ReadDistance(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * @return ecu_status_t status of the operation
  */
-void Ultrasonic_ReadDistance(int num_sensors, ...) {
-    va_list args;
-    va_start(args, num_sensors);
-    sensors_to_get_distance = num_sensors;
+ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors, ...) {
+    ecu_status_t l_EcuStatus = ECU_OK;
+    va_list l_Args;
+    va_start(l_Args, p_NumSensors);
+    SensorsToGetDistance = p_NumSensors;
 
     /* Store all sensor pointers */
-    for (int i = 0; i < num_sensors; i++) {
-        sensors[i] = va_arg(args, UltrasonicSensor*);
+    for (int i = 0; i < p_NumSensors; i++) {
+        Sensors[i] = va_arg(l_Args, UltrasonicSensor*);
+        if (NULL == Sensors[i])
+        {
+            l_EcuStatus = ECU_ERROR;
+            break;
+        }
     }
-    va_end(args);
+    va_end(l_Args);
 
-    /* Set TRIG pins high for all sensors */
-    for (int i = 0; i < num_sensors; i++) {
-        HAL_GPIO_WritePin(sensors[i]->TRIG_PORT, sensors[i]->TRIG_PIN, GPIO_PIN_SET);
+    if (l_EcuStatus != ECU_ERROR)
+    {
+        /* Set TRIG pins high for all Sensors */
+        for (int i = 0; i < p_NumSensors; i++) {
+            HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_SET);
+        }
+
+        delay_us(Sensors[0]->htim,10);
+
+        /* Set TRIG pins low for all Sensors */
+        for (int i = 0; i < p_NumSensors; i++) {
+            HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_RESET);
+        }
     }
-
-    delay_us(sensors[0]->htim,10);
-
-    /* Set TRIG pins low for all sensors */
-    for (int i = 0; i < num_sensors; i++) {
-        HAL_GPIO_WritePin(sensors[i]->TRIG_PORT, sensors[i]->TRIG_PIN, GPIO_PIN_RESET);
-    }
+    return l_EcuStatus;
 }
 
 /**
- * @brief   Callback function for input capture event to calculate distance.
+ * @brief   Callback function for input capture event to calculate Distance.
  * @param   htim Pointer to the timer handle where the input capture occurred.
  */
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
-    static uint8_t expression_1 = 0;
-    static uint8_t expression_2 = 0;
-    static uint8_t expression_3 = 0;
-    static uint8_t expression_4 = 0;
+    static uint8_t l_Expression_1 = 0;
+    static uint8_t l_Expression_2 = 0;
+    static uint8_t l_Expression_3 = 0;
+    static uint8_t l_Expression_4 = 0;
 
-    for (uint8_t counter = 0; counter < sensors_to_get_distance; counter++) {
-        if ((sensors[counter]->htim) == htim) {
-            expression_1 = (((sensors[counter]->Channel) == channel_1) && (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1));
-            expression_2 = (((sensors[counter]->Channel) == channel_2) && (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2));
-            expression_3 = (((sensors[counter]->Channel) == channel_3) && (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3));
-            expression_4 = (((sensors[counter]->Channel) == channel_4) && (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_4));
+    for (uint8_t l_Counter = 0; l_Counter < SensorsToGetDistance; l_Counter++) {
+        if ((Sensors[l_Counter]->htim) == htim) {
+            l_Expression_1 = (((Sensors[l_Counter]->Channel) == TIM_CHANNEL_1) && 
+                                   (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1));
+            l_Expression_2 = (((Sensors[l_Counter]->Channel) == TIM_CHANNEL_2) && 
+                                   (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2));
+            l_Expression_3 = (((Sensors[l_Counter]->Channel) == TIM_CHANNEL_3) && 
+                                   (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3));
+            l_Expression_4 = (((Sensors[l_Counter]->Channel) == TIM_CHANNEL_4) && 
+                                   (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_4));
 
-            if (expression_1 || expression_2 || expression_3 || expression_4) {
-                if (INITIAL == first_val[counter]) {
-                    first_val[counter]   = (float)HAL_TIM_ReadCapturedValue(htim, channel_select__[sensors[counter]->Channel]);
+            if (l_Expression_1 || l_Expression_2 || l_Expression_3 || l_Expression_4) {
+                if (INITIAL == FirstVal[l_Counter]) {
+                    FirstVal[l_Counter]   = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
                 } else {
-                    second_val[counter]  = (float)HAL_TIM_ReadCapturedValue(htim, channel_select__[sensors[counter]->Channel]);
-                    *(distance[counter]) = ((second_val[counter] - first_val[counter]) * 0.017);
-                    first_val[counter]   = INITIAL;
+                    SecondVal[l_Counter]  = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
+                    *(Distance[l_Counter]) = ((SecondVal[l_Counter] - FirstVal[l_Counter]) * 0.017);
+                    FirstVal[l_Counter]   = INITIAL;
                 }
             }
         }
     }
 }
+
+
+/***********************************************************************************************************************
+* AUTHOR                |* NOTE                                                                                        *
+************************************************************************************************************************
+*                       |                                                                                              * 
+*                       |                                                                                              * 
+***********************************************************************************************************************/
