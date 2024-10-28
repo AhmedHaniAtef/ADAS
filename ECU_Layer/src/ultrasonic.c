@@ -141,7 +141,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
                     FirstVal[l_Counter]    = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
                 } else {
                     SecondVal[l_Counter]   = (float)HAL_TIM_ReadCapturedValue(htim, Sensors[l_Counter]->Channel);
-                    *(Distance[l_Counter]) = (0+(SecondVal[l_Counter] - FirstVal[l_Counter]))*0.017;
+                    *(Distance[l_Counter]) = (OverFlow[l_Counter]*((Sensors[l_Counter]->htim)->Init.Period)+(SecondVal[l_Counter] - FirstVal[l_Counter]))*0.017;
                     FirstVal[l_Counter]    = INITIAL;
                     OverFlow[l_Counter]    = INITIAL;
                 }
