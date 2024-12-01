@@ -25,12 +25,17 @@ ECU_Layer/src/motor.o: ../ECU_Layer/src/motor.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
- F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h \
  ../ECU_Layer/src/../inc/ecu.h ../ECU_Layer/src/../inc/motor.h \
- ../ECU_Layer/src/../inc/robot.h ../ECU_Layer/src/../inc/../ecu_std.h
+ ../ECU_Layer/src/../inc/robot.h ../ECU_Layer/src/../inc/../ecu_std.h \
+ ../ECU_Layer/src/../inc/mcp2515.h \
+ ../ECU_Layer/src/../inc/../../lib/inc/list.h \
+ ../ECU_Layer/src/../inc/../../lib/inc/queue.h \
+ ../ECU_Layer/src/../inc/../../lib/inc/list.h
 ../ECU_Layer/src/../inc/motor.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -57,11 +62,16 @@ ECU_Layer/src/motor.o: ../ECU_Layer/src/motor.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
-F:/Graduation\ Project/ADAS/ECU_Layer/ecu_std.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../ECU_Layer/src/../inc/ecu.h:
 ../ECU_Layer/src/../inc/motor.h:
 ../ECU_Layer/src/../inc/robot.h:
 ../ECU_Layer/src/../inc/../ecu_std.h:
+../ECU_Layer/src/../inc/mcp2515.h:
+../ECU_Layer/src/../inc/../../lib/inc/list.h:
+../ECU_Layer/src/../inc/../../lib/inc/queue.h:
+../ECU_Layer/src/../inc/../../lib/inc/list.h:

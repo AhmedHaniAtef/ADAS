@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -89,37 +90,17 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM4_Init();
   MX_TIM3_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  ecu_status_t l_EcuStatus = ECU_OK;
-  l_EcuStatus |= robot_init(&Robot);
-  l_EcuStatus |= motor_init(&Robot.FR.Motor);
+
   while (1)
   {
 
-	  l_EcuStatus |= robot_move(&Robot , 0 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
-	  l_EcuStatus |= robot_move(&Robot , 90 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
-	  l_EcuStatus |= robot_move(&Robot , 180 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
-	  l_EcuStatus |= robot_move(&Robot , 270 , 30);
-	  HAL_Delay(3000);
-	  l_EcuStatus |= robot_move(&Robot , 0 , 0);
-	  HAL_Delay(1000);
-
-
-	  //l_EcuStatus |= motor_move_forward(&Robot.FR.Motor, 100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -6,6 +6,7 @@
         "ecu.h": "c",
         "robot.h": "c",
         "motor.h": "c",
-        "stm32f4xx_hal.h": "c"
+        "stm32f4xx_hal.h": "c",
+        "list.h": "c"
     }
 }

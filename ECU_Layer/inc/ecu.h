@@ -14,6 +14,7 @@
 ***********************************************************************************************************************/
 #include "motor.h"
 #include "robot.h"
+#include "mcp2515.h"
 
 
 
@@ -57,15 +58,7 @@
 *                                                   EXTERN OBJECTS                                                     *
 ***********************************************************************************************************************/
 
-extern motor_t MotorFrontLeft;
-
-extern motor_t MotorFrontRight;
-
-extern motor_t MotorRearLeft;
-
-extern motor_t MotorRearRight;
-
-extern robot_t Robot;
+extern can_t CAN;
 
 
 
