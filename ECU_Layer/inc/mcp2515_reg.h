@@ -271,4 +271,13 @@
 #define RXB1CTRL_FILHIT1    (1 << 1) // Filter Hit Indicator 1
 #define RXB1CTRL_FILHIT0    (1 << 0) // Filter Hit Indicator 0
 
+// Load TX Instructions
+
+#define TX_Buffer_0_Start_at_TXB0SIDH  0x40
+#define TX_Buffer_0_Start_at_TXB0D0    0x41
+#define TX_Buffer_1_Start_at_TXB1SIDH  0x42
+#define TX_Buffer_1_Start_at_TXB1D0    0x43
+#define TX_Buffer_2_Start_at_TXB2SIDH  0x44
+#define TX_Buffer_2_Start_at_TXB2D0    0x45
+
 #endif // MCP2515_REG_H

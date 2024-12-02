@@ -3238,21 +3238,28 @@ Discarded input sections
                 0x00000000      0x218 ./ECU_Layer/src/mcp2515.o
  .text.can_message_receive_from_queue
                 0x00000000       0x6c ./ECU_Layer/src/mcp2515.o
+ .rodata        0x00000000        0x3 ./ECU_Layer/src/mcp2515.o
+ .text.can_message_transmit_using_command
+                0x00000000      0x36c ./ECU_Layer/src/mcp2515.o
+ .text.can_command_send
+                0x00000000       0xa0 ./ECU_Layer/src/mcp2515.o
+ .text.can_command_read
+                0x00000000       0xc0 ./ECU_Layer/src/mcp2515.o
  .text.Rx_Buffer_Ready_Callback
                 0x00000000       0x24 ./ECU_Layer/src/mcp2515.o
  .text.can_receive_from_buffer
                 0x00000000      0x1d0 ./ECU_Layer/src/mcp2515.o
  .text.can_parser
                 0x00000000       0xae ./ECU_Layer/src/mcp2515.o
- .debug_info    0x00000000      0xd0d ./ECU_Layer/src/mcp2515.o
- .debug_abbrev  0x00000000      0x271 ./ECU_Layer/src/mcp2515.o
+ .debug_info    0x00000000      0xf0a ./ECU_Layer/src/mcp2515.o
+ .debug_abbrev  0x00000000      0x27e ./ECU_Layer/src/mcp2515.o
  .debug_aranges
-                0x00000000       0x40 ./ECU_Layer/src/mcp2515.o
+                0x00000000       0x58 ./ECU_Layer/src/mcp2515.o
  .debug_rnglists
-                0x00000000       0x3d ./ECU_Layer/src/mcp2515.o
- .debug_macro   0x00000000      0x3ac ./ECU_Layer/src/mcp2515.o
+                0x00000000       0x52 ./ECU_Layer/src/mcp2515.o
+ .debug_macro   0x00000000      0x3b2 ./ECU_Layer/src/mcp2515.o
  .debug_macro   0x00000000      0xab4 ./ECU_Layer/src/mcp2515.o
- .debug_macro   0x00000000      0x49f ./ECU_Layer/src/mcp2515.o
+ .debug_macro   0x00000000      0x4c9 ./ECU_Layer/src/mcp2515.o
  .debug_macro   0x00000000      0x29b ./ECU_Layer/src/mcp2515.o
  .debug_macro   0x00000000       0x2e ./ECU_Layer/src/mcp2515.o
  .debug_macro   0x00000000       0x28 ./ECU_Layer/src/mcp2515.o
@@ -3320,10 +3327,10 @@ Discarded input sections
  .debug_macro   0x00000000       0x10 ./ECU_Layer/src/mcp2515.o
  .debug_macro   0x00000000       0x10 ./ECU_Layer/src/mcp2515.o
  .debug_macro   0x00000000       0x70 ./ECU_Layer/src/mcp2515.o
- .debug_line    0x00000000      0xcbf ./ECU_Layer/src/mcp2515.o
- .debug_str     0x00000000    0x8b2d7 ./ECU_Layer/src/mcp2515.o
+ .debug_line    0x00000000      0xfc3 ./ECU_Layer/src/mcp2515.o
+ .debug_str     0x00000000    0x8b4b2 ./ECU_Layer/src/mcp2515.o
  .comment       0x00000000       0x44 ./ECU_Layer/src/mcp2515.o
- .debug_frame   0x00000000       0xc0 ./ECU_Layer/src/mcp2515.o
+ .debug_frame   0x00000000      0x130 ./ECU_Layer/src/mcp2515.o
  .ARM.attributes
                 0x00000000       0x34 ./ECU_Layer/src/mcp2515.o
  .group         0x00000000        0xc ./ECU_Layer/src/motor.o

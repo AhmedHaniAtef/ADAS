@@ -151,6 +151,13 @@ ecu_status_t can_init(can_t* p_Can);
  */
 ecu_status_t can_message_receive_from_queue(can_t* p_Can, can_message_t **p_ReturnedMessage);
 
+/** 
+ * @brief this interface assign transmission buffers Parameters to send it throw send Command
+ * @param p_Can pointer to the CAN module used to transmit this message
+ * @param p_Message pointer to the message buffer want to be sent
+ * @return ecu_status_t status of the operation
+ */
+ecu_status_t can_message_transmit_using_command(can_t* p_Can,can_message_t *p_TrasmitedMessage);
 
 
 
