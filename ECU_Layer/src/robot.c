@@ -39,12 +39,14 @@ this is for robot strafe and rotation
 ***********************************************************************************************************************/
 #include "../inc/ecu.h"
 #include "../inc/robot.h"
+#include <ecu_std.h>
 
 
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
-
+#define PID_ROBOT_MAX_OUT	(255.0f)
+#define PID_ROBOT_MIN_OUT	(0.0f)
 
 
 
@@ -77,7 +79,7 @@ this is for robot strafe and rotation
 static float_t Kp = DEFUALT_Kp_VALUE;
 static float_t Ki = DEFUALT_Ki_VALUE;
 static float_t Kd = DEFUALT_Kd_VALUE;
-
+static float_t N  = DEFUALT_N_VALUE;
 
 
 /***********************************************************************************************************************
@@ -186,12 +188,52 @@ ecu_status_t robot_move(robot_t *p_Robot , uint16_t p_Angle , float_t p_Speed)
 }
 
 /**
+  *
+  * @brief This function stops the robot
+  *
+  * @param p_Robot pointer to robot object
+  * @return ecu_status_t status of the operation
+ */
+ecu_status_t robot_stop(robot_t *p_Robot)
+{
+	ecu_status_t l_EcuStatus = ECU_OK;
+    if (NULL == p_Robot)
+    {
+        l_EcuStatus = ECU_ERROR;
+    }
+    else
+    {
+		// store the speed of each wheel
+    	p_Robot->FL.Speed = 0.0f;
+    	p_Robot->FR.Speed = 0.0f;
+    	p_Robot->RL.Speed = 0.0f;
+    	p_Robot->RR.Speed = 0.0f;
+
+		// determine the direction of Front Left motor rotation then store and move it
+		p_Robot->FL.Direction = STOPED;
+    	l_EcuStatus = motor_stop(&p_Robot->FL.Motor);
+		p_Robot->FR.Direction = STOPED;
+    	l_EcuStatus = motor_stop(&p_Robot->FR.Motor);
+		p_Robot->RL.Direction = STOPED;
+    	l_EcuStatus = motor_stop(&p_Robot->RL.Motor);
+		p_Robot->RR.Direction = STOPED;
+    	l_EcuStatus = motor_stop(&p_Robot->RR.Motor);
+		p_Robot->FL.Encoder.Speed = 0.0f;
+		p_Robot->FR.Encoder.Speed = 0.0f;
+		p_Robot->RL.Encoder.Speed = 0.0f;
+		p_Robot->RR.Encoder.Speed = 0.0f;
+	}
+	return l_EcuStatus;
+}
+
+/**
  * @brief initialize each wheel (motor) of the robot
  * 
  * @param p_Robot pointer to the robot object needed to be initialized
+ * @param p_TimeStep value which the speed will be modifed every time (in ms)
  * @return ecu_status_t status of the operation
  */
-ecu_status_t robot_init(robot_t *p_Robot)
+ecu_status_t robot_init(robot_t *p_Robot, float_t p_TimeStep)
 {
 	ecu_status_t l_EcuStatus = ECU_OK;
     if (NULL == p_Robot)
@@ -202,25 +244,33 @@ ecu_status_t robot_init(robot_t *p_Robot)
     {
 		/* initialize wheels of the robot (front left) */
 		l_EcuStatus |= motor_init(&p_Robot->FL.Motor);
+		l_EcuStatus |= encoder_init(&p_Robot->FL.Encoder);
 		p_Robot->FL.Speed = 0.0;
 		p_Robot->FL.Direction = STOPED;
 		/* initialize wheels of the robot (front right) */
 		l_EcuStatus |= motor_init(&p_Robot->FR.Motor);
+		l_EcuStatus |= encoder_init(&p_Robot->FR.Encoder);
 		p_Robot->FR.Speed = 0.0;
 		p_Robot->FR.Direction = STOPED;
 		/* initialize wheels of the robot (rear left) */
 		l_EcuStatus |= motor_init(&p_Robot->RL.Motor);
+		l_EcuStatus |= encoder_init(&p_Robot->RL.Encoder);
 		p_Robot->RL.Speed = 0.0;
 		p_Robot->RL.Direction = STOPED;
 		/* initialize wheels of the robot (rear right) */
 		l_EcuStatus |= motor_init(&p_Robot->RR.Motor);
+		l_EcuStatus |= encoder_init(&p_Robot->RR.Encoder);
 		p_Robot->RR.Speed = 0.0;
 		p_Robot->RR.Direction = STOPED;
 
 		/* restore the PID constants from flash */
-		Kp = *((volatile float_t *)(ADD_Kp_VALUE));
-		Ki = *((volatile float_t *)(ADD_Ki_VALUE));
-		Kd = *((volatile float_t *)(ADD_Kd_VALUE));
+		Kp = DEFUALT_Kp_VALUE;
+		Ki = DEFUALT_Ki_VALUE;
+		Kd = DEFUALT_Kd_VALUE;
+		N  = DEFUALT_N_VALUE;
+
+		// initialize the controller
+		PID_Init(&p_Robot->PID, Kp, Ki, Kd, N, p_TimeStep / 1000.0 , PID_ROBOT_MIN_OUT, PID_ROBOT_MAX_OUT);
 	}
 	return l_EcuStatus;
 }
@@ -258,6 +308,7 @@ ecu_status_t robot_calibrate(robot_t *p_Robot)
 		Kp = DEFUALT_Kp_VALUE;
 		Ki = DEFUALT_Ki_VALUE;
 		Kd = DEFUALT_Kd_VALUE;
+		N  = DEFUALT_N_VALUE;
 
 #elif (ROBOT_CALIBRATE_TYPE == ROBOT_CALIBRATE_I2C)
 		/* NOT IMPLEMENTED YET */
@@ -273,11 +324,13 @@ ecu_status_t robot_calibrate(robot_t *p_Robot)
 		else
 		{   
 			/* store the Kp in flash */
-			l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_LAST_MAX_CAL_SPEED, Kp);
+			l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_Kp_VALUE, Kp);
 			/* store the Ki in flash */
-			l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_LAST_MAX_CAL_SPEED, Ki);
+			l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_Ki_VALUE, Ki);
 			/* store the Kd in flash */
-			l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_LAST_MAX_CAL_SPEED, Kd);
+			l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_Kd_VALUE, Kd);
+			/* store the N in flash */
+			l_HalStatus |= HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ADD_N_VALUE, N);
 
 			/* Lock the Flash memory */
 			do
@@ -297,21 +350,64 @@ ecu_status_t robot_calibrate(robot_t *p_Robot)
  * @brief main function of controlling the speed of robot and performing controll over PID
  * 
  * @param p_Robot pointer to the robot object needed to be controlled
+ * @param p_TimeStep this functions should be called with time step - time is in (ms)
  * @return ecu_status_t status of the operation
  */
-ecu_status_t robot_PID(robot_t *p_Robot)
+ecu_status_t robot_PID(robot_t *p_Robot, float_t p_TimeStep)
 {
 	ecu_status_t l_EcuStatus = ECU_OK;
+	static float_t l_FilterdSpeed_FL = 0;
+	static float_t l_FilterdSpeed_FR = 0;
+	static float_t l_FilterdSpeed_RL = 0;
+	static float_t l_FilterdSpeed_RR = 0;
+	static float_t l_PID_Out_FL = 0;
+	static float_t l_PID_Out_FR = 0;
+	static float_t l_PID_Out_RL = 0;
+	static float_t l_PID_Out_RR = 0;
     if (NULL == p_Robot)
     {
         l_EcuStatus = ECU_ERROR;
     }
     else
     {
+		// Update the speed come from each encoder
+		l_EcuStatus |= encoder_periodic_update(&p_Robot->FL.Encoder, p_TimeStep);
+		l_EcuStatus |= encoder_periodic_update(&p_Robot->FR.Encoder, p_TimeStep);
+		l_EcuStatus |= encoder_periodic_update(&p_Robot->RL.Encoder, p_TimeStep);
+		l_EcuStatus |= encoder_periodic_update(&p_Robot->RR.Encoder, p_TimeStep);
+
+		// Filter the final speed using low pass filter
+		l_FilterdSpeed_FL = ENCODER_READ_FILTER_CONST * p_Robot->FL.Encoder.Speed + 
+							(1 - ENCODER_READ_FILTER_CONST) * l_FilterdSpeed_FL;
+		l_FilterdSpeed_FR = ENCODER_READ_FILTER_CONST * p_Robot->FR.Encoder.Speed + 
+							(1 - ENCODER_READ_FILTER_CONST) * l_FilterdSpeed_FR;
+		l_FilterdSpeed_RL = ENCODER_READ_FILTER_CONST * p_Robot->RL.Encoder.Speed + 
+							(1 - ENCODER_READ_FILTER_CONST) * l_FilterdSpeed_RL;
+		l_FilterdSpeed_RR = ENCODER_READ_FILTER_CONST * p_Robot->RR.Encoder.Speed + 
+							(1 - ENCODER_READ_FILTER_CONST) * l_FilterdSpeed_RR;
 		
+		// PID output 
+		l_PID_Out_FL = PID_Compute(&p_Robot->PID, p_Robot->FL.Speed, l_FilterdSpeed_FL);
+		l_PID_Out_FR = PID_Compute(&p_Robot->PID, p_Robot->FR.Speed, l_FilterdSpeed_FR);
+		l_PID_Out_RL = PID_Compute(&p_Robot->PID, p_Robot->RL.Speed, l_FilterdSpeed_RL);
+		l_PID_Out_RR = PID_Compute(&p_Robot->PID, p_Robot->RR.Speed, l_FilterdSpeed_RR);
+
+		// Map PID output from (0 - 255) to be (0 - MaxClibratedSpeed of motors)
+		l_PID_Out_FL *= (MaxClibratedSpeed / PID_ROBOT_MAX_OUT);
+		l_PID_Out_FR *= (MaxClibratedSpeed / PID_ROBOT_MAX_OUT);
+		l_PID_Out_RL *= (MaxClibratedSpeed / PID_ROBOT_MAX_OUT);
+		l_PID_Out_RR *= (MaxClibratedSpeed / PID_ROBOT_MAX_OUT);
+
+		// change the speed of the motor according to the PID output
+		l_EcuStatus |= motor_change_speed(&p_Robot->FL.Motor, l_PID_Out_FL);
+		l_EcuStatus |= motor_change_speed(&p_Robot->FR.Motor, l_PID_Out_FR);
+		l_EcuStatus |= motor_change_speed(&p_Robot->RL.Motor, l_PID_Out_RL);
+		l_EcuStatus |= motor_change_speed(&p_Robot->RR.Motor, l_PID_Out_RR);
+
 	}
 	return l_EcuStatus;
 }
+
 /***********************************************************************************************************************
 *                                               STATIC FUNCTION DECLARATION                                            *
 ***********************************************************************************************************************/

@@ -1,8 +1,0 @@
-../ECU_Layer/src/mcp2515.c:100:14:can_init	4
-../ECU_Layer/src/mcp2515.c:210:14:can_message_receive_from_queue	5
-../ECU_Layer/src/mcp2515.c:241:14:can_message_transmit_using_command	6
-../ECU_Layer/src/mcp2515.c:352:21:can_command_send	8
-../ECU_Layer/src/mcp2515.c:402:21:can_command_read	9
-../ECU_Layer/src/mcp2515.c:460:6:Rx_Buffer_Ready_Callback	2
-../ECU_Layer/src/mcp2515.c:473:21:can_receive_from_buffer	7
-../ECU_Layer/src/mcp2515.c:577:23:can_parser	2

@@ -1,0 +1,2 @@
+../ECU_Layer/src/encoder.c:72:14:encoder_init	24	static
+../ECU_Layer/src/encoder.c:99:14:encoder_periodic_update	48	static

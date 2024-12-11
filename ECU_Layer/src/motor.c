@@ -17,7 +17,7 @@
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
 
-#define DEFUALT_SPEED           (100.0)
+#define DEFUALT_SPEED           (195.0)
 
 
 
@@ -87,7 +87,7 @@ ecu_status_t motor_init(motor_t *p_Motor)
         HAL_TIM_PWM_Start(p_Motor->SelectedTimer, p_Motor->SelectedChannel);
 
         /* restore the max speed of motor from flash memory */
-        //MaxClibratedSpeed = *((volatile float_t *)(ADD_LAST_MAX_CAL_SPEED));
+        MaxClibratedSpeed = DEFUALT_MOTOR_MAX_SPEED;
     }
     return l_EcuStatus;
 }
@@ -174,7 +174,7 @@ ecu_status_t motor_change_speed(motor_t *p_Motor , float_t p_Speed)
     else
     {
         // get the value of duty cycle in percentage
-        float_t l_PwmDutyCycle = (float_t)((float_t)p_Speed / (float_t)MaxClibratedSpeed);
+        float_t l_PwmDutyCycle = (float_t)((float_t)(MaxClibratedSpeed - p_Speed) / (float_t)MaxClibratedSpeed);
         // get the value of CCRx Register
         uint32_t l_PwmCCR = (uint32_t)(l_PwmDutyCycle * TIMER_AUTO_RELOAD_VAL);
         // change the output duty cycle of the timer

@@ -18,13 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "../../ECU_Layer/inc/ecu.h"
+#include "../../lib/inc/PID.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,7 +39,8 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+ecu_status_t EcuStatus = ECU_OK;
+float_t test = 0.0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -88,18 +89,78 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_TIM1_Init();
   MX_TIM4_Init();
+  MX_TIM2_Init();
   MX_TIM3_Init();
-  MX_SPI1_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  //EcuStatus |= robot_init(&ADAS_ROBOT, 100);
+   //EcuStatus |= encoder_init(&ADAS_ROBOT.FL.Encoder);
+  //EcuStatus |= motor_init(&zeft);
+  //EcuStatus |= encoder_init(&encoder_test);
+  PID_Init(&PID, 0.85, 9.5, 0.07, 0.8, 0.1 , 0.0, 255.0);
+ // EcuStatus |= motor_move_forward(&zeft, 120);
 
   while (1)
   {
+	  /*
+	  EcuStatus |= encoder_periodic_update(&encoder_test, 100);
+	  test = 0.5 * encoder_test.Speed + (1 - 0.5) * test;
+	  float_t test_o = PID_Compute(&PID, 70, test);
+	  test_o *= (195.0 / 255.0);
+	  EcuStatus |= motor_change_speed(&zeft, test_o);
+	  HAL_Delay(100);
+	  */
+    //  move forward
+    EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.3);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    HAL_Delay(2000);
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000); 
+
+    //  move backward
+    EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.3);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    HAL_Delay(2000);
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000); 
+
+    //  move right
+    EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.3);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    HAL_Delay(2000);
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000); 
+
+    //  move left
+    EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.3);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    HAL_Delay(2000);
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000);
+
 
     /* USER CODE END WHILE */
 
@@ -129,8 +190,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 13;
-  RCC_OscInitStruct.PLL.PLLN = 84;
+  RCC_OscInitStruct.PLL.PLLM = 25;
+  RCC_OscInitStruct.PLL.PLLN = 168;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)

@@ -7,6 +7,9 @@
         "robot.h": "c",
         "motor.h": "c",
         "stm32f4xx_hal.h": "c",
-        "list.h": "c"
+        "list.h": "c",
+        "encoder.h": "c",
+        "math.h": "c",
+        "main.h": "c"
     }
 }

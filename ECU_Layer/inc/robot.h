@@ -14,6 +14,8 @@
 *                                                      INCLUDES                                                        *
 ***********************************************************************************************************************/
 #include "motor.h"
+#include "encoder.h"
+#include "../../lib/inc/PID.h"
 #include "../ecu_std.h"
 
 /***********************************************************************************************************************
@@ -47,12 +49,14 @@ typedef enum
  * @param Motor motor object
  * @param Speed of the wheel
  * @param Direction direction of rotation
+ * @param Encoder the encoder attached to the motor moving the wheel
  */
 typedef struct
 {
 	motor_t Motor;
 	float_t Speed;
 	direction_t Direction;
+	encoder_t Encoder;
 }wheel_t;
 
 /**
@@ -68,6 +72,7 @@ typedef struct
 	wheel_t FR;
 	wheel_t RL;
 	wheel_t RR;
+	PID_Controller PID;
 }robot_t;
 
 /***********************************************************************************************************************
@@ -86,12 +91,22 @@ typedef struct
 ecu_status_t robot_move(robot_t *p_Robot , uint16_t p_Angle , float_t p_Speed);
 
 /**
+  *
+  * @brief This function stops the robot
+  *
+  * @param p_Robot pointer to robot object
+  * @return ecu_status_t status of the operation
+ */
+ecu_status_t robot_stop(robot_t *p_Robot);
+
+/**
  * @brief initialize each wheel (motor) of the robot
  * 
  * @param p_Robot pointer to the robot object needed to be initialized
+ * @param p_TimeStep value which the speed will be modifed every time (in ms)
  * @return ecu_status_t status of the operation
  */
-ecu_status_t robot_init(robot_t *p_Robot);
+ecu_status_t robot_init(robot_t *p_Robot, float_t p_TimeStep);
 
 /**
  * @brief this function calibrates the motors of the robot by making it move forward - backward - left - right then
@@ -106,9 +121,10 @@ ecu_status_t robot_calibrate(robot_t *p_Robot);
  * @brief main function of controlling the speed of robot and performing controll over PID
  * 
  * @param p_Robot pointer to the robot object needed to be controlled
+ * @param p_TimeStep this functions should be called with time step - time is in (ms)
  * @return ecu_status_t status of the operation
  */
-ecu_status_t robot_PID(robot_t *p_Robot);
+ecu_status_t robot_PID(robot_t *p_Robot, float_t p_TimeStep);
 
 
 /***********************************************************************************************************************

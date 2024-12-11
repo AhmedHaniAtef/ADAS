@@ -14,7 +14,8 @@
 ***********************************************************************************************************************/
 #include "motor.h"
 #include "robot.h"
-#include "mcp2515.h"
+//#include "mcp2515.h"
+#include "encoder.h"
 
 
 
@@ -27,17 +28,22 @@
 #define ADD_Kp_VALUE            (LAST_ADD_USED_FLASH - 4)
 #define ADD_Ki_VALUE            (LAST_ADD_USED_FLASH - 8)
 #define ADD_Kd_VALUE            (LAST_ADD_USED_FLASH - 12)
+#define ADD_N_VALUE             (LAST_ADD_USED_FLASH - 16)
 
-#define TIMER_AUTO_RELOAD_VAL   (4200)
+#define TIMER_AUTO_RELOAD_VAL   (4199)
 #define ROBOT_LENGHT_X          (10)
 #define ROBOT_LENGHT_Y          (10)
 #define RADIUS_WHEEL            (0.03)
 
-#define DEFUALT_Kp_VALUE        (0)
-#define DEFUALT_Ki_VALUE        (0)
-#define DEFUALT_Kd_VALUE        (0)
+#define DEFUALT_Kp_VALUE        (0.85f)
+#define DEFUALT_Ki_VALUE        (9.5f)
+#define DEFUALT_Kd_VALUE        (0.07f)
+#define DEFUALT_N_VALUE         (0.8f)
 
-#define DEFUALT_MOTOR_MAX_SPEED (100)
+#define DEFUALT_MIN_PID_OUT     (0.0f)
+#define DEFAULT_MAX_PID_OUT     (255.0f)
+
+#define DEFUALT_MOTOR_MAX_SPEED (195.0f)
 
 #define ROBOT_CALIBRATE_UART    (0)
 #define ROBOT_CALIBRATE_SPI     (1)
@@ -45,6 +51,13 @@
 #define ROBOT_CALIBRATE_I2C     (3)
 
 #define ROBOT_CALIBRATE_TYPE (ROBOT_CALIBRATE_MANUAL)
+
+#define ENCODER_MAX_COUNTER_VAL (44000)
+#define ENCODER_PRESCALER       (4)
+#define ENCODER_PULSES_NUMBER   (11)
+#define ENCODER_GEAR_RATIO      (40)
+
+#define ENCODER_READ_FILTER_CONST   (0.5f)
 
 
 /***********************************************************************************************************************
@@ -58,9 +71,10 @@
 *                                                   EXTERN OBJECTS                                                     *
 ***********************************************************************************************************************/
 
-extern can_t CAN;
-
-
+extern robot_t ADAS_ROBOT;
+extern motor_t zeft;
+extern encoder_t encoder_test;
+extern PID_Controller PID;
 
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *

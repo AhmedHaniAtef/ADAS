@@ -57,24 +57,22 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define Motor3_IN1_Pin GPIO_PIN_2
-#define Motor3_IN1_GPIO_Port GPIOA
-#define Motor3_IN2_Pin GPIO_PIN_3
-#define Motor3_IN2_GPIO_Port GPIOA
-#define Motor4_IN1_Pin GPIO_PIN_4
-#define Motor4_IN1_GPIO_Port GPIOA
-#define Motor2_IN1_Pin GPIO_PIN_10
-#define Motor2_IN1_GPIO_Port GPIOB
-#define Motor2_IN2_Pin GPIO_PIN_12
-#define Motor2_IN2_GPIO_Port GPIOB
-#define Motor1_IN2_Pin GPIO_PIN_4
-#define Motor1_IN2_GPIO_Port GPIOB
-#define Motor1_IN1_Pin GPIO_PIN_5
-#define Motor1_IN1_GPIO_Port GPIOB
-#define Motor_3_Pin GPIO_PIN_8
-#define Motor_3_GPIO_Port GPIOB
-#define Motor_4_Pin GPIO_PIN_9
-#define Motor_4_GPIO_Port GPIOB
+#define FR_1_Pin GPIO_PIN_14
+#define FR_1_GPIO_Port GPIOC
+#define FR_2_Pin GPIO_PIN_15
+#define FR_2_GPIO_Port GPIOC
+#define RR_2_Pin GPIO_PIN_0
+#define RR_2_GPIO_Port GPIOB
+#define RR_1_Pin GPIO_PIN_1
+#define RR_1_GPIO_Port GPIOB
+#define RL_1_Pin GPIO_PIN_2
+#define RL_1_GPIO_Port GPIOB
+#define RL_2_Pin GPIO_PIN_10
+#define RL_2_GPIO_Port GPIOB
+#define FL_1_Pin GPIO_PIN_4
+#define FL_1_GPIO_Port GPIOB
+#define FL_2_Pin GPIO_PIN_5
+#define FL_2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
