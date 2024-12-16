@@ -1,0 +1,7 @@
+../Core/mpu.c:44:14:MPU6050_Init	4
+../Core/mpu.c:83:14:MPU6050_Read_Accel	3
+../Core/mpu.c:109:14:MPU6050_Read_Gyro	3
+../Core/mpu.c:134:14:MPU6050_Read_Temp	4
+../Core/mpu.c:155:14:MPU6050_Read_All	14
+../Core/mpu.c:232:8:Kalman_getAngle	1
+../Core/mpu.c:261:6:HAL_GPIO_EXTI_Callback	2
