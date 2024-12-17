@@ -72,7 +72,10 @@ typedef struct
 	wheel_t FR;
 	wheel_t RL;
 	wheel_t RR;
-	PID_Controller PID;
+	PID_Controller PID_FL;
+	PID_Controller PID_FR;
+	PID_Controller PID_RL;
+	PID_Controller PID_RR;
 }robot_t;
 
 /***********************************************************************************************************************
@@ -88,7 +91,18 @@ typedef struct
   * @param p_Speed speed of motor
   * @return ecu_status_t status of the operation
  */
-ecu_status_t robot_move(robot_t *p_Robot , uint16_t p_Angle , float_t p_Speed);
+ecu_status_t robot_move(robot_t *p_Robot , float_t p_Angle , float_t p_Speed);
+
+/**
+  *
+  * @brief This function move the robot in circular path with specific radius and specific angle
+  *
+  * @param p_Robot pointer to robot object
+  * @param p_Radius radius of the path
+  * @param p_AngularSpeed the angular speed of the robot around this path in RPM
+  * @return ecu_status_t status of the operation
+ */
+ecu_status_t robot_rotate(robot_t *p_Robot , float_t p_Radius , float_t p_AngularSpeed);
 
 /**
   *

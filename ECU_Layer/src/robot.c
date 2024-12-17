@@ -102,7 +102,7 @@ static float_t N  = DEFUALT_N_VALUE;
   * @param p_Speed speed of motor
   * @return ecu_status_t status of the operation
  */
-ecu_status_t robot_move(robot_t *p_Robot , uint16_t p_Angle , float_t p_Speed)
+ecu_status_t robot_move(robot_t *p_Robot , float_t p_Angle , float_t p_Speed)
 {
 	ecu_status_t l_EcuStatus = ECU_OK;
     if (NULL == p_Robot)
@@ -119,9 +119,107 @@ ecu_status_t robot_move(robot_t *p_Robot , uint16_t p_Angle , float_t p_Speed)
     	float_t l_LinearVelocityYAxis       = 0;   // Vy
     	float_t l_AngularVelocityRobotBase  = 0;   // Wz
 
+    	p_Speed = roundf(100 * p_Speed) / 100.0;
 		// convert velocity and angle to x and y velocity
-    	l_LinearVelocityXAxis = p_Speed * cos(p_Angle);
-    	l_LinearVelocityYAxis = p_Speed * sin(p_Angle);
+    	l_LinearVelocityXAxis = p_Speed * cos(DEGREE_TO_RADIAN(p_Angle));
+    	l_LinearVelocityYAxis = p_Speed * sin(DEGREE_TO_RADIAN(p_Angle));
+
+		// calculate the speed of each wheel
+    	l_AngularVelocityFrontLeft  = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis - l_LinearVelocityYAxis -
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+    	l_AngularVelocityFrontRight = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis + l_LinearVelocityYAxis +
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+    	l_AngularVelocityRearLeft   = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis + l_LinearVelocityYAxis -
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+    	l_AngularVelocityRearRight  = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis - l_LinearVelocityYAxis +
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+
+		// store the speed of each wheel
+    	p_Robot->FL.Speed = fabs(RPS_TO_RPM(l_AngularVelocityFrontLeft ));
+    	p_Robot->FR.Speed = fabs(RPS_TO_RPM(l_AngularVelocityFrontRight));
+    	p_Robot->RL.Speed = fabs(RPS_TO_RPM(l_AngularVelocityRearLeft  ));
+    	p_Robot->RR.Speed = fabs(RPS_TO_RPM(l_AngularVelocityRearRight ));
+
+		// determine the direction of Front Left motor rotation then store and move it 
+    	if(l_AngularVelocityFrontLeft < 0)
+    	{
+    		p_Robot->FL.Direction = BACWARD;
+    		l_EcuStatus = motor_move_backward(&p_Robot->FL.Motor , p_Robot->FL.Speed);
+    	}
+    	else
+    	{
+    		p_Robot->FL.Direction = FORWARD;
+    		l_EcuStatus = motor_move_forward(&p_Robot->FL.Motor , p_Robot->FL.Speed);
+    	}
+		// determine the direction of Front Right motor rotation then store and move it 
+    	if(l_AngularVelocityFrontRight < 0)
+    	{
+    	    p_Robot->FR.Direction = BACWARD;
+    	    l_EcuStatus = motor_move_backward(&p_Robot->FR.Motor , p_Robot->FR.Speed);
+    	}
+    	else
+    	{
+    	    p_Robot->FR.Direction = FORWARD;
+    	    l_EcuStatus = motor_move_forward(&p_Robot->FR.Motor , p_Robot->FR.Speed);
+    	}
+		// determine the direction of Rear Left motor rotation then store and move it 
+    	if(l_AngularVelocityRearLeft < 0)
+    	{
+    	    p_Robot->RL.Direction = BACWARD;
+    	    l_EcuStatus = motor_move_backward(&p_Robot->RL.Motor , p_Robot->RL.Speed);
+    	}
+    	else
+    	{
+    	    p_Robot->RL.Direction = FORWARD;
+    	    l_EcuStatus = motor_move_forward(&p_Robot->RL.Motor , p_Robot->RL.Speed);
+    	}
+		// determine the direction of Rear Right motor rotation then store and move it 
+    	if(l_AngularVelocityRearRight < 0)
+    	{
+    	    p_Robot->RR.Direction = BACWARD;
+    	    l_EcuStatus = motor_move_backward(&p_Robot->RR.Motor , p_Robot->RR.Speed);
+    	}
+    	else
+    	{
+    	    p_Robot->RR.Direction = FORWARD;
+    	    l_EcuStatus = motor_move_forward(&p_Robot->RR.Motor , p_Robot->RR.Speed);
+    	}
+    }
+	return l_EcuStatus;
+}
+
+/**
+  *
+  * @brief This function move the robot in circular path with specific radius and specific angle
+  *
+  * @param p_Robot pointer to robot object
+  * @param p_Radius radius of the path
+  * @param p_AngularSpeed the angular speed of the robot around this path in RPM
+  * @return ecu_status_t status of the operation
+ */
+ecu_status_t robot_rotate(robot_t *p_Robot , float_t p_Radius , float_t p_AngularSpeed)
+{
+	ecu_status_t l_EcuStatus = ECU_OK;
+    if (NULL == p_Robot)
+    {
+        l_EcuStatus = ECU_ERROR;
+    }
+    else
+    {
+    	float_t l_AngularVelocityFrontLeft  = 0;   // Wfl
+    	float_t l_AngularVelocityFrontRight = 0;   // Wfr
+    	float_t l_AngularVelocityRearLeft   = 0;   // Wrl
+    	float_t l_AngularVelocityRearRight  = 0;   // Wrr
+    	float_t l_LinearVelocityXAxis       = 0;   // Vx
+    	float_t l_LinearVelocityYAxis       = 0;   // Vy
+    	float_t l_AngularVelocityRobotBase  = 0;   // Wz
+
+		p_AngularSpeed = RPM_TO_RPS(p_AngularSpeed);
+    	p_AngularSpeed = roundf(100 * p_AngularSpeed) / 100.0;
+		// convert velocity and angle to x and y velocity
+    	l_LinearVelocityXAxis = p_AngularSpeed * p_Radius;
+    	l_LinearVelocityYAxis = 0;
+		l_AngularVelocityRobotBase = (-1.0) * p_AngularSpeed;
 
 		// calculate the speed of each wheel
     	l_AngularVelocityFrontLeft  = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis - l_LinearVelocityYAxis -
@@ -270,7 +368,10 @@ ecu_status_t robot_init(robot_t *p_Robot, float_t p_TimeStep)
 		N  = DEFUALT_N_VALUE;
 
 		// initialize the controller
-		PID_Init(&p_Robot->PID, Kp, Ki, Kd, N, p_TimeStep / 1000.0 , PID_ROBOT_MIN_OUT, PID_ROBOT_MAX_OUT);
+		PID_Init(&p_Robot->PID_FL, Kp, Ki, Kd, N, p_TimeStep / 1000.0 , PID_ROBOT_MIN_OUT, PID_ROBOT_MAX_OUT);
+		PID_Init(&p_Robot->PID_FR, Kp, Ki, Kd, N, p_TimeStep / 1000.0 , PID_ROBOT_MIN_OUT, PID_ROBOT_MAX_OUT);
+		PID_Init(&p_Robot->PID_RL, Kp, Ki, Kd, N, p_TimeStep / 1000.0 , PID_ROBOT_MIN_OUT, PID_ROBOT_MAX_OUT);
+		PID_Init(&p_Robot->PID_RR, Kp, Ki, Kd, N, p_TimeStep / 1000.0 , PID_ROBOT_MIN_OUT, PID_ROBOT_MAX_OUT);
 	}
 	return l_EcuStatus;
 }
@@ -387,10 +488,10 @@ ecu_status_t robot_PID(robot_t *p_Robot, float_t p_TimeStep)
 							(1 - ENCODER_READ_FILTER_CONST) * l_FilterdSpeed_RR;
 		
 		// PID output 
-		l_PID_Out_FL = PID_Compute(&p_Robot->PID, p_Robot->FL.Speed, l_FilterdSpeed_FL);
-		l_PID_Out_FR = PID_Compute(&p_Robot->PID, p_Robot->FR.Speed, l_FilterdSpeed_FR);
-		l_PID_Out_RL = PID_Compute(&p_Robot->PID, p_Robot->RL.Speed, l_FilterdSpeed_RL);
-		l_PID_Out_RR = PID_Compute(&p_Robot->PID, p_Robot->RR.Speed, l_FilterdSpeed_RR);
+		l_PID_Out_FL = PID_Compute(&p_Robot->PID_FL, p_Robot->FL.Speed, l_FilterdSpeed_FL);
+		l_PID_Out_FR = PID_Compute(&p_Robot->PID_FR, p_Robot->FR.Speed, l_FilterdSpeed_FR);
+		l_PID_Out_RL = PID_Compute(&p_Robot->PID_RL, p_Robot->RL.Speed, l_FilterdSpeed_RL);
+		l_PID_Out_RR = PID_Compute(&p_Robot->PID_RR, p_Robot->RR.Speed, l_FilterdSpeed_RR);
 
 		// Map PID output from (0 - 255) to be (0 - MaxClibratedSpeed of motors)
 		l_PID_Out_FL *= (MaxClibratedSpeed / PID_ROBOT_MAX_OUT);
@@ -418,6 +519,6 @@ ecu_status_t robot_PID(robot_t *p_Robot, float_t p_TimeStep)
 /***********************************************************************************************************************
 * AUTHOR                |* NOTE                                                                                        *
 ************************************************************************************************************************
-* Ahmed Hani Atef       |* robot_calibrate is  not completed untill now uart-spi-i2c calibration is not done yet 	   *
-*                       |* robot_PID not implemented yet 															   *
+* Ahmed Hani Atef       |* 																						 	   *
+*                       |*  																						   *
 ***********************************************************************************************************************/

@@ -34,6 +34,7 @@
 /* revolution per minute to radian per second*/
 #define RPM_TO_RPS(number)    (number * ((2 * M_PI) / 60))
 
+#define DEGREE_TO_RADIAN(number)    (((double)number *  M_PI) / 180.0)
 
 
 /***********************************************************************************************************************

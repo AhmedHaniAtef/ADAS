@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -94,70 +95,66 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM5_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //EcuStatus |= robot_init(&ADAS_ROBOT, 100);
-   //EcuStatus |= encoder_init(&ADAS_ROBOT.FL.Encoder);
+  EcuStatus |= robot_init(&ADAS_ROBOT, 100);
+  //EcuStatus |= encoder_init(&ADAS_ROBOT.FL.Encoder);
   //EcuStatus |= motor_init(&zeft);
   //EcuStatus |= encoder_init(&encoder_test);
-  PID_Init(&PID, 0.85, 9.5, 0.07, 0.8, 0.1 , 0.0, 255.0);
- // EcuStatus |= motor_move_forward(&zeft, 120);
+  //PID_Init(&PID, 0.85, 9.5, 0.07, 0.8, 0.1 , 0.0, 255.0);
+  //EcuStatus |= motor_move_forward(&zeft, 120);
 
   while (1)
   {
 	  /*
 	  EcuStatus |= encoder_periodic_update(&encoder_test, 100);
-	  test = 0.5 * encoder_test.Speed + (1 - 0.5) * test;
+	  test = 0.5 * encoder_test.Speed + ((1 - 0.5) * test);
 	  float_t test_o = PID_Compute(&PID, 70, test);
 	  test_o *= (195.0 / 255.0);
 	  EcuStatus |= motor_change_speed(&zeft, test_o);
 	  HAL_Delay(100);
-	  */
+	  	*/
     //  move forward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.3);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
       HAL_Delay(100); 
     }
-    HAL_Delay(2000);
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000); 
-
     //  move backward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.3);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
       HAL_Delay(100); 
     }
-    HAL_Delay(2000);
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000); 
 
     //  move right
-    EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.3);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
       HAL_Delay(100); 
     }
-    HAL_Delay(2000);
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000); 
 
     //  move left
-    EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.3);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
       HAL_Delay(100); 
     }
-    HAL_Delay(2000);
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000);
 

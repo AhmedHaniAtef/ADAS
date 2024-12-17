@@ -1,5 +1,5 @@
 {
-    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.default.compilerPath": "c:\\Program Files (x86)\\GNU Arm Embedded Toolchain\\10 2021.10\\bin\\arm-none-eabi-gcc.exe",
     "files.associations": {
         "gpio.h": "c",

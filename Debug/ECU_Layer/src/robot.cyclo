@@ -1,5 +1,6 @@
 ../ECU_Layer/src/robot.c:105:14:robot_move	6
-../ECU_Layer/src/robot.c:197:14:robot_stop	2
-../ECU_Layer/src/robot.c:236:14:robot_init	2
-../ECU_Layer/src/robot.c:285:14:robot_calibrate	5
-../ECU_Layer/src/robot.c:356:14:robot_PID	2
+../ECU_Layer/src/robot.c:200:14:robot_rotate	6
+../ECU_Layer/src/robot.c:295:14:robot_stop	2
+../ECU_Layer/src/robot.c:334:14:robot_init	2
+../ECU_Layer/src/robot.c:386:14:robot_calibrate	5
+../ECU_Layer/src/robot.c:457:14:robot_PID	2
