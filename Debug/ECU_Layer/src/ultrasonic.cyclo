@@ -1,5 +1,5 @@
 ../ECU_Layer/src/ultrasonic.c:42:6:delay_us	2
 ../ECU_Layer/src/ultrasonic.c:55:14:Ultrasonic_Init	3
-../ECU_Layer/src/ultrasonic.c:83:14:Ultrasonic_ReadDistance	6
-../ECU_Layer/src/ultrasonic.c:121:6:HAL_TIM_IC_CaptureCallback	16
-../ECU_Layer/src/ultrasonic.c:156:6:HAL_TIM_PeriodElapsedCallback	15
+../ECU_Layer/src/ultrasonic.c:90:14:Ultrasonic_ReadDistance	6
+../ECU_Layer/src/ultrasonic.c:128:6:USER_TIM_IC_CALLBACK	16
+../ECU_Layer/src/ultrasonic.c:163:6:USER_TIM_OVERFLOW_CALLBACK	15

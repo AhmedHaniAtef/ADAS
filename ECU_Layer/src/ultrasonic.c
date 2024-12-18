@@ -23,12 +23,12 @@
 *                                                     GLOBAL OBJECTS                                                   *
 ***********************************************************************************************************************/
 
-static UltrasonicSensor* Sensors[8];
-static float* Distance[8];
-static float FirstVal[8] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
-float OverFlow[8] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
-static float SecondVal[8];
-static uint8_t SensorsToGetDistance = 1;
+static UltrasonicSensor* Sensors[TOTOAL_NUMBER_OF_ULTRASONIC];
+static float* Distance[TOTOAL_NUMBER_OF_ULTRASONIC];
+static float FirstVal[TOTOAL_NUMBER_OF_ULTRASONIC] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
+float OverFlow[TOTOAL_NUMBER_OF_ULTRASONIC] = { INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL, INITIAL };
+static float SecondVal[TOTOAL_NUMBER_OF_ULTRASONIC];
+static uint8_t SensorsToGetDistance = 1;  // At least one sensor to get its distance.
 
 /***********************************************************************************************************************
 *                                                  FUNCTION DECLARATION                                                *
@@ -64,6 +64,8 @@ ecu_status_t Ultrasonic_Init(int p_NumSensors, ...) {
             l_EcuStatus = ECU_ERROR;
             break;
         }
+        HAL_TIM_RegisterCallback(sensor->htim,HAL_TIM_IC_CAPTURE_CB_ID,USER_TIM_IC_CALLBACK);
+        HAL_TIM_RegisterCallback(sensor->htim,HAL_TIM_PERIOD_ELAPSED_CB_ID,USER_TIM_OVERFLOW_CALLBACK);
         HAL_TIM_IC_Start_IT(sensor->htim, sensor->Channel);
         HAL_TIM_Base_Start_IT(sensor->htim);
         Distance[i] = sensor->Distance;
@@ -76,18 +78,23 @@ ecu_status_t Ultrasonic_Init(int p_NumSensors, ...) {
 /**
  * @brief   Reads Distance from multiple ultrasonic Sensors.
  * @param   p_NumSensors Number of Sensors to read from.
- * @param   ...         Variable arguments, each of type UltrasonicSensor*.
- * @example EcuStatus |= Ultrasonic_ReadDistance(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * @param	index : is the index to of first ultrasonic to read in Ultrasonic_Init() argument  ||
+ * @param   ...         Variable arguments, each of type UltrasonicSensor*.                    \/
+ * @example EcuStatus |= Ultrasonic_Init(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * 						 Ultrasonic_ReadDistance(4,1,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * 					or   Ultrasonic_ReadDistance(3,2,&sensor_2,&sensor_3,&sensor_4);
+ * 					or   Ultrasonic_ReadDistance(2,3,&sensor_3,&sensor_4);
+ * 					or   Ultrasonic_ReadDistance(1,4,&sensor_4);
  * @return ecu_status_t status of the operation
  */
-ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors, ...) {
+ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors,int index, ...) {
     ecu_status_t l_EcuStatus = ECU_OK;
     va_list l_Args;
     va_start(l_Args, p_NumSensors);
     SensorsToGetDistance = p_NumSensors;
-
+    int i=index-1;
     /* Store all sensor pointers */
-    for (int i = 0; i < p_NumSensors; i++) {
+    for (i;i <(index-1+p_NumSensors);i++){
         Sensors[i] = va_arg(l_Args, UltrasonicSensor*);
         if (NULL == Sensors[i])
         {
@@ -100,14 +107,14 @@ ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors, ...) {
     if (l_EcuStatus != ECU_ERROR)
     {
         /* Set TRIG pins high for all Sensors */
-        for (int i = 0; i < p_NumSensors; i++) {
+        for (i;i < (index-1+p_NumSensors); i++) {
             HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_SET);
         }
 
         delay_us(Sensors[0]->htim,10);
 
         /* Set TRIG pins low for all Sensors */
-        for (int i = 0; i < p_NumSensors; i++) {
+        for (i;i < (index-1+p_NumSensors); i++) {
             HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_RESET);
         }
     }
@@ -118,13 +125,13 @@ ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors, ...) {
  * @brief   Callback function for input capture event to calculate Distance.
  * @param   htim Pointer to the timer handle where the input capture occurred.
  */
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
+void USER_TIM_IC_CALLBACK(TIM_HandleTypeDef *htim) {
     static uint8_t l_Expression_1 = 0;
     static uint8_t l_Expression_2 = 0;
     static uint8_t l_Expression_3 = 0;
     static uint8_t l_Expression_4 = 0;
 
-    for (uint8_t l_Counter = 0; l_Counter < SensorsToGetDistance; l_Counter++) {
+    for (uint8_t l_Counter = 0; l_Counter < TOTOAL_NUMBER_OF_ULTRASONIC; l_Counter++) {
         if ((Sensors[l_Counter]->htim) == htim) {
             l_Expression_1 = (((Sensors[l_Counter]->Channel) == TIM_CHANNEL_1) && 
                                    (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1));
@@ -153,12 +160,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
  * @brief   Callback function for calculate timer overflows.
  * @param   htim Pointer to the timer handle where the overflow occurred.
  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+void USER_TIM_OVERFLOW_CALLBACK(TIM_HandleTypeDef *htim) {
 		static uint8_t l_Expression_1 = 0;
 	    static uint8_t l_Expression_2 = 0;
 	    static uint8_t l_Expression_3 = 0;
 	    static uint8_t l_Expression_4 = 0;
-	for (uint8_t l_Counter = 0; l_Counter < SensorsToGetDistance; l_Counter++) {
+	for (uint8_t l_Counter = 0; l_Counter < TOTOAL_NUMBER_OF_ULTRASONIC; l_Counter++) {
 		l_Expression_1=((Sensors[l_Counter]->htim->Instance==TIM2)&&(htim->Instance == TIM2));
 		l_Expression_2=((Sensors[l_Counter]->htim->Instance==TIM3)&&(htim->Instance == TIM3));
 		l_Expression_3=((Sensors[l_Counter]->htim->Instance==TIM4)&&(htim->Instance == TIM4));

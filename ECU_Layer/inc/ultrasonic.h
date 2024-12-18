@@ -21,7 +21,7 @@
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
 #define INITIAL 0.5f  /**< Initial distance value or threshold setting */
-
+#define TOTOAL_NUMBER_OF_ULTRASONIC 8
 /***********************************************************************************************************************
 *                                                   MACRO FUNCTIONS                                                    *
 ***********************************************************************************************************************/
@@ -59,11 +59,16 @@ ecu_status_t Ultrasonic_Init(int num_sensors, ...);
 /**
  * @brief   Reads Distance from multiple ultrasonic Sensors.
  * @param   p_NumSensors Number of Sensors to read from.
- * @param   ...         Variable arguments, each of type UltrasonicSensor*.
- * @example EcuStatus |= Ultrasonic_ReadDistance(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * @param	index : is the index to of first ultrasonic to read in Ultrasonic_Init() argument  ||
+ * @param   ...         Variable arguments, each of type UltrasonicSensor*.                    \/
+ * @example EcuStatus |= Ultrasonic_Init(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * 						 Ultrasonic_ReadDistance(4,1,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+ * 					or   Ultrasonic_ReadDistance(3,2,&sensor_2,&sensor_3,&sensor_4);
+ * 					or   Ultrasonic_ReadDistance(2,3,&sensor_3,&sensor_4);
+ * 					or   Ultrasonic_ReadDistance(1,4,&sensor_4);
  * @return ecu_status_t status of the operation
  */
-ecu_status_t Ultrasonic_ReadDistance(int num_sensors, ...);
+ecu_status_t Ultrasonic_ReadDistance(int num_sensors,int index, ...);
 
 /**
  * @brief   Delays the execution by specified microseconds.
@@ -72,10 +77,12 @@ ecu_status_t Ultrasonic_ReadDistance(int num_sensors, ...);
 void delay_us(TIM_HandleTypeDef *htim,uint16_t us);
 
 /**
- * @brief   Callback for input capture interrupt. Processes ECHO pulse width.
- * @param   htim Timer handle where input capture interrupt occurred.
+ * @brief   Callback for input capture interrupt and overflow (USER_DEFINED) Processes ECHO pulse width.
+ * @param   htim Timer handle where input capture interrupt and overflow occurred.
  */
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
+void USER_TIM_IC_CALLBACK(TIM_HandleTypeDef *htim);
+void USER_TIM_OVERFLOW_CALLBACK(TIM_HandleTypeDef *htim);
+
 
 
 /***********************************************************************************************************************

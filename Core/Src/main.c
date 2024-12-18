@@ -127,8 +127,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	      HAL_Delay(500);
-	  	  Ultrasonic_ReadDistance(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+	      HAL_Delay(300);
+	  	  Ultrasonic_ReadDistance(2,1,&sensor_1,&sensor_2);
+	  	  HAL_Delay(300);
+	  	  Ultrasonic_ReadDistance(2,3,&sensor_3,&sensor_4);
 
 
     /* USER CODE END WHILE */

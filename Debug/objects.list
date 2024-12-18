@@ -23,6 +23,4 @@
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o"
 "./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o"
 "./ECU_Layer/src/ecu.o"
-"./ECU_Layer/src/motor.o"
-"./ECU_Layer/src/robot.o"
 "./ECU_Layer/src/ultrasonic.o"

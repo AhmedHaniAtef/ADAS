@@ -6,31 +6,25 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../ECU_Layer/src/ecu.c \
-../ECU_Layer/src/motor.c \
-../ECU_Layer/src/robot.c \
 ../ECU_Layer/src/ultrasonic.c 
 
 OBJS += \
 ./ECU_Layer/src/ecu.o \
-./ECU_Layer/src/motor.o \
-./ECU_Layer/src/robot.o \
 ./ECU_Layer/src/ultrasonic.o 
 
 C_DEPS += \
 ./ECU_Layer/src/ecu.d \
-./ECU_Layer/src/motor.d \
-./ECU_Layer/src/robot.d \
 ./ECU_Layer/src/ultrasonic.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
 ECU_Layer/src/%.o ECU_Layer/src/%.su ECU_Layer/src/%.cyclo: ../ECU_Layer/src/%.c ECU_Layer/src/subdir.mk
-	arm-none-eabi-gcc -gdwarf-4 "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xC -c -I../Core/Inc -I"C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer" -I"C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/inc" -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+	arm-none-eabi-gcc -gdwarf-4 "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xC -c -I../Core/Inc -I"C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer" -I"C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/inc" -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 clean: clean-ECU_Layer-2f-src
 
 clean-ECU_Layer-2f-src:
-	-$(RM) ./ECU_Layer/src/ecu.cyclo ./ECU_Layer/src/ecu.d ./ECU_Layer/src/ecu.o ./ECU_Layer/src/ecu.su ./ECU_Layer/src/motor.cyclo ./ECU_Layer/src/motor.d ./ECU_Layer/src/motor.o ./ECU_Layer/src/motor.su ./ECU_Layer/src/robot.cyclo ./ECU_Layer/src/robot.d ./ECU_Layer/src/robot.o ./ECU_Layer/src/robot.su ./ECU_Layer/src/ultrasonic.cyclo ./ECU_Layer/src/ultrasonic.d ./ECU_Layer/src/ultrasonic.o ./ECU_Layer/src/ultrasonic.su
+	-$(RM) ./ECU_Layer/src/ecu.cyclo ./ECU_Layer/src/ecu.d ./ECU_Layer/src/ecu.o ./ECU_Layer/src/ecu.su ./ECU_Layer/src/ultrasonic.cyclo ./ECU_Layer/src/ultrasonic.d ./ECU_Layer/src/ultrasonic.o ./ECU_Layer/src/ultrasonic.su
 
 .PHONY: clean-ECU_Layer-2f-src
 

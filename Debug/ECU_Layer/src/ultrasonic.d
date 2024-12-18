@@ -1,5 +1,5 @@
 ECU_Layer/src/ultrasonic.o: ../ECU_Layer/src/ultrasonic.c \
- C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/inc/ultrasonic.h \
+ C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/inc/ultrasonic.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -28,8 +28,8 @@ ECU_Layer/src/ultrasonic.o: ../ECU_Layer/src/ultrasonic.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
- C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/ecu_std.h
-C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/inc/ultrasonic.h:
+ C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/ecu_std.h
+C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/inc/ultrasonic.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -58,4 +58,4 @@ C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/inc/ultrasonic
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
-C:/Users/es-IslamSameh2025/Desktop/eslam_new/eslam/ADAS/ECU_Layer/ecu_std.h:
+C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/ecu_std.h:
