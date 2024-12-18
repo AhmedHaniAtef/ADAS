@@ -199,26 +199,26 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
         KalmanY.angle = pitch;
         KalmanAngleY =pitch-OFFSET_IN_PITCH;
         old_pitch = (fabs(KalmanAngleY-old_pitch) > ROLL_PITCH_THRESHOLD) ? KalmanAngleY:old_pitch;
-        DataStruct->Pitch=(__int8_t)(old_pitch);
+        DataStruct->Pitch=(__int16_t)(old_pitch);
     }
     else
     {
         KalmanAngleY =Kalman_getAngle(&KalmanY, pitch, DataStruct->Gy, dt)-OFFSET_IN_PITCH;
         old_pitch = (fabs(KalmanAngleY-old_pitch) > ROLL_PITCH_THRESHOLD) ? KalmanAngleY:old_pitch;
-        DataStruct->Pitch=(__int8_t)(old_pitch);
+        DataStruct->Pitch=(__int16_t)(old_pitch);
     }
     if (fabs(KalmanAngleY) > 90){
         DataStruct->Gx = -DataStruct->Gx;
     }
     	KalmanAngleX = Kalman_getAngle(&KalmanX, roll, DataStruct->Gx, dt);
     	old_roll = (fabs(KalmanAngleX-old_roll) > ROLL_PITCH_THRESHOLD) ? KalmanAngleX:old_roll;
-    	DataStruct->Roll=(__int8_t)(old_roll);
+    	DataStruct->Roll=(__int16_t)(old_roll);
 
 
     // Yaw Calculation with Threshold (0.8 degrees per trial)
     if (fabs(DataStruct->Gz * dt) > YAW_THRESHOLD) // Only integrate if increase in yaw (DataStruct->Gz * dt) is larger than yaw_threshold
     	old_yaw += DataStruct->Gz * dt;
-    DataStruct->Yaw=(__int8_t)(old_yaw);
+    DataStruct->Yaw=(__int16_t)(old_yaw);
     }
 	else
 	{
