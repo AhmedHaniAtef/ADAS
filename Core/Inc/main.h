@@ -61,10 +61,10 @@ void Error_Handler(void);
 #define FR_1_GPIO_Port GPIOC
 #define FR_2_Pin GPIO_PIN_15
 #define FR_2_GPIO_Port GPIOC
-#define RR_2_Pin GPIO_PIN_0
-#define RR_2_GPIO_Port GPIOB
-#define RR_1_Pin GPIO_PIN_1
-#define RR_1_GPIO_Port GPIOB
+#define RR_2_Pin GPIO_PIN_3
+#define RR_2_GPIO_Port GPIOA
+#define RR_1_Pin GPIO_PIN_4
+#define RR_1_GPIO_Port GPIOA
 #define RL_1_Pin GPIO_PIN_2
 #define RL_1_GPIO_Port GPIOB
 #define RL_2_Pin GPIO_PIN_10
