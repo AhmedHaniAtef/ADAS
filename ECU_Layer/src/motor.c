@@ -174,7 +174,7 @@ ecu_status_t motor_change_speed(motor_t *p_Motor , float_t p_Speed)
     else
     {
         // get the value of duty cycle in percentage
-        float_t l_PwmDutyCycle = (float_t)((float_t)(MaxClibratedSpeed - p_Speed) / (float_t)MaxClibratedSpeed);
+        float_t l_PwmDutyCycle = (float_t)((float_t)(p_Speed) / (float_t)MaxClibratedSpeed);
         // get the value of CCRx Register
         uint32_t l_PwmCCR = (uint32_t)(l_PwmDutyCycle * TIMER_AUTO_RELOAD_VAL);
         // change the output duty cycle of the timer

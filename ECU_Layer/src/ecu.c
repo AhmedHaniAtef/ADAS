@@ -84,7 +84,7 @@ robot_t ADAS_ROBOT =
 	.RR.Motor.SelectedChannel = TIM_CHANNEL_4,
 };
 
-/*
+
 motor_t zeft =
 {
 	 .GpioxMotor[0]   = FL_1_GPIO_Port,
@@ -101,7 +101,7 @@ encoder_t encoder_test =
 	.SelectedTimer = &htim1,
 	.WheelRadius = 3,
 };
-*/
+
 PID_Controller PID;
 
 /***********************************************************************************************************************

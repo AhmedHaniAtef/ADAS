@@ -111,14 +111,14 @@ int main(void)
 
   while (1)
   {
-	  /*
-	  EcuStatus |= encoder_periodic_update(&encoder_test, 100);
-	  test = 0.5 * encoder_test.Speed + ((1 - 0.5) * test);
-	  float_t test_o = PID_Compute(&PID, 70, test);
-	  test_o *= (195.0 / 255.0);
-	  EcuStatus |= motor_change_speed(&zeft, test_o);
-	  HAL_Delay(100);
-	  	*/
+
+	  // EcuStatus |= encoder_periodic_update(&encoder_test, 100);
+	  // test = 0.5 * encoder_test.Speed + ((1 - 0.5) * test);
+	  // float_t test_o = PID_Compute(&PID, 70, test);
+	  // test_o *= (195.0 / 255.0);
+	  // EcuStatus |= motor_change_speed(&zeft, test_o);
+	  // HAL_Delay(100);
+	 
     //  move forward
     EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
@@ -157,6 +157,7 @@ int main(void)
     }
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000);
+    
 
 
     /* USER CODE END WHILE */
