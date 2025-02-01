@@ -28,9 +28,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/gpio.h \
  ../Core/Src/../../ECU_Layer/inc/ecu.h \
- C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/inc/ultrasonic.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/inc/ultrasonic.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
- C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/ecu_std.h
+ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -63,6 +63,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/main.h:
 ../Core/Inc/gpio.h:
 ../Core/Src/../../ECU_Layer/inc/ecu.h:
-C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/inc/ultrasonic.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/inc/ultrasonic.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
-C:/Users/es-IslamSameh2025/Desktop/ADAS/ECU_Layer/ecu_std.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:

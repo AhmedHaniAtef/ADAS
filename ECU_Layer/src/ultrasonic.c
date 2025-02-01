@@ -107,14 +107,14 @@ ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors,int index, ...) {
     if (l_EcuStatus != ECU_ERROR)
     {
         /* Set TRIG pins high for all Sensors */
-        for (i;i < (index-1+p_NumSensors); i++) {
+        for (i=index-1;i < (index-1+p_NumSensors); i++) {
             HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_SET);
         }
 
         delay_us(Sensors[0]->htim,10);
 
         /* Set TRIG pins low for all Sensors */
-        for (i;i < (index-1+p_NumSensors); i++) {
+        for (i=index-1;i < (index-1+p_NumSensors); i++) {
             HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_RESET);
         }
     }

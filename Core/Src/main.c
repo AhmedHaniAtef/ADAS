@@ -29,7 +29,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-float dis_1,dis_2,dis_3,dis_4;
+float dis_1,dis_2,dis_3,dis_4,dis_5,dis_6,dis_7,dis_8;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -61,6 +61,34 @@ UltrasonicSensor sensor_4={
 		.TRIG_PIN=GPIO_PIN_7,
 		.htim=&htim3,
 		.Distance=&dis_4
+};
+UltrasonicSensor sensor_5={
+		.Channel=TIM_CHANNEL_3,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim2,
+		.Distance=&dis_5
+};
+UltrasonicSensor sensor_6={
+		.Channel=TIM_CHANNEL_4,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim2,
+		.Distance=&dis_6
+};
+UltrasonicSensor sensor_7={
+		.Channel=TIM_CHANNEL_3,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim4,
+		.Distance=&dis_7
+};
+UltrasonicSensor sensor_8={
+		.Channel=TIM_CHANNEL_4,
+		.TRIG_PORT=GPIOA,
+		.TRIG_PIN=GPIO_PIN_7,
+		.htim=&htim4,
+		.Distance=&dis_8
 };
 /* USER CODE END PD */
 
@@ -118,8 +146,9 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   MX_TIM2_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  Ultrasonic_Init(4,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+  Ultrasonic_Init(1,&sensor_1);
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
@@ -127,10 +156,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	      HAL_Delay(300);
-	  	  Ultrasonic_ReadDistance(2,1,&sensor_1,&sensor_2);
-	  	  HAL_Delay(300);
-	  	  Ultrasonic_ReadDistance(2,3,&sensor_3,&sensor_4);
+	  	  Ultrasonic_ReadDistance(1,1,&sensor_1);
+	  	  HAL_Delay(100);
+	  	  
 
 
     /* USER CODE END WHILE */
