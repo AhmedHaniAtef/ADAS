@@ -1,535 +1,231 @@
 /**
- * @file    mpu.c
- * @brief   Source file for MPU6050
- * @authors Eslam Sameh & Youssef Benyamine
- * @date    2024-11-25
+ * @file    mpu.h
+ * @brief   Enhanced MPU6050 sensor handling on STM32F4 microcontrollers.
+ *          Provides initialization, reading acceleration, angular velocity, temperature, and calculating angles using Kalman filtering.
+ * @authors Eslam Sameh & Youssef Benyamain
+ * @date    2024-12-10
  */
+
+/***********************************************************************************************************************
+*                                                      INCLUDES                                                        *
+***********************************************************************************************************************/
 #include "mpu.h"
 
-/**
- * @brief  Initializes MPU6050 and I2C peripheral
- * @param  *p_MPU6050: Pointer to empty @ref MPU6050_t structure
- * @param  p_AccelerometerSensitivity: Set accelerometer sensitivity. This parameter can be a value of @ref MPU6050_accelerometer_t enumeration
- * @param  p_GyroscopeSensitivity: Set gyroscope sensitivity. This parameter can be a value of @ref MPU6050_gyroscope_t enumeration
- * @retval Initialization status:
- *            - MPU6050_result_t: Everything OK
- *            - Other member: in other cases
- */
-MPU6050_result_t MPU6050_init(MPU6050_t *p_MPU6050, MPU6050_accelerometer_t p_AccelerometerSensitivity, MPU6050_gyroscope_t p_GyroscopeSensitivity)
+/***********************************************************************************************************************
+*                                                     GLOBAL OBJECTS                                                   *
+***********************************************************************************************************************/
+// I2C and MPU6050 instance pointers
+static I2C_HandleTypeDef *I2C_INT;
+static MPU6050_t *MPU_INT;
+float  old_temp;
+double old_roll;
+double old_pitch;
+double old_yaw;
+/* Raw Accelerometer Data */
+static int16_t Accel_X_RAW;  /**< Raw X-axis accelerometer data. */
+static int16_t Accel_Y_RAW;  /**< Raw Y-axis accelerometer data. */
+/* Raw Gyroscope Data */
+static int16_t Gyro_Z_RAW;  /**< Raw Z-axis gyroscope data. */
+// Timer for Kalman filter
+uint32_t timer;
+
+/***********************************************************************************************************************
+*                                                  FUNCTION Implementation                                                *
+***********************************************************************************************************************/
+ecu_status_t MPU6050_Init(I2C_HandleTypeDef *I2Cx,MPU6050_t *DataStruct)
 {
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Data[2];
-	uint8_t l_DataReturn = 0;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		uint8_t l_WhoAmI = (uint8_t)MPU6050_WHO_AM_I;
+	I2C_INT=I2Cx;
+	MPU_INT=DataStruct;
+    uint8_t check;
+    uint8_t Data;
+    ecu_status_t l_EcuStatus=ECU_OK;
 
-		/* Check if device is connected */
-		if (HAL_I2C_IsDeviceReady(p_MPU6050->I2Cx, p_MPU6050->Address, 2, 5) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
+    // Check device ID WHO_AM_I
+    HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, WHO_AM_I_REG, 1, &check, 1, 1000);
+    if ((check == 0x68)&&(NULL!=I2Cx)&&(NULL!=DataStruct)) // 0x68 will be returned by the sensor if everything goes well
+    {
+        // Power management register 0x6B: Wake the sensor up
+        Data = 0;
+        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG, PWR_MGMT_1_REG, 1, &Data, 1, 100);
 
-		/* Send address */
+        // Set DATA RATE to 31.25Hz(8000/(1+255)) by writing to SMPLRT_DIV register
+        Data = 0xFF;
+        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG, SMPLRT_DIV_REG, 1, &Data, 1, 100);
+        // Set accelerometer configuration in ACCEL_CONFIG Register (+-2g)
+        Data = 0x00;
+        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG, ACCEL_CONFIG_REG, 1, &Data, 1, 100);
+        // Set gyroscope configuration in GYRO_CONFIG Register (-+250 degree per s)
+        Data = 0x00;
+        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG, GYRO_CONFIG_REG, 1, &Data, 1, 100);
+        Data = 0x90; // Clear interrupt for any register read (active high interrupt)
+        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG,INT_CFG_REG, 1, &Data, 1, 100);
+        Data = 0x01; // Enable Data Ready Interrupt (INT_ENABLE register: 0x38)
+        HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG,INT_ENABLE_REG,1, &Data, 1, 100);
 
-		if (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, p_MPU6050->Address, &l_WhoAmI, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
+    }
+    else
+    {
+    	l_EcuStatus=ECU_ERROR;
+    }
 
-		/* Receive multiple byte */
-		if (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, p_MPU6050->Address, &l_DataReturn, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		/* Checking */
-		while (l_DataReturn != MPU6050_I_AM)
-		{
-			/* Return error */
-			return MPU6050_RESULT_ERROR;
-		}
-		//------------------
-
-		/* Wakeup MPU6050 */
-		//------------------
-		/* Format array to send */
-		l_Data[0] = MPU6050_PWR_MGMT_1;
-		l_Data[1] = 0x00;
-		/* Try to transmit via I2C */
-		if (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), (uint8_t *)l_Data, 2, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		//-----------------
-		/* Check who am I */
-		//------------------
-
-		/* Set sample rate to 8kHz */
-		MPU6050_set_data_rate(p_MPU6050, (uint8_t)MPU6050_DATARATE_8KHZ);
-
-		/* Config accelerometer */
-		MPU6050_set_accelerometer(p_MPU6050, p_AccelerometerSensitivity);
-
-		/* Config Gyroscope */
-		MPU6050_set_gyroscope(p_MPU6050, p_GyroscopeSensitivity);
-
-		/* Enables interrupts */
-		MPU6050_enable_interrupts(p_MPU6050);
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Sets gyroscope sensitivity
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure indicating MPU6050 device
- * @param  p_GyroscopeSensitivity: gyroscope sensitivity value. This parameter can be a value of @ref MPU6050_gyroscope_t enumeration
- * @retval Member of @ref MPU6050_result_t enumeration
- */
-MPU6050_result_t MPU6050_set_gyroscope(MPU6050_t *p_MPU6050, MPU6050_gyroscope_t p_GyroscopeSensitivity)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Register = (uint8_t)MPU6050_GYRO_CONFIG;
-	uint8_t l_DataReturn = 0;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Config gyroscope */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_DataReturn, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		l_DataReturn = (l_DataReturn & 0xE7) | (uint8_t)p_GyroscopeSensitivity << 3; // 0XE7 to no change the l_DataReturn and reset bit 3 and 4
-
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_DataReturn, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		switch (p_GyroscopeSensitivity)
-		{
-			case (MPU6050_GYROSCOPE_250S):
-				p_MPU6050->GyroscopeMult = (float)1 / MPU6050_GYRO_SENS_250;
-				break;
-			case (MPU6050_GYROSCOPE_500S):
-				p_MPU6050->GyroscopeMult = (float)1 / MPU6050_GYRO_SENS_500;
-				break;
-			case (MPU6050_GYROSCOPE_1000S):
-				p_MPU6050->GyroscopeMult = (float)1 / MPU6050_GYRO_SENS_1000;
-				break;
-			case (MPU6050_GYROSCOPE_2000S):
-				p_MPU6050->GyroscopeMult = (float)1 / MPU6050_GYRO_SENS_2000;
-				break;
-			default:
-				break;
-		}
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Sets accelerometer sensitivity
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure indicating MPU6050 device
- * @param  p_AccelerometerSensitivity: Gyro sensitivity value. This parameter can be a value of @ref MPU6050_accelerometer_t enumeration
- * @retval Member of @ref MPU6050_result_t enumeration
- */
-MPU6050_result_t MPU6050_set_accelerometer(MPU6050_t *p_MPU6050, MPU6050_accelerometer_t p_AccelerometerSensitivity)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Register = (uint8_t)MPU6050_ACCEL_CONFIG;
-	uint8_t l_DataReturn = 0;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Config gyroscope */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_DataReturn, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		l_DataReturn = (l_DataReturn & 0xE7) | (uint8_t)p_AccelerometerSensitivity << 3; // 0XE7 to no change the l_DataReturn and reset bit 3 and 4
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_DataReturn, 1, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		switch (p_AccelerometerSensitivity)
-		{
-			case (MPU6050_ACCELEROMETER_2G):
-				p_MPU6050->AccelerometerMult = (float)1 / MPU6050_ACCE_SENS_2;
-				break;
-			case (MPU6050_ACCELEROMETER_4G):
-				p_MPU6050->AccelerometerMult = (float)1 / MPU6050_ACCE_SENS_4;
-				break;
-			case (MPU6050_ACCELEROMETER_8G):
-				p_MPU6050->AccelerometerMult = (float)1 / MPU6050_ACCE_SENS_8;
-				break;
-			case (MPU6050_ACCELEROMETER_16G):
-				p_MPU6050->AccelerometerMult = (float)1 / MPU6050_ACCE_SENS_16;
-				break;
-			default:
-				break;
-		}
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Sets output data rate
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure indicating MPU6050 device
- * @param  p_DataRate: Data rate value. An 8-bit value for prescaler value
- * @retval Member of @ref MPU6050_result_t enumeration
- */
-MPU6050_result_t MPU6050_set_data_rate(MPU6050_t *p_MPU6050, uint8_t p_DataRate)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Data[2] = {MPU6050_SMPLRT_DIV, p_DataRate};
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Set data sample rate */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), (uint8_t *)l_Data, 2, 1000) != HAL_OK)
-		{
-			return MPU6050_RESULT_ERROR;
-		}
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Enables interrupts
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure indicating MPU6050 device
- * @retval Member of @ref MPU6050_result_t enumeration
- */
-MPU6050_result_t MPU6050_enable_interrupts(MPU6050_t *p_MPU6050)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_DataReturn = 0;
-	uint8_t l_Register[2] = {MPU6050_INT_ENABLE,0x21}; /* set the interrupts bits */
-	uint8_t l_MPU_Register_Interrupt = MPU6050_INT_PIN_CFG;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Enable interrupts for data ready and motion detect */
-		while(HAL_I2C_Master_Transmit(p_MPU6050->I2Cx , (uint16_t)(p_MPU6050->Address), l_Register, 2, 1000) != HAL_OK);
-		
-		/* Clear IRQ flag on any read operation */
-		while(HAL_I2C_Master_Transmit(p_MPU6050->I2Cx , (uint16_t)(p_MPU6050->Address), &l_MPU_Register_Interrupt, 1, 1000) != HAL_OK);
-
-		while(HAL_I2C_Master_Receive(p_MPU6050->I2Cx , (uint16_t)(p_MPU6050->Address), &l_DataReturn, 14, 1000) != HAL_OK);
-		l_DataReturn |= 0x10;
-		l_Register[0] = MPU6050_INT_PIN_CFG;
-		l_Register[1] = l_DataReturn;
-		while(HAL_I2C_Master_Transmit(p_MPU6050->I2Cx , (uint16_t)(p_MPU6050->Address), l_Register, 2, 1000) != HAL_OK);
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Disables interrupts
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure indicating MPU6050 device
- * @retval Member of @ref MPU6050_result_t enumeration
- */
-MPU6050_result_t MPU6050_disable_interrupts(MPU6050_t *p_MPU6050)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Register[2] = {MPU6050_INT_ENABLE, 0x00};
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Disable interrupts */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), l_Register, 2, 1000) != HAL_OK);
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Reads and clears interrupts
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure indicating MPU6050 device
- * @param  *p_InterruptsStruct: Pointer to @ref MPU6050_interrupt_t structure to store status in
- * @retval Member of @ref MPU6050_result_t enumeration
- */
-MPU6050_result_t MPU6050_read_interrupts(MPU6050_t *p_MPU6050, MPU6050_interrupt_status_t *p_InterruptsStruct)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_DataReturn = 0;
-	uint8_t l_Register = MPU6050_INT_ENABLE;
-	p_InterruptsStruct->MPU6050_interrupt_status = 0;
-	if ((NULL == p_MPU6050) || (NULL == p_InterruptsStruct))
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK);
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_DataReturn, 14, 1000) != HAL_OK);
-
-		/* Fill value */
-		p_InterruptsStruct->MPU6050_interrupt_status = l_DataReturn;
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Reads accelerometer data from sensor
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure to store data to
- * @retval Member of @ref MPU6050_result_t:
- */
-MPU6050_result_t MPU6050_read_accelerometer(MPU6050_t *p_MPU6050)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Data[6];
-	uint8_t l_Register = MPU6050_ACCEL_XOUT_H;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Read temperature */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK);
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), l_Data, 6, 1000) != HAL_OK);
-
-		/* Format */
-		p_MPU6050->AccelerometerX = (int16_t)(l_Data[0] << 8 | l_Data[1]);
-		p_MPU6050->AccelerometerY = (int16_t)(l_Data[2] << 8 | l_Data[3]);
-		p_MPU6050->AccelerometerZ = (int16_t)(l_Data[4] << 8 | l_Data[5]);
-
-		// Convert raw values to acceleration in 'g'
-		p_MPU6050->AccelerometerX *= p_MPU6050->AccelerometerMult;
-		p_MPU6050->AccelerometerY *= p_MPU6050->AccelerometerMult;
-		p_MPU6050->AccelerometerZ *= p_MPU6050->AccelerometerMult;
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Reads gyroscope data from sensor
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure to store data to
- * @retval Member of @ref MPU6050_result_t:
- */
-MPU6050_result_t MPU6050_read_gyroscope(MPU6050_t *p_MPU6050)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Data[6];
-	uint8_t l_Register = MPU6050_GYRO_XOUT_H;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Read temperature */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK);
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), l_Data, 6, 1000) != HAL_OK);
-
-		/* Format */
-		p_MPU6050->GyroscopeX = (int16_t)(l_Data[0] << 8 | l_Data[1]);
-		p_MPU6050->GyroscopeY = (int16_t)(l_Data[2] << 8 | l_Data[3]);
-		p_MPU6050->GyroscopeZ = (int16_t)(l_Data[4] << 8 | l_Data[5]);
-
-		// Convert raw values to angular velocity in °/s
-		p_MPU6050->GyroscopeX *= p_MPU6050->GyroscopeMult;
-		p_MPU6050->GyroscopeY *= p_MPU6050->GyroscopeMult;
-		p_MPU6050->GyroscopeZ *= p_MPU6050->GyroscopeMult;
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Reads temperature data from sensor
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure to store data to
- * @retval Member of @ref MPU6050_result_t:
- */
-MPU6050_result_t MPU6050_read_temperature(MPU6050_t *p_MPU6050)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Data[2];
-	uint8_t l_Register = MPU6050_TEMP_OUT_H;
-	uint8_t l_DataReturn = 0;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Read temperature */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK);
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), l_Data, 2, 1000) != HAL_OK);
-
-		/* Format temperature */
-		l_DataReturn = (l_Data[0] << 8 | l_Data[1]);
-		p_MPU6050->Temperature = (float)((int16_t)l_DataReturn / (float)340.0 + (float)36.53);
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Reads accelerometer, gyroscope and temperature data from sensor
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure to store data to
- * @retval Member of @ref MPU6050_result_t:
- */
-MPU6050_result_t MPU6050_read_all(MPU6050_t *p_MPU6050)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Data[14];
-	int16_t l_DataReturn;
-	uint8_t l_Register = MPU6050_ACCEL_XOUT_H;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Read full raw data, 14bytes */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK);
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), l_Data, 14, 1000) != HAL_OK);
-
-		/* Format accelerometer data */
-		p_MPU6050->AccelerometerX = (int16_t)(l_Data[0] << 8 | l_Data[1]);
-		p_MPU6050->AccelerometerY = (int16_t)(l_Data[2] << 8 | l_Data[3]);
-		p_MPU6050->AccelerometerZ = (int16_t)(l_Data[4] << 8 | l_Data[5]);
-
-		// Convert raw values to acceleration in 'g'
-		p_MPU6050->AccelerometerX *= p_MPU6050->AccelerometerMult;
-		p_MPU6050->AccelerometerY *= p_MPU6050->AccelerometerMult;
-		p_MPU6050->AccelerometerZ *= p_MPU6050->AccelerometerMult;
-
-		/* Format temperature */
-		l_DataReturn = (l_Data[6] << 8 | l_Data[7]);
-		p_MPU6050->Temperature = (float)((float)((int16_t)l_DataReturn) / (float)340.0 + (float)36.53);
-
-		/* Format gyroscope data */
-		p_MPU6050->GyroscopeX = (int16_t)(l_Data[8]  << 8 | l_Data[9] );
-		p_MPU6050->GyroscopeY = (int16_t)(l_Data[10] << 8 | l_Data[11]);
-		p_MPU6050->GyroscopeZ = (int16_t)(l_Data[12] << 8 | l_Data[13]);
-
-		// Convert raw values to angular velocity in °/s
-		p_MPU6050->GyroscopeX *= p_MPU6050->GyroscopeMult;
-		p_MPU6050->GyroscopeY *= p_MPU6050->GyroscopeMult;
-		p_MPU6050->GyroscopeZ *= p_MPU6050->GyroscopeMult;
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
-}
-
-/**
- * @brief  Reads gyroscope of Z axis only data from sensor
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure to store data to
- * @retval Member of @ref MPU6050_result_t:
- */
-MPU6050_result_t MPU6050_read_gyroscope_z(MPU6050_t *p_MPU6050)
-{
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	uint8_t l_Data[2] = {0,0};
-	uint8_t l_Register = MPU6050_GYRO_ZOUT_H;
-	if (NULL == p_MPU6050)
-	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
-	}
-	else
-	{
-		/* Read temperature */
-		while (HAL_I2C_Master_Transmit(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), &l_Register, 1, 1000) != HAL_OK);
-
-		while (HAL_I2C_Master_Receive(p_MPU6050->I2Cx, (uint16_t)(p_MPU6050->Address), l_Data, 2 , 1000) != HAL_OK);
-
-		/* Format */
-		p_MPU6050->GyroscopeZ = (int16_t)(l_Data[0] << 8 | l_Data[1]);
-
-		// Convert raw values to angular velocity in °/s
-		p_MPU6050->GyroscopeZ *= p_MPU6050->GyroscopeMult ;
-
-		l_MPU6050Result = MPU6050_RESULT_OK;
-	}
-	return l_MPU6050Result;
+    return l_EcuStatus;
 }
 
 
-/**
- * @brief  Function to measure yaw (Z-axis angle)
- * @param  *p_MPU6050: Pointer to @ref MPU6050_t structure to store data to
- * @retval Member of @ref MPU6050_result_t:
- */
-MPU6050_result_t MPU6050_calculate_yaw(MPU6050_t *p_MPU6050) 
+ecu_status_t MPU6050_Read_Accel(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
 {
-	MPU6050_result_t l_MPU6050Result = MPU6050_RESULT_OK;
-	float_t l_GyroRateZ = 0;
-	static uint32_t l_PreviousTime = 0;
-	if (NULL == p_MPU6050)
+	ecu_status_t l_EcuStatus = ECU_OK;
+	if ((NULL != I2Cx) && (NULL != DataStruct))
 	{
-		l_MPU6050Result = MPU6050_RESULT_ERROR;
+		uint8_t Rec_Data[4];
+		// Read 6 BYTES of data starting from ACCEL_XOUT_H register
+		HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, ACCEL_XOUT_H_REG, 1, Rec_Data, 4, 100);
+		Accel_X_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+		Accel_Y_RAW = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
+		/*** convert the RAW values into acceleration in 'g'
+			 we have to divide according to the Full scale value set in FS_SEL
+			 I have configured FS_SEL = 0. So I am dividing by 16384.0
+			 for more details check ACCEL_CONFIG Register           ***/
+		DataStruct->Ax = Accel_X_RAW / 16384.0;
+		DataStruct->Ay = Accel_Y_RAW / 16384.0;
 	}
 	else
 	{
-		// Gyroscope rate of change in degrees/second
-		l_GyroRateZ = p_MPU6050->GyroscopeZ * p_MPU6050->GyroscopeMult;
-
-		uint32_t l_CurrentTime = HAL_GetTick(); // Get current time in ms
-		float_t dt = (float_t)((l_CurrentTime - l_PreviousTime) / 1000.0); // Convert to seconds
-		l_PreviousTime = l_CurrentTime;
-
-		// Integrate gyroscope data to calculate yaw
-    	(p_MPU6050->AngleYaw) += (l_GyroRateZ * dt);
-		
-		l_MPU6050Result = MPU6050_RESULT_OK;
+    	l_EcuStatus=ECU_ERROR;
 	}
-	return l_MPU6050Result;
+    return l_EcuStatus;
+
+}
+
+ecu_status_t MPU6050_Read_Gyro(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
+{
+	ecu_status_t l_EcuStatus=ECU_OK;
+	if ((NULL!=I2Cx)&&(NULL!=DataStruct))
+	{
+
+		uint8_t Rec_Data[2];
+		// Read 6 BYTES of data starting from GYRO_XOUT_H register
+		HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, GYRO_ZOUT_H_REG, 1, Rec_Data, 2, 100);
+	    Gyro_Z_RAW = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+
+		    /*** convert the RAW values into dps (�/s)
+	         we have to divide according to the Full scale value set in FS_SEL
+	         I have configured FS_SEL = 0. So I am dividing by 131.0
+		         for more details check GYRO_CONFIG Register              ****/
+	    DataStruct->Gz = Gyro_Z_RAW / 131.0;
+	}
+	else
+	{
+		l_EcuStatus=ECU_ERROR;
+	}
+	return l_EcuStatus;
+}
+ecu_status_t MPU6050_Read_Temp(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
+{
+	ecu_status_t l_EcuStatus=ECU_OK;
+	if ((NULL!=I2Cx)&&(NULL!=DataStruct))
+	{
+    uint8_t Rec_Data[2];
+    int16_t temp;
+    float new_temp;
+    // Read 2 BYTES of data starting from TEMP_OUT_H_REG register
+    HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, TEMP_OUT_H_REG, 1, Rec_Data, 2, 100);
+    temp = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+    new_temp= (float)((int16_t)temp / (float)340.0 + (float)36.53);
+    old_temp=(fabs(new_temp-old_temp)>TEMPERATURE_THRESHOLD)?new_temp:old_temp;
+    DataStruct->Temperature=((uint16_t)(old_temp*100))/100.0;
+	}
+	else
+	{
+		l_EcuStatus=ECU_ERROR;
+	}
+	return l_EcuStatus;
+}
+
+ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
+{
+	ecu_status_t l_EcuStatus=ECU_OK;
+	if ((NULL!=I2Cx)&&(NULL!=DataStruct))
+	{
+	float new_temp;
+    uint8_t Rec_Data_Acc[4];
+    uint8_t Rec_Data_Temp[2];
+    uint8_t Rec_Data_Gyro[2];
+    int16_t temp;
+    // Read 14 BYTES of data starting from ACCEL_XOUT_H register
+    HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, ACCEL_XOUT_H_REG, 1, Rec_Data_Acc, 4, 100);
+    Accel_X_RAW = (int16_t)(Rec_Data_Acc[0] << 8 | Rec_Data_Acc[1]);
+    Accel_Y_RAW = (int16_t)(Rec_Data_Acc[2] << 8 | Rec_Data_Acc[3]);
+    HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, TEMP_OUT_H_REG, 1, Rec_Data_Temp, 2, 100);
+    temp = (int16_t)(Rec_Data_Temp[0] << 8 | Rec_Data_Temp[1]);
+    HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, GYRO_ZOUT_H_REG, 1, Rec_Data_Gyro, 2, 100);
+    Gyro_Z_RAW = (int16_t)(Rec_Data_Gyro[0] << 8 | Rec_Data_Gyro[1]);
+
+    DataStruct->Ax = Accel_X_RAW / 16384.0 + 0.06;
+    DataStruct->Ay = Accel_Y_RAW / 16384.0 + 0.02;
+
+    new_temp= (float)((int16_t)temp / (float)340.0 + (float)36.53);
+    old_temp=(fabs(new_temp-old_temp)>TEMPERATURE_THRESHOLD)?new_temp:old_temp;
+    DataStruct->Temperature=((uint16_t)(old_temp*100))/100.0;
+
+    DataStruct->Gz = Gyro_Z_RAW / 131.0;
+    // Kalman angle solve
+    double dt = (double)(HAL_GetTick() - timer) / 1000.0;
+    timer = HAL_GetTick();
+    // Yaw Calculation with Threshold (0.8 degrees per trial)
+    if (fabs(DataStruct->Gz * dt) > YAW_THRESHOLD) // Only integrate if increase in yaw (DataStruct->Gz * dt) is larger than yaw_threshold
+    	old_yaw += DataStruct->Gz * dt;
+    DataStruct->Yaw=(__int16_t)(old_yaw);
+    }
+	else
+	{
+		l_EcuStatus=ECU_ERROR;
+	}
+	return l_EcuStatus;
 }
 
 
+
+double Kalman_getAngle(Kalman_t *Kalman, double newAngle, double newRate, double dt)
+{
+    double rate = newRate - Kalman->bias;
+    Kalman->angle += dt * rate;
+
+    Kalman->P[0][0] += dt * (dt * Kalman->P[1][1] - Kalman->P[0][1] - Kalman->P[1][0] + Kalman->Q_angle);
+    Kalman->P[0][1] -= dt * Kalman->P[1][1];
+    Kalman->P[1][0] -= dt * Kalman->P[1][1];
+    Kalman->P[1][1] += Kalman->Q_bias * dt;
+
+    double S = Kalman->P[0][0] + Kalman->R_measure;
+    double K[2];
+    K[0] = Kalman->P[0][0] / S;
+    K[1] = Kalman->P[1][0] / S;
+
+    double y = newAngle - Kalman->angle;
+    Kalman->angle += K[0] * y;
+    Kalman->bias += K[1] * y;
+
+    double P00_temp = Kalman->P[0][0];
+    double P01_temp = Kalman->P[0][1];
+
+    Kalman->P[0][0] -= K[0] * P00_temp;
+    Kalman->P[0][1] -= K[0] * P01_temp;
+    Kalman->P[1][0] -= K[1] * P00_temp;
+    Kalman->P[1][1] -= K[1] * P01_temp;
+
+    return Kalman->angle;
+};
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == GPIO_PIN_4) // Check if the interrupt is from Port B Pin 4
+    {
+        MPU6050_Read_All(I2C_INT,MPU_INT);
+    }
+}
+/***********************************************************************************************************************
+* AUTHOR                |* NOTE                                                                                        *
+************************************************************************************************************************
+*                       |                                                                                              *
+*                       |                                                                                              *
+***********************************************************************************************************************/
