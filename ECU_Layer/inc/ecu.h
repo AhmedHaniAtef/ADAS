@@ -31,8 +31,8 @@
 #define ADD_N_VALUE             (LAST_ADD_USED_FLASH - 16)
 
 #define TIMER_AUTO_RELOAD_VAL   (4199)
-#define ROBOT_LENGHT_X          (10)
-#define ROBOT_LENGHT_Y          (10)
+#define ROBOT_LENGHT_X          (0.15)
+#define ROBOT_LENGHT_Y          (0.1)
 #define RADIUS_WHEEL            (0.03)
 
 #define DEFUALT_Kp_VALUE        (0.85f)

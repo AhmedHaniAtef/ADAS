@@ -103,11 +103,10 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   EcuStatus |= robot_init(&ADAS_ROBOT, 100);
-  //EcuStatus |= encoder_init(&ADAS_ROBOT.FL.Encoder);
-  //EcuStatus |= motor_init(&zeft);
-  //EcuStatus |= encoder_init(&encoder_test);
-  //PID_Init(&PID, 0.85, 9.5, 0.07, 0.8, 0.1 , 0.0, 255.0);
-  //EcuStatus |= motor_move_forward(&zeft, 120);
+  // EcuStatus |= motor_init(&zeft);
+  // EcuStatus |= encoder_init(&encoder_test);
+  // PID_Init(&PID, 0.85, 9.5, 0.07, 0.8, 0.1 , 0.0, 255.0);
+  // EcuStatus |= motor_move_forward(&zeft, 120);
 
   while (1)
   {
@@ -120,7 +119,7 @@ int main(void)
 	  // HAL_Delay(100);
 	 
     //  move forward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 45, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
@@ -129,7 +128,7 @@ int main(void)
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000); 
     //  move backward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 135, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
@@ -139,7 +138,7 @@ int main(void)
     HAL_Delay(2000); 
 
     //  move right
-    EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 225, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
@@ -149,7 +148,7 @@ int main(void)
     HAL_Delay(2000); 
 
     //  move left
-    EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 315, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
@@ -157,6 +156,15 @@ int main(void)
     }
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000);
+    
+	  // EcuStatus |= robot_rotate(&ADAS_ROBOT, 0.3, 6);
+	  // for (uint32_t counter = 0; counter < 650; counter++)
+	  // {
+	  //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+	  //   HAL_Delay(100);
+	  // }
+	  // EcuStatus |= robot_stop(&ADAS_ROBOT);
+	  // HAL_Delay(2000);
     
 
 
