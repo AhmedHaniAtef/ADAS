@@ -67,8 +67,8 @@ all: main-build
 main-build: ADAS.elf secondary-outputs
 
 # Tool invocations
-ADAS.elf ADAS.map: $(OBJS) $(USER_OBJS) D:\studying\Graduation_Project\Baremetal\ADAS\STM32F401RCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -gdwarf-4 -o "ADAS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\studying\Graduation_Project\Baremetal\ADAS\STM32F401RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADAS.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+ADAS.elf ADAS.map: $(OBJS) $(USER_OBJS) C:\Users\es-IslamSameh2025\Desktop\ADAS\STM32F401RCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -gdwarf-4 -o "ADAS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\es-IslamSameh2025\Desktop\ADAS\STM32F401RCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADAS.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

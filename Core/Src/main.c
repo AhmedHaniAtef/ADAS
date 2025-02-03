@@ -38,42 +38,42 @@ UltrasonicSensor sensor_1={
 		.Channel=TIM_CHANNEL_1,
 		.TRIG_PORT=GPIOA,
 		.TRIG_PIN=GPIO_PIN_7,
-		.htim=&htim2,
+		.htim=&htim3,
 		.Distance=&dis_1
 };
 UltrasonicSensor sensor_2={
 		.Channel=TIM_CHANNEL_2,
 		.TRIG_PORT=GPIOA,
 		.TRIG_PIN=GPIO_PIN_7,
-		.htim=&htim2,
+		.htim=&htim3,
 		.Distance=&dis_2
 };
 UltrasonicSensor sensor_3={
-		.Channel=TIM_CHANNEL_1,
+		.Channel=TIM_CHANNEL_3,
 		.TRIG_PORT=GPIOA,
 		.TRIG_PIN=GPIO_PIN_7,
 		.htim=&htim3,
 		.Distance=&dis_3
 };
 UltrasonicSensor sensor_4={
-		.Channel=TIM_CHANNEL_3,
+		.Channel=TIM_CHANNEL_4,
 		.TRIG_PORT=GPIOA,
 		.TRIG_PIN=GPIO_PIN_7,
 		.htim=&htim3,
 		.Distance=&dis_4
 };
 UltrasonicSensor sensor_5={
-		.Channel=TIM_CHANNEL_3,
+		.Channel=TIM_CHANNEL_1,
 		.TRIG_PORT=GPIOA,
 		.TRIG_PIN=GPIO_PIN_7,
-		.htim=&htim2,
+		.htim=&htim4,
 		.Distance=&dis_5
 };
 UltrasonicSensor sensor_6={
-		.Channel=TIM_CHANNEL_4,
+		.Channel=TIM_CHANNEL_2,
 		.TRIG_PORT=GPIOA,
 		.TRIG_PIN=GPIO_PIN_7,
-		.htim=&htim2,
+		.htim=&htim4,
 		.Distance=&dis_6
 };
 UltrasonicSensor sensor_7={
@@ -145,10 +145,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM3_Init();
-  MX_TIM2_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  Ultrasonic_Init(1,&sensor_1);
+  Ultrasonic_Init(8,&sensor_1,&sensor_2,&sensor_3,&sensor_4,&sensor_5,&sensor_6,&sensor_7,&sensor_8);
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
@@ -156,7 +155,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  	  Ultrasonic_ReadDistance(1,1,&sensor_1);
+	  	  //Ultrasonic_ReadDistance(4,1,&sensor_1,&sensor_2,&sensor_3,&sensor_4);
+	  	  //Ultrasonic_ReadDistance(4,5,&sensor_5,&sensor_6,&sensor_7,&sensor_8);
+	  	  Ultrasonic_ReadDistance(8,1,&sensor_1,&sensor_2,&sensor_3,&sensor_4,&sensor_5,&sensor_6,&sensor_7,&sensor_8);
 	  	  HAL_Delay(100);
 	  	  
 

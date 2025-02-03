@@ -35,14 +35,24 @@ static uint8_t SensorsToGetDistance = 1;  // At least one sensor to get its dist
 ***********************************************************************************************************************/
 
 /**
- * @brief   Delays execution by a specified number of microseconds.
- * @param   p_Htim pointer to the timer used in delay
- * @param   p_US Microseconds to delay.
+ * @brief   Introduces a delay of the specified duration in microseconds.
+ * @param   p_Htim Pointer to the timer used for the delay.
+ * @param   p_US   Duration of the delay in microseconds.
+ *
+ * @note    This function has been modified to handle timer overflow(to safely deal with 16 bit timers).
+ *          However, it does not account for multiple overflows.
+ *          Ensure that p_US is at least 10 µs, and the timer period is not less than 10 µs.
  */
 void delay_us(TIM_HandleTypeDef *p_Htim, uint16_t p_US) {
     uint32_t l_Temp = __HAL_TIM_GET_COUNTER(p_Htim);
     l_Temp += p_US;
+    if(l_Temp<p_Htim->Init.Period)
     while (__HAL_TIM_GET_COUNTER(p_Htim) < l_Temp);
+    else
+    {
+    while (__HAL_TIM_GET_COUNTER(p_Htim) != p_Htim->Init.Period );
+    while (__HAL_TIM_GET_COUNTER(p_Htim)< l_Temp-p_Htim->Init.Period);
+    }
 }
 
 /**
@@ -111,7 +121,7 @@ ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors,int index, ...) {
             HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_SET);
         }
 
-        delay_us(Sensors[0]->htim,10);
+        delay_us(Sensors[index-1]->htim,10);
 
         /* Set TRIG pins low for all Sensors */
         for (i=index-1;i < (index-1+p_NumSensors); i++) {
