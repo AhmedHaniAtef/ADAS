@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -95,7 +94,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM5_Init();
-  MX_SPI2_Init();
+  MX_TIM9_Init();
   /* USER CODE BEGIN 2 */
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
@@ -119,7 +118,7 @@ int main(void)
 	  // HAL_Delay(100);
 	 
     //  move forward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 45, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
@@ -128,7 +127,7 @@ int main(void)
     EcuStatus |= robot_stop(&ADAS_ROBOT);
     HAL_Delay(2000); 
     //  move backward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 135, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
@@ -138,7 +137,7 @@ int main(void)
     HAL_Delay(2000); 
 
     //  move right
-    EcuStatus |= robot_move(&ADAS_ROBOT, 225, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
@@ -148,7 +147,7 @@ int main(void)
     HAL_Delay(2000); 
 
     //  move left
-    EcuStatus |= robot_move(&ADAS_ROBOT, 315, 0.2);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.2);
     for (uint8_t counter = 0; counter < 50; counter++)
     {
       EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
