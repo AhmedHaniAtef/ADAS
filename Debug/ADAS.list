@@ -668,11 +668,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = CAN_INT_Pin;
  80006a6:	f44f 6380 	mov.w	r3, #1024	@ 0x400
  80006aa:	617b      	str	r3, [r7, #20]
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
- 80006ac:	f44f 1304 	mov.w	r3, #2162688	@ 0x210000
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+ 80006ac:	f44f 1388 	mov.w	r3, #1114112	@ 0x110000
  80006b0:	61bb      	str	r3, [r7, #24]
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
- 80006b2:	2301      	movs	r3, #1
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 80006b2:	2300      	movs	r3, #0
  80006b4:	61fb      	str	r3, [r7, #28]
   HAL_GPIO_Init(CAN_INT_GPIO_Port, &GPIO_InitStruct);
  80006b6:	f107 0314 	add.w	r3, r7, #20
@@ -690,8 +690,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
  80006cc:	2301      	movs	r3, #1
  80006ce:	61fb      	str	r3, [r7, #28]
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
- 80006d0:	2302      	movs	r3, #2
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 80006d0:	2300      	movs	r3, #0
  80006d2:	623b      	str	r3, [r7, #32]
   HAL_GPIO_Init(CAN_CS_GPIO_Port, &GPIO_InitStruct);
  80006d4:	f107 0314 	add.w	r3, r7, #20
@@ -877,8 +877,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
  80007e8:	2301      	movs	r3, #1
  80007ea:	623b      	str	r3, [r7, #32]
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
- 80007ec:	f44f 3380 	mov.w	r3, #65536	@ 0x10000
+  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+ 80007ec:	f44f 23a0 	mov.w	r3, #327680	@ 0x50000
  80007f0:	627b      	str	r3, [r7, #36]	@ 0x24
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
  80007f2:	2302      	movs	r3, #2
