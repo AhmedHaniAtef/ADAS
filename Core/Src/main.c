@@ -130,7 +130,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //EcuStatus |= robot_init(&ADAS_ROBOT, 100);
+  EcuStatus |= robot_init(&ADAS_ROBOT, 100);
   AppStatus |= CAN_task_init(&Main_CAN);
   // EcuStatus |= motor_init(&zeft);
   // EcuStatus |= encoder_init(&encoder_test);
@@ -139,62 +139,62 @@ int main(void)
 
   while (1)
   {
-    AppStatus |= CAN_send_message(&Main_CAN, &messagetx);
-    HAL_Delay(100);
+
 	  // EcuStatus |= encoder_periodic_update(&encoder_test, 100);
 	  // test = 0.5 * encoder_test.Speed + ((1 - 0.5) * test);
 	  // float_t test_o = PID_Compute(&PID, 70, test);
 	  // test_o *= (195.0 / 255.0);
 	  // EcuStatus |= motor_change_speed(&zeft, test_o);
 	  // HAL_Delay(100);
-	 
+	  AppStatus |= CAN_send_message(&Main_CAN, &messagetx);
     //  move forward
-    // EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
-    // for (uint8_t counter = 0; counter < 50; counter++)
-    // {
-    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-    //   HAL_Delay(100); 
-    // }
-    // EcuStatus |= robot_stop(&ADAS_ROBOT);
-    // HAL_Delay(2000); 
-    // //  move backward
-    // EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.2);
-    // for (uint8_t counter = 0; counter < 50; counter++)
-    // {
-    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-    //   HAL_Delay(100); 
-    // }
-    // EcuStatus |= robot_stop(&ADAS_ROBOT);
-    // HAL_Delay(2000); 
-
-    // //  move right
-    // EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.2);
-    // for (uint8_t counter = 0; counter < 50; counter++)
-    // {
-    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-    //   HAL_Delay(100); 
-    // }
-    // EcuStatus |= robot_stop(&ADAS_ROBOT);
-    // HAL_Delay(2000); 
-
-    // //  move left
-    // EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.2);
-    // for (uint8_t counter = 0; counter < 50; counter++)
-    // {
-    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-    //   HAL_Delay(100); 
-    // }
-    // EcuStatus |= robot_stop(&ADAS_ROBOT);
-    // HAL_Delay(2000);
-    
-	  // EcuStatus |= robot_rotate(&ADAS_ROBOT, 0.3, 6);
-	  // for (uint32_t counter = 0; counter < 650; counter++)
-	  // {
-	  //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-	  //   HAL_Delay(100);
-	  // }
-	  // EcuStatus |= robot_stop(&ADAS_ROBOT);
-	  // HAL_Delay(2000);
+    EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000); 
+    AppStatus |= CAN_send_message(&Main_CAN, &messagetx);
+    //  move backward
+    EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.2);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000); 
+    AppStatus |= CAN_send_message(&Main_CAN, &messagetx);
+    //  move right
+    EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.2);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000); 
+    AppStatus |= CAN_send_message(&Main_CAN, &messagetx);
+    //  move left
+    EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.2);
+    for (uint8_t counter = 0; counter < 50; counter++)
+    {
+      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+      HAL_Delay(100); 
+    }
+    EcuStatus |= robot_stop(&ADAS_ROBOT);
+    HAL_Delay(2000);
+    AppStatus |= CAN_send_message(&Main_CAN, &messagetx);
+	  EcuStatus |= robot_rotate(&ADAS_ROBOT, 0.3, 6);
+	  for (uint32_t counter = 0; counter < 650; counter++)
+	  {
+	    EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+	    HAL_Delay(100);
+	  }
+	  EcuStatus |= robot_stop(&ADAS_ROBOT);
+	  HAL_Delay(2000);
     
 
 
@@ -223,7 +223,7 @@ void SystemClock_Config(void)
   * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 25;
