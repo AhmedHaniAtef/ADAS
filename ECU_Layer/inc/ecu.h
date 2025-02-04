@@ -12,10 +12,12 @@
 /***********************************************************************************************************************
 *                                                      INCLUDES                                                        *
 ***********************************************************************************************************************/
+#include "../../Core/Inc/main.h"
 #include "motor.h"
 #include "robot.h"
-//#include "mcp2515.h"
 #include "encoder.h"
+#include "CANSPI.h"
+#include "MCP2515.h"
 
 
 
@@ -59,6 +61,11 @@
 
 #define ENCODER_READ_FILTER_CONST   (0.5f)
 
+#define CAN_MCP2515_CS_PORT     (CAN_CS_GPIO_Port)
+#define CAN_MCP2515_CS_PIN      (CAN_CS_Pin)
+#define CAN_RX_INTERRUP_ENABLE  (0x03)
+#define CAN_RX_INTERRUP_DISABLE (0x00)
+#define CAN_RX_INTERRUPT  (CAN_RX_INTERRUP_ENABLE)
 
 /***********************************************************************************************************************
 *                                                   MACRO FUNCTIONS                                                    *

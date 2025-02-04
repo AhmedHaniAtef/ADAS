@@ -25,5 +25,6 @@ void list_prepend(List *list, void *data);
 void *list_remove_head(List *list);
 void *list_remove_tail(List *list);
 size_t list_size(const List *list);
+void *list_find(List *list, const void *data, int (*callback)(void *, const void *)) ;
 
 #endif // LIST_H

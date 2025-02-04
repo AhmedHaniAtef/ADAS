@@ -24,10 +24,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
- ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/gpio.h \
- ../Core/Src/../../ECU_Layer/inc/ecu.h \
+ ../Core/Inc/spi.h ../Core/Inc/main.h ../Core/Inc/tim.h \
+ ../Core/Inc/gpio.h ../Core/Src/../../ECU_Layer/inc/ecu.h \
+ ../Core/Src/../../ECU_Layer/inc/../../Core/Inc/main.h \
  ../Core/Src/../../ECU_Layer/inc/motor.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h \
@@ -35,7 +37,13 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Src/../../ECU_Layer/inc/encoder.h \
  ../Core/Src/../../ECU_Layer/inc/../../lib/inc/PID.h \
  ../Core/Src/../../ECU_Layer/inc/../ecu_std.h \
- ../Core/Src/../../lib/inc/PID.h
+ ../Core/Src/../../ECU_Layer/inc/CANSPI.h \
+ ../Core/Src/../../ECU_Layer/inc/MCP2515.h \
+ ../Core/Src/../../APP_Layer/inc/CAN_task.h \
+ ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/ecu.h \
+ ../Core/Src/../../APP_Layer/inc/../APP_std.h \
+ ../Core/Inc/../../lib/inc/list.h ../Core/Inc/../../lib/inc/queue.h \
+ ../Core/Inc/../../lib/inc/list.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -62,12 +70,15 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
-../Core/Inc/tim.h:
+../Core/Inc/spi.h:
 ../Core/Inc/main.h:
+../Core/Inc/tim.h:
 ../Core/Inc/gpio.h:
 ../Core/Src/../../ECU_Layer/inc/ecu.h:
+../Core/Src/../../ECU_Layer/inc/../../Core/Inc/main.h:
 ../Core/Src/../../ECU_Layer/inc/motor.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
@@ -75,4 +86,11 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../Core/Src/../../ECU_Layer/inc/encoder.h:
 ../Core/Src/../../ECU_Layer/inc/../../lib/inc/PID.h:
 ../Core/Src/../../ECU_Layer/inc/../ecu_std.h:
-../Core/Src/../../lib/inc/PID.h:
+../Core/Src/../../ECU_Layer/inc/CANSPI.h:
+../Core/Src/../../ECU_Layer/inc/MCP2515.h:
+../Core/Src/../../APP_Layer/inc/CAN_task.h:
+../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/ecu.h:
+../Core/Src/../../APP_Layer/inc/../APP_std.h:
+../Core/Inc/../../lib/inc/list.h:
+../Core/Inc/../../lib/inc/queue.h:
+../Core/Inc/../../lib/inc/list.h:

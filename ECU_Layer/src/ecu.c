@@ -13,7 +13,7 @@
 #include "../../Core/Inc/gpio.h"
 #include "../../Core/Inc/tim.h"
 #include "../../Core/Inc/main.h"
-//#include "../../core/Inc/spi.h"
+#include "../../core/Inc/spi.h"
 
 
 

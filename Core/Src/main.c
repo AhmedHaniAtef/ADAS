@@ -18,13 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "../../ECU_Layer/inc/ecu.h"
-#include "../../lib/inc/PID.h"
+#include "../../APP_Layer/inc/CAN_task.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -40,12 +41,39 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 ecu_status_t EcuStatus = ECU_OK;
-float_t test = 0.0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+void messagerx_clb(uCAN_MSG *p_Message);
+void messagetx_clb(uCAN_MSG *p_Message);
+
+app_status_t AppStatus = APP_OK;
+uint8_t flag = 0;
+float test = 123.1;
+
+Can_t CAN = {
+	.Speed = MCP_8MHz_1000kBPS,
+	.UsedSPI = &hspi2,
+};
+
+CAN_bus_t Main_CAN =
+{
+  .UsedCAN = &CAN,
+};
+
+can_msg_t messagerx =
+{
+  .ID = 0x0AA,
+  .CallBack = messagerx_clb,
+};
+
+can_msg_t messagetx =
+{
+  .ID = 0x1BA,
+  .CallBack = messagetx_clb,
+};
 
 /* USER CODE END PV */
 
@@ -95,13 +123,15 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM5_Init();
   MX_TIM9_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  EcuStatus |= robot_init(&ADAS_ROBOT, 100);
+  //EcuStatus |= robot_init(&ADAS_ROBOT, 100);
+  AppStatus |= CAN_task_init(&Main_CAN);
   // EcuStatus |= motor_init(&zeft);
   // EcuStatus |= encoder_init(&encoder_test);
   // PID_Init(&PID, 0.85, 9.5, 0.07, 0.8, 0.1 , 0.0, 255.0);
@@ -109,7 +139,8 @@ int main(void)
 
   while (1)
   {
-
+    AppStatus |= CAN_send_message(&Main_CAN, &messagetx);
+    HAL_Delay(100);
 	  // EcuStatus |= encoder_periodic_update(&encoder_test, 100);
 	  // test = 0.5 * encoder_test.Speed + ((1 - 0.5) * test);
 	  // float_t test_o = PID_Compute(&PID, 70, test);
@@ -118,43 +149,43 @@ int main(void)
 	  // HAL_Delay(100);
 	 
     //  move forward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
-    for (uint8_t counter = 0; counter < 50; counter++)
-    {
-      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-      HAL_Delay(100); 
-    }
-    EcuStatus |= robot_stop(&ADAS_ROBOT);
-    HAL_Delay(2000); 
-    //  move backward
-    EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.2);
-    for (uint8_t counter = 0; counter < 50; counter++)
-    {
-      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-      HAL_Delay(100); 
-    }
-    EcuStatus |= robot_stop(&ADAS_ROBOT);
-    HAL_Delay(2000); 
+    // EcuStatus |= robot_move(&ADAS_ROBOT, 0, 0.2);
+    // for (uint8_t counter = 0; counter < 50; counter++)
+    // {
+    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+    //   HAL_Delay(100); 
+    // }
+    // EcuStatus |= robot_stop(&ADAS_ROBOT);
+    // HAL_Delay(2000); 
+    // //  move backward
+    // EcuStatus |= robot_move(&ADAS_ROBOT, 180, 0.2);
+    // for (uint8_t counter = 0; counter < 50; counter++)
+    // {
+    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+    //   HAL_Delay(100); 
+    // }
+    // EcuStatus |= robot_stop(&ADAS_ROBOT);
+    // HAL_Delay(2000); 
 
-    //  move right
-    EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.2);
-    for (uint8_t counter = 0; counter < 50; counter++)
-    {
-      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-      HAL_Delay(100); 
-    }
-    EcuStatus |= robot_stop(&ADAS_ROBOT);
-    HAL_Delay(2000); 
+    // //  move right
+    // EcuStatus |= robot_move(&ADAS_ROBOT, 90, 0.2);
+    // for (uint8_t counter = 0; counter < 50; counter++)
+    // {
+    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+    //   HAL_Delay(100); 
+    // }
+    // EcuStatus |= robot_stop(&ADAS_ROBOT);
+    // HAL_Delay(2000); 
 
-    //  move left
-    EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.2);
-    for (uint8_t counter = 0; counter < 50; counter++)
-    {
-      EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
-      HAL_Delay(100); 
-    }
-    EcuStatus |= robot_stop(&ADAS_ROBOT);
-    HAL_Delay(2000);
+    // //  move left
+    // EcuStatus |= robot_move(&ADAS_ROBOT, 270, 0.2);
+    // for (uint8_t counter = 0; counter < 50; counter++)
+    // {
+    //   EcuStatus |= robot_PID(&ADAS_ROBOT, 100);
+    //   HAL_Delay(100); 
+    // }
+    // EcuStatus |= robot_stop(&ADAS_ROBOT);
+    // HAL_Delay(2000);
     
 	  // EcuStatus |= robot_rotate(&ADAS_ROBOT, 0.3, 6);
 	  // for (uint32_t counter = 0; counter < 650; counter++)
@@ -224,6 +255,28 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if (GPIO_Pin == CAN_INT_Pin) {
+	        // Call your custom callback function here
+	    flag = 1;
+	}
+}
+
+void messagerx_clb(uCAN_MSG *p_Message)
+{
+  test+=0.2;
+}
+
+void messagetx_clb(uCAN_MSG *p_Message)
+{
+  p_Message->frame.idType = dSTANDARD_CAN_MSG_ID_2_0B;
+  p_Message->frame.dlc = 4;
+  p_Message->frame.data[0] ++;
+  p_Message->frame.data[1] = p_Message->frame.data[0] + 1;
+  p_Message->frame.data[2] = p_Message->frame.data[1] + 1;
+  p_Message->frame.data[3] = p_Message->frame.data[2] + 1;
+}
 
 /* USER CODE END 4 */
 

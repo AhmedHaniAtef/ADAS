@@ -1,0 +1,11 @@
+../ECU_Layer/src/CANSPI.c:41:14:CANSPI_Sleep	2
+../ECU_Layer/src/CANSPI.c:62:14:CANSPI_Initialize	10
+../ECU_Layer/src/CANSPI.c:218:14:CANSPI_Transmit	6
+../ECU_Layer/src/CANSPI.c:272:14:CANSPI_Receive	7
+../ECU_Layer/src/CANSPI.c:334:14:CANSPI_messagesInBuffer	5
+../ECU_Layer/src/CANSPI.c:363:14:CANSPI_isBussOff	3
+../ECU_Layer/src/CANSPI.c:383:14:CANSPI_isRxErrorPassive	3
+../ECU_Layer/src/CANSPI.c:403:14:CANSPI_isTxErrorPassive	3
+../ECU_Layer/src/CANSPI.c:423:21:convertReg2ExtendedCANid	1
+../ECU_Layer/src/CANSPI.c:446:21:convertReg2StandardCANid	1
+../ECU_Layer/src/CANSPI.c:459:21:convertCANid2Reg	2

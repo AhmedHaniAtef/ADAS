@@ -77,6 +77,10 @@ void Error_Handler(void);
 #define RR_1_GPIO_Port GPIOB
 #define RR_2_Pin GPIO_PIN_1
 #define RR_2_GPIO_Port GPIOB
+#define CAN_INT_Pin GPIO_PIN_10
+#define CAN_INT_GPIO_Port GPIOB
+#define CAN_CS_Pin GPIO_PIN_12
+#define CAN_CS_GPIO_Port GPIOB
 #define FL_EN_1_Pin GPIO_PIN_8
 #define FL_EN_1_GPIO_Port GPIOA
 #define FL_EN_2_Pin GPIO_PIN_9

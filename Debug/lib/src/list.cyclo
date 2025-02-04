@@ -5,3 +5,4 @@
 ../lib/src/list.c:64:7:list_remove_head	4
 ../lib/src/list.c:80:7:list_remove_tail	4
 ../lib/src/list.c:96:8:list_size	2
+../lib/src/list.c:101:7:list_find	5

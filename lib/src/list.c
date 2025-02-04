@@ -96,3 +96,17 @@ void *list_remove_tail(List *list) {
 size_t list_size(const List *list) {
     return list ? list->size : 0;
 }
+
+// Find data based on a callback function
+void *list_find(List *list, const void *data, int (*callback)(void *, const void *)) {
+    if (!list || !callback) return NULL;
+
+    Node *current = list->head;
+    while (current) {
+        if (callback(current->data, data)) {
+            return current->data;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
