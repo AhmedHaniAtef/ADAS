@@ -1,24 +1,19 @@
 /**
- * @file    ecu.h
+ * @file    monitoring.h
  * @author  Ahmed Hani
- * @brief   contains all configuation of the ecu layer
- * @date    2024-10-07
- * @note    nan
+ * @brief   this file contains the data type and definitions of monitoring through UART
+ * @date    2025-01-29
  */
 
-#ifndef ECU_H_
-#define ECU_H_
+#ifndef MONITORING_H_
+#define MONITORING_H_
 
 /***********************************************************************************************************************
 *                                                      INCLUDES                                                        *
 ***********************************************************************************************************************/
-#include "../../Core/Inc/main.h"
-#include "motor.h"
-#include "robot.h"
-#include "encoder.h"
-#include "CANSPI.h"
-#include "MCP2515.h"
-#include "monitoring.h"
+#include "stm32f4xx_hal.h"
+#include <stm32f401xc.h>
+#include "ecu_std.h"
 
 
 
@@ -26,47 +21,8 @@
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
 
-#define LAST_ADD_USED_FLASH     (0x0803FFF8U)
-#define ADD_LAST_MAX_CAL_SPEED  (LAST_ADD_USED_FLASH)
-#define ADD_Kp_VALUE            (LAST_ADD_USED_FLASH - 4)
-#define ADD_Ki_VALUE            (LAST_ADD_USED_FLASH - 8)
-#define ADD_Kd_VALUE            (LAST_ADD_USED_FLASH - 12)
-#define ADD_N_VALUE             (LAST_ADD_USED_FLASH - 16)
 
-#define TIMER_AUTO_RELOAD_VAL   (4199)
-#define ROBOT_LENGHT_X          (0.15)
-#define ROBOT_LENGHT_Y          (0.1)
-#define RADIUS_WHEEL            (0.03)
 
-#define DEFUALT_Kp_VALUE        (0.85f)
-#define DEFUALT_Ki_VALUE        (9.5f)
-#define DEFUALT_Kd_VALUE        (0.07f)
-#define DEFUALT_N_VALUE         (0.8f)
-
-#define DEFUALT_MIN_PID_OUT     (0.0f)
-#define DEFAULT_MAX_PID_OUT     (255.0f)
-
-#define DEFUALT_MOTOR_MAX_SPEED (195.0f)
-
-#define ROBOT_CALIBRATE_UART    (0)
-#define ROBOT_CALIBRATE_SPI     (1)
-#define ROBOT_CALIBRATE_MANUAL  (2)
-#define ROBOT_CALIBRATE_I2C     (3)
-
-#define ROBOT_CALIBRATE_TYPE (ROBOT_CALIBRATE_MANUAL)
-
-#define ENCODER_MAX_COUNTER_VAL (44000)
-#define ENCODER_PRESCALER       (4)
-#define ENCODER_PULSES_NUMBER   (11)
-#define ENCODER_GEAR_RATIO      (40)
-
-#define ENCODER_READ_FILTER_CONST   (0.5f)
-
-#define CAN_MCP2515_CS_PORT     (CAN_CS_GPIO_Port)
-#define CAN_MCP2515_CS_PIN      (CAN_CS_Pin)
-#define CAN_RX_INTERRUP_ENABLE  (0x03)
-#define CAN_RX_INTERRUP_DISABLE (0x00)
-#define CAN_RX_INTERRUPT  (CAN_RX_INTERRUP_ENABLE)
 
 /***********************************************************************************************************************
 *                                                   MACRO FUNCTIONS                                                    *
@@ -76,17 +32,38 @@
 
 
 /***********************************************************************************************************************
-*                                                   EXTERN OBJECTS                                                     *
-***********************************************************************************************************************/
-
-extern robot_t ADAS_ROBOT;
-extern motor_t zeft;
-extern encoder_t encoder_test;
-extern PID_Controller PID;
-
-/***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *
 ***********************************************************************************************************************/
+
+/**
+ * @brief this data type used to convert data from a struct which passed as pointer to array of bytes to make it easy to
+ *        send through USART
+ * @param OriginalData pointer to the struct wanted to be sent
+ * @param SendData pointer to the first byte of this struct
+ */
+typedef union 
+{
+    void *OriginalData;
+    uint8_t *SendData;
+}monitoring_data_t;
+
+/**
+ * @brief this struct contains the union used to send data and the size of data in bytes
+ * @param Data union used to send data
+ * @param Size size of the data in BYTES
+ * @param MonitorUpdateData_CALLBACK pointer to user call back used to notify the user to updata the values of the data
+ * @param UsedUART the UART used to send data
+ */
+typedef struct 
+{
+    UART_HandleTypeDef *UsedUART;
+    void (*MonitorUpdateData_CALLBACK)(void);
+    monitoring_data_t Data;
+    uint8_t Size;
+}monitoring_t;
+
+
+
 
 
 
@@ -94,6 +71,14 @@ extern PID_Controller PID;
 /***********************************************************************************************************************
 *                                                  FUNCTION DEFINITION                                                 *
 ***********************************************************************************************************************/
+
+/**
+ * @brief used to send the data
+ * 
+ * @param p_MonitorOBJ object to the data and size of the data
+ * @return ecu_status_t 
+ */
+ecu_status_t monitoring_send_data(monitoring_t *p_MonitorOBJ);
 
 
 
@@ -105,5 +90,4 @@ extern PID_Controller PID;
 *                       |                                                                                              * 
 ***********************************************************************************************************************/
 
-
-#endif // ECU_H_
+#endif // MONITORING_H_
