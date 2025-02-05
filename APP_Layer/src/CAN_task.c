@@ -189,7 +189,15 @@ app_status_t CAN_send_message (CAN_bus_t *p_CanBus, can_msg_t *p_Message)
     return l_AppStatus;
 }
 
-
+/**
+ * @brief clears the interrupt to make INT pin high
+ * 
+ * @param p_CanBus pointer to the CAN bus
+ */
+void CAN_CLEAR_INT(CAN_bus_t *p_CanBus)
+{
+    MCP2515_WriteByte(p_CanBus->UsedCAN->UsedSPI, MCP2515_CANINTF, 0x00);
+}
 
 
 /***********************************************************************************************************************

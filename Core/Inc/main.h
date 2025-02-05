@@ -57,10 +57,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define RL_1_Pin GPIO_PIN_13
-#define RL_1_GPIO_Port GPIOC
-#define RL_2_Pin GPIO_PIN_14
-#define RL_2_GPIO_Port GPIOC
 #define RR_EN_1_Pin GPIO_PIN_0
 #define RR_EN_1_GPIO_Port GPIOA
 #define RR_EN_2_Pin GPIO_PIN_1
@@ -77,6 +73,8 @@ void Error_Handler(void);
 #define RR_1_GPIO_Port GPIOB
 #define RR_2_Pin GPIO_PIN_1
 #define RR_2_GPIO_Port GPIOB
+#define FL_2_Pin GPIO_PIN_2
+#define FL_2_GPIO_Port GPIOB
 #define CAN_INT_Pin GPIO_PIN_10
 #define CAN_INT_GPIO_Port GPIOB
 #define CAN_INT_EXTI_IRQn EXTI15_10_IRQn
@@ -88,8 +86,6 @@ void Error_Handler(void);
 #define FL_EN_2_GPIO_Port GPIOA
 #define FL_1_Pin GPIO_PIN_10
 #define FL_1_GPIO_Port GPIOA
-#define FL_2_Pin GPIO_PIN_11
-#define FL_2_GPIO_Port GPIOA
 #define FR_EN_1_Pin GPIO_PIN_15
 #define FR_EN_1_GPIO_Port GPIOA
 #define FR_EN_2_Pin GPIO_PIN_3
@@ -98,6 +94,10 @@ void Error_Handler(void);
 #define FR_1_GPIO_Port GPIOB
 #define FR_2_Pin GPIO_PIN_5
 #define FR_2_GPIO_Port GPIOB
+#define RL_1_Pin GPIO_PIN_6
+#define RL_1_GPIO_Port GPIOB
+#define RL_2_Pin GPIO_PIN_7
+#define RL_2_GPIO_Port GPIOB
 #define FL_PWM_Pin GPIO_PIN_8
 #define FL_PWM_GPIO_Port GPIOB
 #define FR_PWM_Pin GPIO_PIN_9

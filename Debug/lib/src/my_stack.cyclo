@@ -1,0 +1,5 @@
+../lib/src/my_stack.c:5:8:stack_create	3
+../lib/src/my_stack.c:18:6:stack_destroy	2
+../lib/src/my_stack.c:26:6:stack_push	2
+../lib/src/my_stack.c:33:7:stack_pop	2
+../lib/src/my_stack.c:40:8:stack_size	2

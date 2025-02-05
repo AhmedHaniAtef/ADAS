@@ -30,6 +30,7 @@ APP_Layer/src/CAN_task.o: ../APP_Layer/src/CAN_task.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/motor.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h \
@@ -39,8 +40,9 @@ APP_Layer/src/CAN_task.o: ../APP_Layer/src/CAN_task.c \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/../ecu_std.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/CANSPI.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/MCP2515.h \
- ../APP_Layer/src/../inc/../APP_std.h ../Core/Inc/../../lib/inc/list.h \
- ../Core/Inc/../../lib/inc/queue.h ../Core/Inc/../../lib/inc/list.h
+ ../APP_Layer/src/../inc/../../ECU_Layer/inc/monitoring.h \
+ ../APP_Layer/src/../inc/../APP_std.h ../Core/Inc/../../lib/inc/my_list.h \
+ ../Core/Inc/../../lib/inc/my_queue.h ../Core/Inc/../../lib/inc/my_list.h
 ../APP_Layer/src/../inc/CAN_task.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/ecu.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/../../Core/Inc/main.h:
@@ -72,6 +74,7 @@ APP_Layer/src/CAN_task.o: ../APP_Layer/src/CAN_task.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/motor.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
@@ -81,7 +84,8 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/../ecu_std.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/CANSPI.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/MCP2515.h:
+../APP_Layer/src/../inc/../../ECU_Layer/inc/monitoring.h:
 ../APP_Layer/src/../inc/../APP_std.h:
-../Core/Inc/../../lib/inc/list.h:
-../Core/Inc/../../lib/inc/queue.h:
-../Core/Inc/../../lib/inc/list.h:
+../Core/Inc/../../lib/inc/my_list.h:
+../Core/Inc/../../lib/inc/my_queue.h:
+../Core/Inc/../../lib/inc/my_list.h:

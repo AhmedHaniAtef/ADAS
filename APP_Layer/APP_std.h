@@ -15,8 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../../lib/inc/list.h"
-#include "../../lib/inc/queue.h"
+#include "../../lib/inc/my_list.h"
+#include "../../lib/inc/my_queue.h"
 
 
 

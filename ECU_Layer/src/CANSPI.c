@@ -291,11 +291,17 @@ ecu_status_t CANSPI_Receive(Can_t *p_CAN, uCAN_MSG *tempCanMsg)
             {
                 l_EcuStatus |= MCP2515_ReadRxSequence(p_CAN->UsedSPI, MCP2515_READ_RXB0SIDH, rxReg.rx_reg_array, 
                                                       sizeof(rxReg.rx_reg_array));
+                #if CAN_RX_INTERRUPT == CAN_RX_INTERRUP_ENABLE
+                l_EcuStatus |= MCP2515_BitModify(p_CAN->UsedSPI, MCP2515_CANINTF, 0xFF, 0x00);
+                #endif
             }
             else if (rxStatus.rxBuffer == MSG_IN_RXB1)
             {
                 l_EcuStatus |= MCP2515_ReadRxSequence(p_CAN->UsedSPI, MCP2515_READ_RXB1SIDH, rxReg.rx_reg_array, 
                                                       sizeof(rxReg.rx_reg_array));
+                #if CAN_RX_INTERRUPT == CAN_RX_INTERRUP_ENABLE
+                l_EcuStatus |= MCP2515_BitModify(p_CAN->UsedSPI, MCP2515_CANINTF, 0xFF, 0x00);
+                #endif
             }
 
             /* if the message is extended CAN type */

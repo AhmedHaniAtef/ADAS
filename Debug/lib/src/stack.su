@@ -1,5 +1,0 @@
-../lib/src/stack.c:5:8:stack_create	16	static
-../lib/src/stack.c:18:6:stack_destroy	16	static
-../lib/src/stack.c:26:6:stack_push	16	static
-../lib/src/stack.c:33:7:stack_pop	16	static
-../lib/src/stack.c:40:8:stack_size	16	static

@@ -1,0 +1,9 @@
+../Core/Src/freertos.c:154:6:MX_FREERTOS_Init	8	static
+../Core/Src/freertos.c:212:6:PIDtask	24	static
+../Core/Src/freertos.c:232:6:CANtask	24	static
+../Core/Src/freertos.c:255:6:MONITORINGtask	24	static
+../Core/Src/freertos.c:275:6:TempMoveTask	16	static
+../Core/Src/freertos.c:304:6:HAL_GPIO_EXTI_Callback	16	static
+../Core/Src/freertos.c:314:6:messagerx_clb	16	static
+../Core/Src/freertos.c:319:6:update_monitor	4	static
+../Core/Src/freertos.c:324:6:messagetx_clb	16	static

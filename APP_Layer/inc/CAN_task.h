@@ -102,6 +102,13 @@ app_status_t CAN_rx_task (CAN_bus_t *p_CanBus);
  */
 app_status_t CAN_send_message (CAN_bus_t *p_CanBus, can_msg_t *p_Message);
 
+/**
+ * @brief clears the interrupt to make INT pin high
+ * 
+ * @param p_CanBus pointer to the CAN bus
+ */
+void CAN_CLEAR_INT(CAN_bus_t *p_CanBus);
+
 
 
 #endif //CAN_TASK_H_
