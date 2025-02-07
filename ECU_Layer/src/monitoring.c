@@ -72,15 +72,14 @@ ecu_status_t monitoring_send_data(monitoring_t *p_MonitorOBJ)
 {
     ecu_status_t l_EcuStatus = ECU_OK;
     if ((NULL == p_MonitorOBJ)              ||
-        (NULL == p_MonitorOBJ->UsedUART)    || 
-        (NULL == p_MonitorOBJ->MonitorUpdateData_CALLBACK))
+        (NULL == p_MonitorOBJ->UsedUART))
     {
         l_EcuStatus = ECU_ERROR;
     }
     else
     {
-        /* update the data before sending */
-        p_MonitorOBJ->MonitorUpdateData_CALLBACK();
+
+            p_MonitorOBJ->MonitorUpdateData_CALLBACK();
 
         /* Send the data */
         HAL_UART_Transmit(p_MonitorOBJ->UsedUART, p_MonitorOBJ->Data.SendData, p_MonitorOBJ->Size, HAL_MAX_DELAY);

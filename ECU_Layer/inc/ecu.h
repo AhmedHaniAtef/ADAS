@@ -20,6 +20,7 @@
 #include "MCP2515.h"
 #include "monitoring.h"
 #include "ultrasonic.h"
+#include "mpu.h"
 
 
 /***********************************************************************************************************************
@@ -79,10 +80,23 @@
 *                                                   EXTERN OBJECTS                                                     *
 ***********************************************************************************************************************/
 
-extern robot_t ADAS_ROBOT;
-extern motor_t zeft;
-extern encoder_t encoder_test;
-extern PID_Controller PID;
+/* MPU Objects extern */
+extern I2C_HandleTypeDef hi2c2;
+extern MPU6050_t MPUPin;
+
+/* CAN Objects */
+extern Can_t CAN;
+
+/* Monitoring Objects */
+/* needs to be initialized (size - callback - data to be sent)*/
+extern monitoring_t monitor;
+
+/* Controller Objects */
+
+
+/* Ultrasonic Objects */
+
+
 
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *

@@ -24,6 +24,8 @@ ECU_Layer/src/robot.o: ../ECU_Layer/src/robot.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
@@ -37,6 +39,7 @@ ECU_Layer/src/robot.o: ../ECU_Layer/src/robot.c \
  ../ECU_Layer/src/../inc/../../lib/inc/PID.h \
  ../ECU_Layer/src/../inc/../ecu_std.h ../ECU_Layer/src/../inc/CANSPI.h \
  ../ECU_Layer/src/../inc/MCP2515.h ../ECU_Layer/src/../inc/monitoring.h \
+ ../ECU_Layer/src/../inc/ultrasonic.h ../ECU_Layer/src/../inc/mpu.h \
  ../ECU_Layer/src/../inc/robot.h
 ../ECU_Layer/src/../inc/ecu.h:
 ../ECU_Layer/src/../inc/../../Core/Inc/main.h:
@@ -63,6 +66,8 @@ ECU_Layer/src/robot.o: ../ECU_Layer/src/robot.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
@@ -79,4 +84,6 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../ECU_Layer/src/../inc/CANSPI.h:
 ../ECU_Layer/src/../inc/MCP2515.h:
 ../ECU_Layer/src/../inc/monitoring.h:
+../ECU_Layer/src/../inc/ultrasonic.h:
+../ECU_Layer/src/../inc/mpu.h:
 ../ECU_Layer/src/../inc/robot.h:

@@ -5,13 +5,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../APP_Layer/src/CAN_task.c 
+../APP_Layer/src/APP.c \
+../APP_Layer/src/CAN_task.c \
+../APP_Layer/src/Messages_Callbacks.c 
 
 OBJS += \
-./APP_Layer/src/CAN_task.o 
+./APP_Layer/src/APP.o \
+./APP_Layer/src/CAN_task.o \
+./APP_Layer/src/Messages_Callbacks.o 
 
 C_DEPS += \
-./APP_Layer/src/CAN_task.d 
+./APP_Layer/src/APP.d \
+./APP_Layer/src/CAN_task.d \
+./APP_Layer/src/Messages_Callbacks.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -21,7 +27,7 @@ APP_Layer/src/%.o APP_Layer/src/%.su APP_Layer/src/%.cyclo: ../APP_Layer/src/%.c
 clean: clean-APP_Layer-2f-src
 
 clean-APP_Layer-2f-src:
-	-$(RM) ./APP_Layer/src/CAN_task.cyclo ./APP_Layer/src/CAN_task.d ./APP_Layer/src/CAN_task.o ./APP_Layer/src/CAN_task.su
+	-$(RM) ./APP_Layer/src/APP.cyclo ./APP_Layer/src/APP.d ./APP_Layer/src/APP.o ./APP_Layer/src/APP.su ./APP_Layer/src/CAN_task.cyclo ./APP_Layer/src/CAN_task.d ./APP_Layer/src/CAN_task.o ./APP_Layer/src/CAN_task.su ./APP_Layer/src/Messages_Callbacks.cyclo ./APP_Layer/src/Messages_Callbacks.d ./APP_Layer/src/Messages_Callbacks.o ./APP_Layer/src/Messages_Callbacks.su
 
 .PHONY: clean-APP_Layer-2f-src
 

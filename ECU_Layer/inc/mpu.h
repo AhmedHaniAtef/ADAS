@@ -28,7 +28,6 @@
 #define TEMP_OUT_H_REG        0x41 /**< Temperature high byte output register. */
 #define GYRO_CONFIG_REG       0x1B /**< Gyroscope Configuration register address. */
 #define GYRO_XOUT_H_REG       0x43 /**< Gyroscope X-axis high byte output register. */
-#define GYRO_ZOUT_H_REG		  0x47
 #define MPU6050_ADDR_REG      0xD0 /**< Default I2C address for MPU6050 (0x68 shifted left by 1). */
 #define INT_CFG_REG           0x37 /**< interrupt Configuration register address. */
 #define INT_ENABLE_REG		  0x38 /**< interrupt Enable register address. */
@@ -45,15 +44,21 @@
  */
 typedef struct
 {
+
+
 	float Temperature;    /**< Temperature data in degrees Celsius. */
     /* Processed Accelerometer Data */
-    double Ax;  /**< Acceleration along X-axis in g (gravity). */
-    double Ay;  /**< Acceleration along Y-axis in g (gravity). */
-
+    float Ax;  /**< Acceleration along X-axis in g (gravity). */
+    float Ay;  /**< Acceleration along Y-axis in g (gravity). */
+    float Az;  /**< Acceleration along Z-axis in g (gravity). */
     /* Processed Gyroscope Data */
-    double Gz;  /**< Angular velocity around Z-axis in degrees/second. */
+    float Gx;  /**< Angular velocity around X-axis in degrees/second. */
+    float Gy;  /**< Angular velocity around Y-axis in degrees/second. */
+    float Gz;  /**< Angular velocity around Z-axis in degrees/second. */
     /* Calculated Angles */
-    double Yaw;     /**< Yaw angle calculated from gyroscope data. */
+    float Roll;	/**< Roll angle calculated from Kalman filter. */
+    float Pitch;	/**< Pitch angle calculated from Kalman filter. */
+    float Yaw;     /**< Yaw angle calculated from gyroscope data. */
 } MPU6050_t;
 
 /**
@@ -62,13 +67,13 @@ typedef struct
  */
 typedef struct
 {
-    double Q_angle;   /**< Process noise variance for the accelerometer. */
-    double Q_bias;    /**< Process noise variance for the gyro bias. */
-    double R_measure; /**< Measurement noise variance. */
+    float Q_angle;   /**< Process noise variance for the accelerometer. */
+    float Q_bias;    /**< Process noise variance for the gyro bias. */
+    float R_measure; /**< Measurement noise variance. */
 
-    double angle;     /**< Current estimated angle. */
-    double bias;      /**< Current gyro bias. */
-    double P[2][2];   /**< Error covariance matrix. */
+    float angle;     /**< Current estimated angle. */
+    float bias;      /**< Current gyro bias. */
+    float P[2][2];   /**< Error covariance matrix. */
 } Kalman_t;
 
 /***********************************************************************************************************************
@@ -122,13 +127,13 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct);
  * @param  dt: Time difference between measurements in seconds.
  * @return The estimated angle.
  */
-double Kalman_getAngle(Kalman_t *Kalman, double newAngle, double newRate, double dt);
+float Kalman_getAngle(Kalman_t *Kalman, float newAngle, float newRate, float dt);
 
 /**
  * @brief  EXTI interrupt callback for MPU6050 external events.
  * @param  GPIO_Pin: The GPIO pin that triggered the EXTI interrupt.
  */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+extern void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
 /***********************************************************************************************************************
  * AUTHOR                |   note                                                                                         *

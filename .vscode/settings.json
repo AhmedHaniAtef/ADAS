@@ -11,6 +11,11 @@
         "encoder.h": "c",
         "math.h": "c",
         "main.h": "c",
-        "tim.h": "c"
+        "tim.h": "c",
+        "spi.h": "c",
+        "mpu.h": "c",
+        "ultrasonic.h": "c",
+        "i2c.h": "c",
+        "usart.h": "c"
     }
 }
