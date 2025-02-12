@@ -7,17 +7,29 @@
 C_SRCS += \
 ../APP_Layer/src/APP.c \
 ../APP_Layer/src/CAN_task.c \
-../APP_Layer/src/Messages_Callbacks.c 
+../APP_Layer/src/Control_task.c \
+../APP_Layer/src/MPU_task.c \
+../APP_Layer/src/Messages_Callbacks.c \
+../APP_Layer/src/Monitoring_task.c \
+../APP_Layer/src/Ultrasonic_task.c 
 
 OBJS += \
 ./APP_Layer/src/APP.o \
 ./APP_Layer/src/CAN_task.o \
-./APP_Layer/src/Messages_Callbacks.o 
+./APP_Layer/src/Control_task.o \
+./APP_Layer/src/MPU_task.o \
+./APP_Layer/src/Messages_Callbacks.o \
+./APP_Layer/src/Monitoring_task.o \
+./APP_Layer/src/Ultrasonic_task.o 
 
 C_DEPS += \
 ./APP_Layer/src/APP.d \
 ./APP_Layer/src/CAN_task.d \
-./APP_Layer/src/Messages_Callbacks.d 
+./APP_Layer/src/Control_task.d \
+./APP_Layer/src/MPU_task.d \
+./APP_Layer/src/Messages_Callbacks.d \
+./APP_Layer/src/Monitoring_task.d \
+./APP_Layer/src/Ultrasonic_task.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -27,7 +39,7 @@ APP_Layer/src/%.o APP_Layer/src/%.su APP_Layer/src/%.cyclo: ../APP_Layer/src/%.c
 clean: clean-APP_Layer-2f-src
 
 clean-APP_Layer-2f-src:
-	-$(RM) ./APP_Layer/src/APP.cyclo ./APP_Layer/src/APP.d ./APP_Layer/src/APP.o ./APP_Layer/src/APP.su ./APP_Layer/src/CAN_task.cyclo ./APP_Layer/src/CAN_task.d ./APP_Layer/src/CAN_task.o ./APP_Layer/src/CAN_task.su ./APP_Layer/src/Messages_Callbacks.cyclo ./APP_Layer/src/Messages_Callbacks.d ./APP_Layer/src/Messages_Callbacks.o ./APP_Layer/src/Messages_Callbacks.su
+	-$(RM) ./APP_Layer/src/APP.cyclo ./APP_Layer/src/APP.d ./APP_Layer/src/APP.o ./APP_Layer/src/APP.su ./APP_Layer/src/CAN_task.cyclo ./APP_Layer/src/CAN_task.d ./APP_Layer/src/CAN_task.o ./APP_Layer/src/CAN_task.su ./APP_Layer/src/Control_task.cyclo ./APP_Layer/src/Control_task.d ./APP_Layer/src/Control_task.o ./APP_Layer/src/Control_task.su ./APP_Layer/src/MPU_task.cyclo ./APP_Layer/src/MPU_task.d ./APP_Layer/src/MPU_task.o ./APP_Layer/src/MPU_task.su ./APP_Layer/src/Messages_Callbacks.cyclo ./APP_Layer/src/Messages_Callbacks.d ./APP_Layer/src/Messages_Callbacks.o ./APP_Layer/src/Messages_Callbacks.su ./APP_Layer/src/Monitoring_task.cyclo ./APP_Layer/src/Monitoring_task.d ./APP_Layer/src/Monitoring_task.o ./APP_Layer/src/Monitoring_task.su ./APP_Layer/src/Ultrasonic_task.cyclo ./APP_Layer/src/Ultrasonic_task.d ./APP_Layer/src/Ultrasonic_task.o ./APP_Layer/src/Ultrasonic_task.su
 
 .PHONY: clean-APP_Layer-2f-src
 

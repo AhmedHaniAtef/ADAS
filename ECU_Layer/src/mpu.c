@@ -18,9 +18,9 @@
 static I2C_HandleTypeDef *I2C_INT;
 static MPU6050_t *MPU_INT;
 float  old_temp;
-float old_roll;
-float old_pitch;
-float old_yaw;
+double old_roll;
+double old_pitch;
+double old_yaw;
 /* Raw Accelerometer Data */
 static int16_t Accel_X_RAW;  /**< Raw X-axis accelerometer data. */
 static int16_t Accel_Y_RAW;  /**< Raw Y-axis accelerometer data. */
@@ -29,8 +29,8 @@ static int16_t Accel_Z_RAW;  /**< Raw Z-axis accelerometer data. */
 static int16_t Gyro_X_RAW;  /**< Raw X-axis gyroscope data. */
 static int16_t Gyro_Y_RAW;  /**< Raw Y-axis gyroscope data. */
 static int16_t Gyro_Z_RAW;  /**< Raw Z-axis gyroscope data. */
-float KalmanAngleX;  /**< Roll angle calculated using Kalman Filter. */
-float KalmanAngleY;  /**< Pitch angle calculated using Kalman Filter. */
+double KalmanAngleX;  /**< Roll angle calculated using Kalman Filter. */
+double KalmanAngleY;  /**< Pitch angle calculated using Kalman Filter. */
 // Timer for Kalman filter
 uint32_t timer;
 
@@ -178,12 +178,12 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
     DataStruct->Gy = Gyro_Y_RAW / 131.0;
     DataStruct->Gz = Gyro_Z_RAW / 131.0;
     // Kalman angle solve
-    float dt = (float)(HAL_GetTick() - timer) / 1000.0;
+    double dt = (double)(HAL_GetTick() - timer) / 1000.0;
     timer = HAL_GetTick();
     // Roll Calculation
-    float roll_sqrt = sqrt(
+    double roll_sqrt = sqrt(
     Accel_X_RAW * Accel_X_RAW + Accel_Z_RAW * Accel_Z_RAW);
-    float roll;
+    double roll;
     if (roll_sqrt != 0.0)
     {
         roll = atan(Accel_Y_RAW / roll_sqrt) * RAD_TO_DEG;
@@ -193,7 +193,7 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
         roll = 0.0;
     }
     // Pitch Calculation
-    float pitch = atan2(-Accel_X_RAW, Accel_Z_RAW) * RAD_TO_DEG;
+    double pitch = atan2(-Accel_X_RAW, Accel_Z_RAW) * RAD_TO_DEG;
     if ((pitch < -90 && KalmanAngleY > 90) || (pitch > 90 && KalmanAngleY < -90))
     {
         KalmanY.angle = pitch;
@@ -229,9 +229,9 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
 
 
 
-float Kalman_getAngle(Kalman_t *Kalman, float newAngle, float newRate, float dt)
+double Kalman_getAngle(Kalman_t *Kalman, double newAngle, double newRate, double dt)
 {
-    float rate = newRate - Kalman->bias;
+    double rate = newRate - Kalman->bias;
     Kalman->angle += dt * rate;
 
     Kalman->P[0][0] += dt * (dt * Kalman->P[1][1] - Kalman->P[0][1] - Kalman->P[1][0] + Kalman->Q_angle);
@@ -239,17 +239,17 @@ float Kalman_getAngle(Kalman_t *Kalman, float newAngle, float newRate, float dt)
     Kalman->P[1][0] -= dt * Kalman->P[1][1];
     Kalman->P[1][1] += Kalman->Q_bias * dt;
 
-    float S = Kalman->P[0][0] + Kalman->R_measure;
-    float K[2];
+    double S = Kalman->P[0][0] + Kalman->R_measure;
+    double K[2];
     K[0] = Kalman->P[0][0] / S;
     K[1] = Kalman->P[1][0] / S;
 
-    float y = newAngle - Kalman->angle;
+    double y = newAngle - Kalman->angle;
     Kalman->angle += K[0] * y;
     Kalman->bias += K[1] * y;
 
-    float P00_temp = Kalman->P[0][0];
-    float P01_temp = Kalman->P[0][1];
+    double P00_temp = Kalman->P[0][0];
+    double P01_temp = Kalman->P[0][1];
 
     Kalman->P[0][0] -= K[0] * P00_temp;
     Kalman->P[0][1] -= K[0] * P01_temp;

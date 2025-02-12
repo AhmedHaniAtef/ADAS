@@ -28,6 +28,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
@@ -56,10 +57,16 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/monitoring.h \
  ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/ultrasonic.h \
  ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/mpu.h \
+ ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/Control.h \
  ../Core/Src/../../APP_Layer/inc/CAN_task.h \
  ../Core/Src/../../APP_Layer/inc/../APP_std.h \
  ../Core/Inc/../../lib/inc/my_list.h ../Core/Inc/../../lib/inc/my_queue.h \
- ../Core/Inc/../../lib/inc/my_list.h
+ ../Core/Inc/../../lib/inc/my_list.h \
+ ../Core/Src/../../APP_Layer/inc/MPU_task.h \
+ ../Core/Src/../../APP_Layer/inc/Ultrasonic_task.h \
+ ../Core/Src/../../APP_Layer/inc/Monitoring_task.h \
+ ../Core/Src/../../APP_Layer/inc/Messages_Callbacks.h \
+ ../Core/Src/../../APP_Layer/inc/Control_task.h
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -90,6 +97,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_crc.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
@@ -118,8 +126,14 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/monitoring.h:
 ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/ultrasonic.h:
 ../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/mpu.h:
+../Core/Src/../../APP_Layer/inc/../../ECU_Layer/inc/Control.h:
 ../Core/Src/../../APP_Layer/inc/CAN_task.h:
 ../Core/Src/../../APP_Layer/inc/../APP_std.h:
 ../Core/Inc/../../lib/inc/my_list.h:
 ../Core/Inc/../../lib/inc/my_queue.h:
 ../Core/Inc/../../lib/inc/my_list.h:
+../Core/Src/../../APP_Layer/inc/MPU_task.h:
+../Core/Src/../../APP_Layer/inc/Ultrasonic_task.h:
+../Core/Src/../../APP_Layer/inc/Monitoring_task.h:
+../Core/Src/../../APP_Layer/inc/Messages_Callbacks.h:
+../Core/Src/../../APP_Layer/inc/Control_task.h:

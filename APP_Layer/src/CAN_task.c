@@ -174,6 +174,11 @@ app_status_t CAN_send_message (CAN_bus_t *p_CanBus, can_msg_t *p_Message)
             if ((l_EcuStatus != ECU_OK))
             {
                 l_AppStatus = APP_ERROR;
+                if (l_EcuStatus == ECU_ERROR)
+                {
+                	l_EcuStatus = CANSPI_Initialize(p_CanBus->UsedCAN);
+                	l_AppStatus = APP_ERROR;
+                }
             }
         }
         else

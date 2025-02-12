@@ -3,4 +3,4 @@
 ../ECU_Layer/src/mpu.c:109:14:MPU6050_Read_Gyro	3
 ../ECU_Layer/src/mpu.c:134:14:MPU6050_Read_Temp	4
 ../ECU_Layer/src/mpu.c:155:14:MPU6050_Read_All	14
-../ECU_Layer/src/mpu.c:232:7:Kalman_getAngle	1
+../ECU_Layer/src/mpu.c:232:8:Kalman_getAngle	1

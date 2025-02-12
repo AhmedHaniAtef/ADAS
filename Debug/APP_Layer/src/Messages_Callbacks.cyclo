@@ -1,0 +1,4 @@
+../APP_Layer/src/Messages_Callbacks.c:111:13:msg_robot_strafe_clb	1
+../APP_Layer/src/Messages_Callbacks.c:123:13:msg_robot_rotate_clb	1
+../APP_Layer/src/Messages_Callbacks.c:135:13:msg_robot_stop_clb	1
+../APP_Layer/src/Messages_Callbacks.c:145:13:msg_robot_Wz_clb	1

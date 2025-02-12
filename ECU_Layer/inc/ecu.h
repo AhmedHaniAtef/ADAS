@@ -21,6 +21,7 @@
 #include "monitoring.h"
 #include "ultrasonic.h"
 #include "mpu.h"
+#include "Control.h"
 
 
 /***********************************************************************************************************************
@@ -80,6 +81,8 @@
 *                                                   EXTERN OBJECTS                                                     *
 ***********************************************************************************************************************/
 
+extern CRC_HandleTypeDef hcrc;
+
 /* MPU Objects extern */
 extern I2C_HandleTypeDef hi2c2;
 extern MPU6050_t MPUPin;
@@ -89,13 +92,46 @@ extern Can_t CAN;
 
 /* Monitoring Objects */
 /* needs to be initialized (size - callback - data to be sent)*/
-extern monitoring_t monitor;
+extern monitoring_t all;
+extern monitoring_t mpu_monitor;
+extern monitoring_t ul0;
+extern monitoring_t ul45;
+extern monitoring_t ul90;
+extern monitoring_t ul135;
+extern monitoring_t ul180;
+extern monitoring_t ul225;
+extern monitoring_t ul270;
+extern monitoring_t ul315;
+extern monitoring_t Wz;
+extern monitoring_t mpu_kp;
+extern monitoring_t mpu_ki;
+extern monitoring_t mpu_kd;
+extern monitoring_t mpu_n;
+extern monitoring_t mpu_sp;
+extern monitoring_t sync;
+extern monitoring_t CRC_frame;
 
 /* Controller Objects */
-
+extern control_t Controller;
 
 /* Ultrasonic Objects */
+extern UltrasonicSensor sensor_0;
+extern UltrasonicSensor sensor_45;
+extern UltrasonicSensor sensor_90;
+extern UltrasonicSensor sensor_135;
+extern UltrasonicSensor sensor_180;
+extern UltrasonicSensor sensor_225;
+extern UltrasonicSensor sensor_270;
+extern UltrasonicSensor sensor_315;
 
+extern float_t sensor_0_dis;
+extern float_t sensor_45_dis;
+extern float_t sensor_90_dis;
+extern float_t sensor_135_dis;
+extern float_t sensor_180_dis;
+extern float_t sensor_225_dis;
+extern float_t sensor_270_dis;
+extern float_t sensor_315_dis;
 
 
 /***********************************************************************************************************************

@@ -16,6 +16,16 @@
         "mpu.h": "c",
         "ultrasonic.h": "c",
         "i2c.h": "c",
-        "usart.h": "c"
+        "usart.h": "c",
+        "mpu_task.h": "c",
+        "app_std.h": "c",
+        "Control_task.h": "c",
+        "App.h": "c",
+        "CAN_task.h": "c",
+        "Monitoring_task.h": "c",
+        "MPU_task.h": "c",
+        "Ultrasonic_task.h": "c",
+        "control.h": "c",
+        "messages_callbacks.h": "c"
     }
 }

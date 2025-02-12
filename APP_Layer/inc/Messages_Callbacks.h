@@ -13,7 +13,7 @@
 *                                                      INCLUDES                                                        *
 ***********************************************************************************************************************/
 #include "CAN_task.h"
-
+#include "../APP_std.h"
 
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
@@ -32,6 +32,17 @@
 *                                                   EXTERN OBJECTS                                                     *
 ***********************************************************************************************************************/
 
+/* Message for robot strafe */
+extern can_msg_t msg_robot_strafe;
+
+/* Message for robot rotate */
+extern can_msg_t msg_robot_rotate;
+
+/* Message for robot stop */
+extern can_msg_t msg_robot_stop;
+
+/* Message for robot updating the value of omega z */
+extern can_msg_t msg_robot_Wz;
 
 
 /***********************************************************************************************************************

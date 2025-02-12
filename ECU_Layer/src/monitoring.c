@@ -78,11 +78,12 @@ ecu_status_t monitoring_send_data(monitoring_t *p_MonitorOBJ)
     }
     else
     {
-
+        if(p_MonitorOBJ->MonitorUpdateData_CALLBACK != NULL)
+        {
             p_MonitorOBJ->MonitorUpdateData_CALLBACK();
-
+        }
         /* Send the data */
-        HAL_UART_Transmit(p_MonitorOBJ->UsedUART, p_MonitorOBJ->Data.SendData, p_MonitorOBJ->Size, HAL_MAX_DELAY);
+        l_EcuStatus |= HAL_UART_Transmit(p_MonitorOBJ->UsedUART, p_MonitorOBJ->Data.SendData, p_MonitorOBJ->Size, HAL_MAX_DELAY);
     }
     return l_EcuStatus;
 }

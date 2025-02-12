@@ -48,17 +48,17 @@ typedef struct
 
 	float Temperature;    /**< Temperature data in degrees Celsius. */
     /* Processed Accelerometer Data */
-    float Ax;  /**< Acceleration along X-axis in g (gravity). */
-    float Ay;  /**< Acceleration along Y-axis in g (gravity). */
-    float Az;  /**< Acceleration along Z-axis in g (gravity). */
+    double Ax;  /**< Acceleration along X-axis in g (gravity). */
+    double Ay;  /**< Acceleration along Y-axis in g (gravity). */
+    double Az;  /**< Acceleration along Z-axis in g (gravity). */
     /* Processed Gyroscope Data */
-    float Gx;  /**< Angular velocity around X-axis in degrees/second. */
-    float Gy;  /**< Angular velocity around Y-axis in degrees/second. */
-    float Gz;  /**< Angular velocity around Z-axis in degrees/second. */
+    double Gx;  /**< Angular velocity around X-axis in degrees/second. */
+    double Gy;  /**< Angular velocity around Y-axis in degrees/second. */
+    double Gz;  /**< Angular velocity around Z-axis in degrees/second. */
     /* Calculated Angles */
-    float Roll;	/**< Roll angle calculated from Kalman filter. */
-    float Pitch;	/**< Pitch angle calculated from Kalman filter. */
-    float Yaw;     /**< Yaw angle calculated from gyroscope data. */
+    double Roll;	/**< Roll angle calculated from Kalman filter. */
+    double Pitch;	/**< Pitch angle calculated from Kalman filter. */
+    double Yaw;     /**< Yaw angle calculated from gyroscope data. */
 } MPU6050_t;
 
 /**
@@ -67,13 +67,13 @@ typedef struct
  */
 typedef struct
 {
-    float Q_angle;   /**< Process noise variance for the accelerometer. */
-    float Q_bias;    /**< Process noise variance for the gyro bias. */
-    float R_measure; /**< Measurement noise variance. */
+    double Q_angle;   /**< Process noise variance for the accelerometer. */
+    double Q_bias;    /**< Process noise variance for the gyro bias. */
+    double R_measure; /**< Measurement noise variance. */
 
-    float angle;     /**< Current estimated angle. */
-    float bias;      /**< Current gyro bias. */
-    float P[2][2];   /**< Error covariance matrix. */
+    double angle;     /**< Current estimated angle. */
+    double bias;      /**< Current gyro bias. */
+    double P[2][2];   /**< Error covariance matrix. */
 } Kalman_t;
 
 /***********************************************************************************************************************
@@ -127,13 +127,7 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct);
  * @param  dt: Time difference between measurements in seconds.
  * @return The estimated angle.
  */
-float Kalman_getAngle(Kalman_t *Kalman, float newAngle, float newRate, float dt);
-
-/**
- * @brief  EXTI interrupt callback for MPU6050 external events.
- * @param  GPIO_Pin: The GPIO pin that triggered the EXTI interrupt.
- */
-extern void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+double Kalman_getAngle(Kalman_t *Kalman, double newAngle, double newRate, double dt);
 
 /***********************************************************************************************************************
  * AUTHOR                |   note                                                                                         *

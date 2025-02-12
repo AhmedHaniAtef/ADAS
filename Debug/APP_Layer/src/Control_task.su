@@ -1,0 +1,3 @@
+../APP_Layer/src/Control_task.c:74:14:controller_add_callback	32	static
+../APP_Layer/src/Control_task.c:132:14:controller_wait_receive	24	static
+../APP_Layer/src/Control_task.c:155:14:controller_task	48	static

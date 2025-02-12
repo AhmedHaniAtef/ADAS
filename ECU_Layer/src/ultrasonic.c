@@ -46,12 +46,12 @@ static uint8_t SensorsToGetDistance = 1;  // At least one sensor to get its dist
 void delay_us(TIM_HandleTypeDef *p_Htim, uint16_t p_US) {
     uint32_t l_Temp = __HAL_TIM_GET_COUNTER(p_Htim);
     l_Temp += p_US;
-    if(l_Temp<p_Htim->Init.Period)
-    while (__HAL_TIM_GET_COUNTER(p_Htim) < l_Temp);
+    if(l_Temp < p_Htim->Init.Period)
+    	while (__HAL_TIM_GET_COUNTER(p_Htim) < l_Temp);
     else
     {
-    while (__HAL_TIM_GET_COUNTER(p_Htim) != p_Htim->Init.Period );
-    while (__HAL_TIM_GET_COUNTER(p_Htim)< l_Temp-p_Htim->Init.Period);
+    	while (__HAL_TIM_GET_COUNTER(p_Htim) != p_Htim->Init.Period );
+    	while (__HAL_TIM_GET_COUNTER(p_Htim)< l_Temp-p_Htim->Init.Period);
     }
 }
 
@@ -104,7 +104,8 @@ ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors,int index, ...) {
     SensorsToGetDistance = p_NumSensors;
     int i=index-1;
     /* Store all sensor pointers */
-    for (i;i <(index-1+p_NumSensors);i++){
+    for (i;i <(index-1+p_NumSensors);i++)
+    {
         Sensors[i] = va_arg(l_Args, UltrasonicSensor*);
         if (NULL == Sensors[i])
         {
@@ -121,7 +122,7 @@ ecu_status_t Ultrasonic_ReadDistance(int p_NumSensors,int index, ...) {
             HAL_GPIO_WritePin(Sensors[i]->TRIG_PORT, Sensors[i]->TRIG_PIN, GPIO_PIN_SET);
         }
 
-        delay_us(Sensors[index-1]->htim,10);
+        delay_us(Sensors[index-1]->htim,15);
 
         /* Set TRIG pins low for all Sensors */
         for (i=index-1;i < (index-1+p_NumSensors); i++) {

@@ -57,10 +57,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BT_RX_Pin GPIO_PIN_2
+#define UL_TRIGGER_Y_Pin GPIO_PIN_13
+#define UL_TRIGGER_Y_GPIO_Port GPIOC
+#define UL_TRIGGER_V_Pin GPIO_PIN_14
+#define UL_TRIGGER_V_GPIO_Port GPIOC
+#define UL_TRIGGER_U_Pin GPIO_PIN_1
+#define UL_TRIGGER_U_GPIO_Port GPIOA
+#define BT_TX_Pin GPIO_PIN_2
+#define BT_TX_GPIO_Port GPIOA
+#define BT_RX_Pin GPIO_PIN_3
 #define BT_RX_GPIO_Port GPIOA
-#define BT_RXA3_Pin GPIO_PIN_3
-#define BT_RXA3_GPIO_Port GPIOA
 #define CAN_CS_Pin GPIO_PIN_4
 #define CAN_CS_GPIO_Port GPIOA
 #define CAN_SCK_Pin GPIO_PIN_5
@@ -73,8 +79,8 @@ void Error_Handler(void);
 #define UL_90_GPIO_Port GPIOB
 #define UL_135_Pin GPIO_PIN_1
 #define UL_135_GPIO_Port GPIOB
-#define UL_TRIGGER_Pin GPIO_PIN_2
-#define UL_TRIGGER_GPIO_Port GPIOB
+#define UL_TRIGGER_X_Pin GPIO_PIN_2
+#define UL_TRIGGER_X_GPIO_Port GPIOB
 #define MPU_SCL_Pin GPIO_PIN_10
 #define MPU_SCL_GPIO_Port GPIOB
 #define MPU_INT_Pin GPIO_PIN_12
