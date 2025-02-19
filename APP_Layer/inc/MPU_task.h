@@ -38,7 +38,6 @@ typedef struct
     I2C_HandleTypeDef *UsedI2C;
     MPU6050_t *mpu;
     float_t YAW;
-    PID_Controller PID;
 }mpu_t;
 
 

@@ -53,6 +53,10 @@ typedef struct
     monitoring_t *M_mpu_kd;
     monitoring_t *M_mpu_n;
     monitoring_t *M_mpu_sp;
+    monitoring_t *M_Kf_Yaw;
+    monitoring_t *M_Kf_qBias;
+    monitoring_t *M_Kf_qAngle;
+    monitoring_t *M_Kf_rMeasure;
 }monitor_values_t;
 
 

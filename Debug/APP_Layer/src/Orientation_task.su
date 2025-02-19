@@ -1,0 +1,4 @@
+../APP_Layer/src/Orientation_task.c:72:14:Orientation_task_init	24	static
+../APP_Layer/src/Orientation_task.c:101:14:Orientation_Gyro_calibration	24	static
+../APP_Layer/src/Orientation_task.c:122:14:Orientation_PID_task	40	static
+../APP_Layer/src/Orientation_task.c:147:14:Orientation_Kf_task	24	static

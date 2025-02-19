@@ -47,6 +47,7 @@ APP_Layer/src/Monitoring_task.o: ../APP_Layer/src/Monitoring_task.c \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/ultrasonic.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/mpu.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/Control.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/qmc5883l.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/CAN_task.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../APP_std.h \
  ../Core/Inc/../../lib/inc/my_list.h ../Core/Inc/../../lib/inc/my_queue.h \
@@ -56,6 +57,8 @@ APP_Layer/src/Monitoring_task.o: ../APP_Layer/src/Monitoring_task.c \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Monitoring_task.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Messages_Callbacks.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Control_task.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Orientation_task.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../lib/inc/KalmanFilter.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Monitoring_task.h
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/APP.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/ecu.h:
@@ -105,6 +108,7 @@ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/ultrasonic.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/mpu.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/Control.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/qmc5883l.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/CAN_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../APP_std.h:
 ../Core/Inc/../../lib/inc/my_list.h:
@@ -115,4 +119,6 @@ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Ultrasonic_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Monitoring_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Messages_Callbacks.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Control_task.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Orientation_task.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../lib/inc/KalmanFilter.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Monitoring_task.h:

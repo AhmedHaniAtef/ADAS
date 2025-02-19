@@ -1,6 +1,6 @@
 #include "../inc/PID.h"
 
-void PID_Init(PID_Controller *pid, float Kp, float Ki, float Kd, float N, float dt, float outputMin, float outputMax) {
+void PID_Init(PID_Controller *pid, float_t Kp, float_t Ki, float_t Kd, float_t N, float_t dt, float_t outputMin, float_t outputMax) {
     pid->Kp = Kp;
     pid->Ki = Ki;
     pid->Kd = Kd;
@@ -13,27 +13,27 @@ void PID_Init(PID_Controller *pid, float Kp, float Ki, float Kd, float N, float 
     pid->outputMax = outputMax;
 }
 
-float PID_Compute(PID_Controller *pid, float setpoint, float measuredValue) {
+float_t PID_Compute(PID_Controller *pid, float_t setpoint, float_t measuredValue) {
     // Calculate error
-    float error = setpoint - measuredValue;
+    float_t error = setpoint - measuredValue;
 
     // Proportional term
-    float Pout = pid->Kp * error;
+    float_t Pout = pid->Kp * error;
 
     // Integral term
     pid->integral += error * pid->dt;
-    float Iout = pid->Ki * pid->integral;
+    float_t Iout = pid->Ki * pid->integral;
 
     // Derivative term with filtering
-    float derivative = (error - pid->prevError) / pid->dt;
-    float Dout = pid->Kd * ((pid->N * derivative - pid->prevD) / (1.0f + pid->N * pid->dt));
+    float_t derivative = (error - pid->prevError) / pid->dt;
+    float_t Dout = pid->Kd * ((pid->N * derivative - pid->prevD) / (1.0f + pid->N * pid->dt));
 
     // Update previous values
     pid->prevError = error;
     pid->prevD = Dout;
 
     // Total output
-    float output = Pout + Iout + Dout;
+    float_t output = Pout + Iout + Dout;
 
     // Apply output limits
     if (output > pid->outputMax) {

@@ -1,9 +1,8 @@
 /**
  * @file    APP.c
- * @author  Ahmed Hani
- * @brief   contains all configuation of the APP layer
+ * @author  Youssef
+ * @brief   contains all interfaces to controll the car through uart
  * @date    2025-02-07
- * @note    nan
  */
 
 /***********************************************************************************************************************

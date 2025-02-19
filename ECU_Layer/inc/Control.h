@@ -1,6 +1,7 @@
 /**
- * @file    Control.h
+ * @file    APP.c
  * @author  Youssef
+ * @brief   contains all interfaces to controll the car through uart
  * @date    2025-02-07
  */
 
@@ -19,9 +20,10 @@
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
-#define LEFT_JOY_STICK      0XAA   // robot_move
-#define RIGHT_JOY_STICK     0XAB   // robot_rotate
-#define PUSH_BUTTON         0XAC
+#define LEFT_JOY_STICK      (0XAA)   // robot_move
+#define RIGHT_JOY_STICK     (0XAB)   // robot_rotate
+#define PUSH_BUTTON         (0XAC)
+#define COMPASS_ANGLE		(0XAD)
 
 
 

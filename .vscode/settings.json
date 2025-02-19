@@ -26,6 +26,12 @@
         "MPU_task.h": "c",
         "Ultrasonic_task.h": "c",
         "control.h": "c",
-        "messages_callbacks.h": "c"
+        "messages_callbacks.h": "c",
+        "qmc5883l.h": "c",
+        "ecu_std.h": "c",
+        "stdlib.h": "c",
+        "stm32f4xx_hal_tim.h": "c",
+        "pid.h": "c",
+        "kalmanfilter.h": "c"
     }
 }

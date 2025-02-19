@@ -162,10 +162,9 @@ app_status_t controller_task(controller_t *p_UsedController)
     else
     {
         Push_Button_Joy_Stick_Data l_PushButton;
-        Joy_Stick_Data l_JoyStick;
         uint8_t l_Selected;
         two_float_conv temp;
-
+        one_float_conv temp_angle;
         switch (p_UsedController->UsedController->Data[0])
 		{
 			case (LEFT_JOY_STICK):
@@ -237,6 +236,11 @@ app_status_t controller_task(controller_t *p_UsedController)
                     p_UsedController->RITHT_STICK_button_clb(NULL);
                 }
 				break;
+            
+            case (COMPASS_ANGLE):
+                memcpy(temp_angle.data, &p_UsedController->UsedController->Data[1], 4);
+                *p_UsedController->CompassAnglePTR = temp_angle.value; 
+                break;
 
 			default:
 				l_AppStatus = APP_ERROR;

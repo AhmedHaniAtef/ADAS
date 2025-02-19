@@ -22,6 +22,7 @@
 #include "ultrasonic.h"
 #include "mpu.h"
 #include "Control.h"
+#include "qmc5883l.h"
 
 
 /***********************************************************************************************************************
@@ -109,6 +110,10 @@ extern monitoring_t mpu_kd;
 extern monitoring_t mpu_n;
 extern monitoring_t mpu_sp;
 extern monitoring_t sync;
+extern monitoring_t Kf_outYaw;
+extern monitoring_t q_bias;
+extern monitoring_t q_angle;
+extern monitoring_t r_measure;
 extern monitoring_t CRC_frame;
 
 /* Controller Objects */

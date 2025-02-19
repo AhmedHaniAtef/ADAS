@@ -78,14 +78,6 @@ app_status_t MPU_task_init(mpu_t *p_UsedMPU)
     }
     else
     {
-        PID_Init(&p_UsedMPU->PID, 
-                 MPU_PID_Kp, 
-                 MPU_PID_Ki, 
-                 MPU_PID_Kd, 
-                 MPU_PID_N, 
-                 MPU_PID_TIME_STEP, 
-                 MPU_PID_MIN_OUT, 
-                 MPU_PID_MAX_OUT);
         ecu_status_t l_EcuStatus = MPU6050_Init(p_UsedMPU->UsedI2C, p_UsedMPU->mpu);
         if (l_EcuStatus != ECU_OK)
         {
@@ -122,31 +114,6 @@ app_status_t MPU_update_task(mpu_t *p_UsedMPU)
     return l_AppStatus;
 }
 
-/**
- * @brief PID controller using MPU
- * @param p_UsedMPU pointer to the used MPU
- * @param p_Wz Return the value of PID Controller output
- * @param p_SetPoint set point of the angle i want
- * @return app_status_t status of operation
- */
-app_status_t MPU_PID_task(mpu_t *p_UsedMPU, float_t *p_Wz, float_t p_SetPoint)
-{
-    app_status_t l_AppStatus = APP_OK;
-    if ((NULL == p_UsedMPU) || (NULL == p_Wz))
-    {
-        l_AppStatus = APP_ERROR;
-    }
-    else
-    {
-        float_t temp = 0;
-        temp = PID_Compute(&p_UsedMPU->PID, p_SetPoint, p_UsedMPU->YAW);
-        temp = temp * 100.0f;
-        temp = (temp > (floor(temp)+0.5f)) ? ceil(temp) : floor(temp);
-        temp = temp / 100.0f;
-        *p_Wz = temp;
-    }
-    return l_AppStatus;
-}
 
 /***********************************************************************************************************************
 *                                               STATIC FUNCTION DECLARATION                                            *

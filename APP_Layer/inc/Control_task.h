@@ -44,6 +44,7 @@ typedef struct
     void (* START_button_clb)(void *);
     void (* LEFT_STICK_button_clb)(void *);
     void (* RITHT_STICK_button_clb)(void *);
+    float_t *CompassAnglePTR;
 }controller_t;
 
 typedef enum

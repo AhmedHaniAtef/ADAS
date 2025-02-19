@@ -8,4 +8,4 @@
 ../APP_Layer/src/Ultrasonic_task.c:296:14:ultrasonics_outlier_detect_Y	2
 ../APP_Layer/src/Ultrasonic_task.c:323:14:ultrasonics_outlier_detect_V	2
 ../APP_Layer/src/Ultrasonic_task.c:354:13:shift_readings	2
-../APP_Layer/src/Ultrasonic_task.c:372:16:outlier_detect	4
+../APP_Layer/src/Ultrasonic_task.c:372:16:outlier_detect	5

@@ -35,7 +35,16 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+// QMC5883L_t qmc =
+// {
+//   .UsedI2C = &hi2c2,
+//   .DRDY = DRDY_INT_DISABLE, 
+//   .FullScale = RNG_8G,
+//   .Mode = CONTINUOUS,
+//   .OutputDataRate = ODR_200,
+//   .OverSampleRatio = OSR_512,
+// };
+// float_t angle = 0;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -52,28 +61,28 @@ osThreadId_t MPU_taskHandle;
 const osThreadAttr_t MPU_task_attributes = {
   .name = "MPU_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityRealtime1,
+  .priority = (osPriority_t) osPriorityHigh5,
 };
 /* Definitions for CAN_task */
 osThreadId_t CAN_taskHandle;
 const osThreadAttr_t CAN_task_attributes = {
   .name = "CAN_task",
   .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityHigh3,
 };
 /* Definitions for MONITORING_task */
 osThreadId_t MONITORING_taskHandle;
 const osThreadAttr_t MONITORING_task_attributes = {
   .name = "MONITORING_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityHigh6,
 };
-/* Definitions for Mpu_PID_task */
-osThreadId_t Mpu_PID_taskHandle;
-const osThreadAttr_t Mpu_PID_task_attributes = {
-  .name = "Mpu_PID_task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+/* Definitions for OrientationTask */
+osThreadId_t OrientationTaskHandle;
+const osThreadAttr_t OrientationTask_attributes = {
+  .name = "OrientationTask",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityHigh2,
 };
 /* Definitions for Ultrasonic_task */
 osThreadId_t Ultrasonic_taskHandle;
@@ -87,7 +96,7 @@ osThreadId_t CONTROL_taskHandle;
 const osThreadAttr_t CONTROL_task_attributes = {
   .name = "CONTROL_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityHigh5,
 };
 /* Definitions for TempPIDmoveTask */
 osThreadId_t TempPIDmoveTaskHandle;
@@ -101,10 +110,10 @@ osSemaphoreId_t MPU_semaHandle;
 const osSemaphoreAttr_t MPU_sema_attributes = {
   .name = "MPU_sema"
 };
-/* Definitions for MPU_PID_sema */
-osSemaphoreId_t MPU_PID_semaHandle;
-const osSemaphoreAttr_t MPU_PID_sema_attributes = {
-  .name = "MPU_PID_sema"
+/* Definitions for Orientation_sema */
+osSemaphoreId_t Orientation_semaHandle;
+const osSemaphoreAttr_t Orientation_sema_attributes = {
+  .name = "Orientation_sema"
 };
 /* Definitions for CONTROL_sema */
 osSemaphoreId_t CONTROL_semaHandle;
@@ -115,6 +124,11 @@ const osSemaphoreAttr_t CONTROL_sema_attributes = {
 osSemaphoreId_t PID_tune_semaHandle;
 const osSemaphoreAttr_t PID_tune_sema_attributes = {
   .name = "PID_tune_sema"
+};
+/* Definitions for OrientationReady_sema */
+osSemaphoreId_t OrientationReady_semaHandle;
+const osSemaphoreAttr_t OrientationReady_sema_attributes = {
+  .name = "OrientationReady_sema"
 };
 /* Definitions for CAN_sema */
 osSemaphoreId_t CAN_semaHandle;
@@ -137,7 +151,7 @@ void Reset_PID(void *);
 void MPUtask(void *argument);
 void CANtask(void *argument);
 void MONITORINGtask(void *argument);
-void MpuPIDtask(void *argument);
+void Orientationtask(void *argument);
 void ULTRASONICtask(void *argument);
 void CONTROLtask(void *argument);
 void TempPIDmove_Task(void *argument);
@@ -162,14 +176,17 @@ void MX_FREERTOS_Init(void) {
   /* creation of MPU_sema */
   MPU_semaHandle = osSemaphoreNew(1, 0, &MPU_sema_attributes);
 
-  /* creation of MPU_PID_sema */
-  MPU_PID_semaHandle = osSemaphoreNew(1, 0, &MPU_PID_sema_attributes);
+  /* creation of Orientation_sema */
+  Orientation_semaHandle = osSemaphoreNew(1, 0, &Orientation_sema_attributes);
 
   /* creation of CONTROL_sema */
   CONTROL_semaHandle = osSemaphoreNew(1, 0, &CONTROL_sema_attributes);
 
   /* creation of PID_tune_sema */
   PID_tune_semaHandle = osSemaphoreNew(1, 0, &PID_tune_sema_attributes);
+
+  /* creation of OrientationReady_sema */
+  OrientationReady_semaHandle = osSemaphoreNew(1, 0, &OrientationReady_sema_attributes);
 
   /* creation of CAN_sema */
   CAN_semaHandle = osSemaphoreNew(2, 0, &CAN_sema_attributes);
@@ -196,8 +213,8 @@ void MX_FREERTOS_Init(void) {
   /* creation of MONITORING_task */
   MONITORING_taskHandle = osThreadNew(MONITORINGtask, NULL, &MONITORING_task_attributes);
 
-  /* creation of Mpu_PID_task */
-  Mpu_PID_taskHandle = osThreadNew(MpuPIDtask, NULL, &Mpu_PID_task_attributes);
+  /* creation of OrientationTask */
+  OrientationTaskHandle = osThreadNew(Orientationtask, NULL, &OrientationTask_attributes);
 
   /* creation of Ultrasonic_task */
   Ultrasonic_taskHandle = osThreadNew(ULTRASONICtask, NULL, &Ultrasonic_task_attributes);
@@ -228,13 +245,24 @@ void MX_FREERTOS_Init(void) {
 void MPUtask(void *argument)
 {
   /* USER CODE BEGIN MPUtask */
+  osDelay(100);
   app_status_t t_AppStatus = MPU_task_init(&Main_MPU);
-  osSemaphoreRelease(MPU_PID_semaHandle);
+  osSemaphoreAcquire(Orientation_semaHandle, osWaitForever);
+  for (uint32_t i = 0; i < 1000; i++)
+  {
+    osSemaphoreAcquire(MPU_semaHandle, osWaitForever);
+    t_AppStatus |= MPU_update_task(&Main_MPU);
+    MpuGz = Main_MPU.mpu->Gz;
+    t_AppStatus |= Orientation_Gyro_calibration(&Main_Orientation);
+  }
+  Main_Orientation.GyroBias /= 1000.0f;
+  osSemaphoreRelease(OrientationReady_semaHandle);
   /* Infinite loop */
   for(;;)
   {
     osSemaphoreAcquire(MPU_semaHandle, osWaitForever);
     t_AppStatus |= MPU_update_task(&Main_MPU);
+    MpuGz = Main_MPU.mpu->Gz;
   }
   /* USER CODE END MPUtask */
 }
@@ -281,26 +309,28 @@ void MONITORINGtask(void *argument)
   /* USER CODE END MONITORINGtask */
 }
 
-/* USER CODE BEGIN Header_MpuPIDtask */
+/* USER CODE BEGIN Header_Orientationtask */
 /**
-* @brief Function implementing the Mpu_PID_task thread.
+* @brief Function implementing the OrientationTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_MpuPIDtask */
-void MpuPIDtask(void *argument)
+/* USER CODE END Header_Orientationtask */
+void Orientationtask(void *argument)
 {
-  /* USER CODE BEGIN MpuPIDtask */
-  app_status_t t_AppStatus  = APP_OK;
-  osSemaphoreAcquire(MPU_PID_semaHandle, osWaitForever);
+  /* USER CODE BEGIN Orientationtask */
+  app_status_t t_AppStatus = Orientation_task_init(&Main_Orientation);
+  osSemaphoreRelease(Orientation_semaHandle);
+  osSemaphoreAcquire(OrientationReady_semaHandle, osWaitForever);
   /* Infinite loop */
   for(;;)
   {
-    t_AppStatus |= MPU_PID_task(&Main_MPU, &Omega_z, Car_Wanted_Angle);
-    CAN_send_message(&Main_CAN, &msg_robot_Wz);
-    osDelay(100);
+    t_AppStatus |= Orientation_Kf_task(&Main_Orientation);
+    t_AppStatus |= Orientation_PID_task(&Main_Orientation, &Omega_z, Car_Wanted_Angle);
+    t_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_Wz);
+    osDelay(1);
   }
-  /* USER CODE END MpuPIDtask */
+  /* USER CODE END Orientationtask */
 }
 
 /* USER CODE BEGIN Header_ULTRASONICtask */
@@ -408,16 +438,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   osSemaphoreRelease(CONTROL_semaHandle);
 }
 
-float kp = 0;
-float ki = 0;
-float kd = 0;
-float n = 0;
+float qbias = 0.003f;
+float qangle = 0.001f;
+float rmeasure = 0;
+float n = 1;
 void Robot_Stop_PID_tunning(void *)
 {
   Car_Wanted_Speed = 0;
   Car_Wanted_direction = 0;
   Car_Wanted_Angle = 0;
-  PID_Init(&Main_MPU.PID, kp, ki, kd, n, 100, -100, 100);
   CAN_send_message(&Main_CAN, &msg_robot_stop);
 }
 
@@ -433,36 +462,31 @@ void Increase_Set_Point_angle(void *)
 
 void Increase_Kp(void *)
 {
-  kp += -0.001;
+  qbias += 0.0001 * n;
 
-  Main_MPU.PID.Kp = kp;
+  Main_Orientation.Kf_YAW.Q_bias = qbias;
 }
 
 void Increase_Ki(void *)
 {
-  ki += -0.00000001;
-  Main_MPU.PID.Ki = ki;
+  qangle += 0.0001f * n;
+  Main_Orientation.Kf_YAW.Q_angle = qangle;
 }
 
 void Increase_Kd(void *)
 {
-  kd += 0.01;
-  Main_MPU.PID.Kd = kd;
+  rmeasure += 0.0001f * n;
+  Main_Orientation.Kf_YAW.R_measure = rmeasure;
 }
 
 void Increase_N(void *)
 {
-  n += 0.01;
-  Main_MPU.PID.N = n;
+  n *= -1;
 }
 
 void Reset_PID(void *)
 {
-	kp = -0.025;
-	ki= 0;
-	kd= 0.03;
-	n= 0;
-  PID_Init(&Main_MPU.PID, kp, ki, kd, n, 100, -10, 10);
+  Kalman_Init(&Main_Orientation.Kf_YAW);
 }
 /* USER CODE END Application */
 

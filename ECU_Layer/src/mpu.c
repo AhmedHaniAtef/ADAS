@@ -18,9 +18,9 @@
 static I2C_HandleTypeDef *I2C_INT;
 static MPU6050_t *MPU_INT;
 float  old_temp;
-double old_roll;
-double old_pitch;
-double old_yaw;
+float_t old_roll;
+float_t old_pitch;
+float_t old_yaw;
 /* Raw Accelerometer Data */
 static int16_t Accel_X_RAW;  /**< Raw X-axis accelerometer data. */
 static int16_t Accel_Y_RAW;  /**< Raw Y-axis accelerometer data. */
@@ -29,8 +29,8 @@ static int16_t Accel_Z_RAW;  /**< Raw Z-axis accelerometer data. */
 static int16_t Gyro_X_RAW;  /**< Raw X-axis gyroscope data. */
 static int16_t Gyro_Y_RAW;  /**< Raw Y-axis gyroscope data. */
 static int16_t Gyro_Z_RAW;  /**< Raw Z-axis gyroscope data. */
-double KalmanAngleX;  /**< Roll angle calculated using Kalman Filter. */
-double KalmanAngleY;  /**< Pitch angle calculated using Kalman Filter. */
+float_t KalmanAngleX;  /**< Roll angle calculated using Kalman Filter. */
+float_t KalmanAngleY;  /**< Pitch angle calculated using Kalman Filter. */
 // Timer for Kalman filter
 uint32_t timer;
 
@@ -58,7 +58,7 @@ ecu_status_t MPU6050_Init(I2C_HandleTypeDef *I2Cx,MPU6050_t *DataStruct)
         HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG, PWR_MGMT_1_REG, 1, &Data, 1, 100);
 
         // Set DATA RATE to 31.25Hz(8000/(1+255)) by writing to SMPLRT_DIV register
-        Data = 0xFF;
+        Data = 0x07;
         HAL_I2C_Mem_Write(I2Cx, MPU6050_ADDR_REG, SMPLRT_DIV_REG, 1, &Data, 1, 100);
         // Set accelerometer configuration in ACCEL_CONFIG Register (+-2g)
         Data = 0x00;
@@ -178,12 +178,12 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
     DataStruct->Gy = Gyro_Y_RAW / 131.0;
     DataStruct->Gz = Gyro_Z_RAW / 131.0;
     // Kalman angle solve
-    double dt = (double)(HAL_GetTick() - timer) / 1000.0;
+    float_t dt = (float_t)(HAL_GetTick() - timer) / 1000.0;
     timer = HAL_GetTick();
     // Roll Calculation
-    double roll_sqrt = sqrt(
+    float_t roll_sqrt = sqrt(
     Accel_X_RAW * Accel_X_RAW + Accel_Z_RAW * Accel_Z_RAW);
-    double roll;
+    float_t roll;
     if (roll_sqrt != 0.0)
     {
         roll = atan(Accel_Y_RAW / roll_sqrt) * RAD_TO_DEG;
@@ -193,7 +193,7 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
         roll = 0.0;
     }
     // Pitch Calculation
-    double pitch = atan2(-Accel_X_RAW, Accel_Z_RAW) * RAD_TO_DEG;
+    float_t pitch = atan2(-Accel_X_RAW, Accel_Z_RAW) * RAD_TO_DEG;
     if ((pitch < -90 && KalmanAngleY > 90) || (pitch > 90 && KalmanAngleY < -90))
     {
         KalmanY.angle = pitch;
@@ -229,9 +229,9 @@ ecu_status_t MPU6050_Read_All(I2C_HandleTypeDef *I2Cx, MPU6050_t *DataStruct)
 
 
 
-double Kalman_getAngle(Kalman_t *Kalman, double newAngle, double newRate, double dt)
+float_t Kalman_getAngle(Kalman_t *Kalman, float_t newAngle, float_t newRate, float_t dt)
 {
-    double rate = newRate - Kalman->bias;
+    float_t rate = newRate - Kalman->bias;
     Kalman->angle += dt * rate;
 
     Kalman->P[0][0] += dt * (dt * Kalman->P[1][1] - Kalman->P[0][1] - Kalman->P[1][0] + Kalman->Q_angle);
@@ -239,17 +239,17 @@ double Kalman_getAngle(Kalman_t *Kalman, double newAngle, double newRate, double
     Kalman->P[1][0] -= dt * Kalman->P[1][1];
     Kalman->P[1][1] += Kalman->Q_bias * dt;
 
-    double S = Kalman->P[0][0] + Kalman->R_measure;
-    double K[2];
+    float_t S = Kalman->P[0][0] + Kalman->R_measure;
+    float_t K[2];
     K[0] = Kalman->P[0][0] / S;
     K[1] = Kalman->P[1][0] / S;
 
-    double y = newAngle - Kalman->angle;
+    float_t y = newAngle - Kalman->angle;
     Kalman->angle += K[0] * y;
     Kalman->bias += K[1] * y;
 
-    double P00_temp = Kalman->P[0][0];
-    double P01_temp = Kalman->P[0][1];
+    float_t P00_temp = Kalman->P[0][0];
+    float_t P01_temp = Kalman->P[0][1];
 
     Kalman->P[0][0] -= K[0] * P00_temp;
     Kalman->P[0][1] -= K[0] * P01_temp;

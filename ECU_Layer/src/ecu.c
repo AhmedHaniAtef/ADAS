@@ -201,6 +201,40 @@ monitoring_t CRC_frame =
     .Data.OriginalData = NULL,
 };
 
+monitoring_t Kf_outYaw = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+monitoring_t q_bias = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+monitoring_t q_angle = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+monitoring_t r_measure = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+
+
 /* Controller Objects */
 control_t Controller =
 {
