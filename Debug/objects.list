@@ -1,4 +1,6 @@
+"./APP_Layer/src/APP.o"
 "./APP_Layer/src/CAN_task.o"
+"./APP_Layer/src/Messages_Callbacks.o"
 "./Core/Src/freertos.o"
 "./Core/Src/gpio.o"
 "./Core/Src/main.o"

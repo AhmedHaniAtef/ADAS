@@ -33,7 +33,7 @@ APP_Layer/src/CAN_task.o: ../APP_Layer/src/CAN_task.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/motor.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h \
- D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS\ _MOVING/ECU_Layer/ecu_std.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/robot.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/encoder.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/../../lib/inc/PID.h \
@@ -77,7 +77,7 @@ APP_Layer/src/CAN_task.o: ../APP_Layer/src/CAN_task.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/motor.h:
 ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h:
-D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
+D:/studying/Graduation_Project/Baremetal/ADAS\ _MOVING/ECU_Layer/ecu_std.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/robot.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/encoder.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/../../lib/inc/PID.h:

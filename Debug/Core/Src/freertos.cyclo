@@ -1,9 +1,6 @@
-../Core/Src/freertos.c:154:6:MX_FREERTOS_Init	1
-../Core/Src/freertos.c:212:6:PIDtask	1
-../Core/Src/freertos.c:232:6:CANtask	1
-../Core/Src/freertos.c:255:6:MONITORINGtask	1
-../Core/Src/freertos.c:275:6:TempMoveTask	1
-../Core/Src/freertos.c:304:6:HAL_GPIO_EXTI_Callback	2
-../Core/Src/freertos.c:314:6:messagerx_clb	1
-../Core/Src/freertos.c:319:6:update_monitor	1
-../Core/Src/freertos.c:324:6:messagetx_clb	1
+../Core/Src/freertos.c:91:13:configureTimerForRunTimeStats	1
+../Core/Src/freertos.c:96:22:getRunTimeCounterValue	1
+../Core/Src/freertos.c:107:6:MX_FREERTOS_Init	1
+../Core/Src/freertos.c:159:6:PIDtask	1
+../Core/Src/freertos.c:180:6:CANtask	1
+../Core/Src/freertos.c:196:6:HAL_GPIO_EXTI_Callback	2

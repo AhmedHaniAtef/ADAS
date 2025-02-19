@@ -99,9 +99,10 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM5_Init();
-  MX_TIM9_Init();
   MX_SPI2_Init();
   MX_USART6_UART_Init();
+  MX_TIM11_Init();
+  MX_TIM9_Init();
   /* USER CODE BEGIN 2 */
   //HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
   /* USER CODE END 2 */

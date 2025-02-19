@@ -1,0 +1,5 @@
+../APP_Layer/src/Messages_Callbacks.c:105:14:messages_init	16	static
+../APP_Layer/src/Messages_Callbacks.c:123:13:msg_robot_strafe_clb	32	static
+../APP_Layer/src/Messages_Callbacks.c:133:13:msg_robot_rotate_clb	32	static
+../APP_Layer/src/Messages_Callbacks.c:143:13:msg_robot_stop_clb	24	static
+../APP_Layer/src/Messages_Callbacks.c:153:13:msg_robot_Wz_clb	24	static

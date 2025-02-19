@@ -95,6 +95,106 @@ static float_t N  = DEFUALT_N_VALUE;
 
 /**
   *
+  * @brief This function move the robot manually using Vx, Vy and Wz
+  * 
+  * @param p_Robot pointer to robot object
+  * @param p_Vx speed in x direction (m/s)
+  * @param p_Vy speed in y direction (m/s)
+  * @param p_Wz angular speed (radian per second)
+  * @return ecu_status_t status of the operation
+ */
+ecu_status_t robot_manual_move(robot_t *p_Robot , float_t p_Vx , float_t p_Vy, float_t p_Wz)
+{
+	ecu_status_t l_EcuStatus = ECU_OK;
+    if (NULL == p_Robot)
+    {
+        l_EcuStatus = ECU_ERROR;
+    }
+    else
+    {
+    	float_t l_AngularVelocityFrontLeft  = 0;   // Wfl
+    	float_t l_AngularVelocityFrontRight = 0;   // Wfr
+    	float_t l_AngularVelocityRearLeft   = 0;   // Wrl
+    	float_t l_AngularVelocityRearRight  = 0;   // Wrr
+    	float_t l_LinearVelocityXAxis       = 0;   // Vx
+    	float_t l_LinearVelocityYAxis       = 0;   // Vy
+    	float_t l_AngularVelocityRobotBase  = 0;   // Wz
+
+		l_LinearVelocityXAxis      = p_Vx;
+		l_LinearVelocityYAxis      = p_Vy;
+		l_AngularVelocityRobotBase = p_Wz;
+
+		p_Robot->Vx = l_LinearVelocityXAxis;
+		p_Robot->Vy = l_LinearVelocityYAxis;
+		p_Robot->Wz = l_AngularVelocityRobotBase;
+
+		// calculate the speed of each wheel
+    	l_AngularVelocityFrontLeft  = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis - l_LinearVelocityYAxis -
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+    	l_AngularVelocityFrontRight = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis + l_LinearVelocityYAxis +
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+    	l_AngularVelocityRearLeft   = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis + l_LinearVelocityYAxis -
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+    	l_AngularVelocityRearRight  = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis - l_LinearVelocityYAxis +
+    								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
+
+		// store the speed of each wheel
+    	p_Robot->FL.Speed = fabs(RPS_TO_RPM(l_AngularVelocityFrontLeft ));
+    	p_Robot->FR.Speed = fabs(RPS_TO_RPM(l_AngularVelocityFrontRight));
+    	p_Robot->RL.Speed = fabs(RPS_TO_RPM(l_AngularVelocityRearLeft  ));
+    	p_Robot->RR.Speed = fabs(RPS_TO_RPM(l_AngularVelocityRearRight ));
+
+		// determine the direction of Front Left motor rotation then store and move it 
+    	if(l_AngularVelocityFrontLeft < 0)
+    	{
+    		p_Robot->FL.Direction = BACWARD;
+    		l_EcuStatus = motor_move_backward(&p_Robot->FL.Motor , p_Robot->FL.Speed);
+    	}
+    	else
+    	{
+    		p_Robot->FL.Direction = FORWARD;
+    		l_EcuStatus = motor_move_forward(&p_Robot->FL.Motor , p_Robot->FL.Speed);
+    	}
+		// determine the direction of Front Right motor rotation then store and move it 
+    	if(l_AngularVelocityFrontRight < 0)
+    	{
+    	    p_Robot->FR.Direction = BACWARD;
+    	    l_EcuStatus = motor_move_backward(&p_Robot->FR.Motor , p_Robot->FR.Speed);
+    	}
+    	else
+    	{
+    	    p_Robot->FR.Direction = FORWARD;
+    	    l_EcuStatus = motor_move_forward(&p_Robot->FR.Motor , p_Robot->FR.Speed);
+    	}
+		// determine the direction of Rear Left motor rotation then store and move it 
+    	if(l_AngularVelocityRearLeft < 0)
+    	{
+    	    p_Robot->RL.Direction = BACWARD;
+    	    l_EcuStatus = motor_move_backward(&p_Robot->RL.Motor , p_Robot->RL.Speed);
+    	}
+    	else
+    	{
+    	    p_Robot->RL.Direction = FORWARD;
+    	    l_EcuStatus = motor_move_forward(&p_Robot->RL.Motor , p_Robot->RL.Speed);
+    	}
+		// determine the direction of Rear Right motor rotation then store and move it 
+    	if(l_AngularVelocityRearRight < 0)
+    	{
+    	    p_Robot->RR.Direction = BACWARD;
+    	    l_EcuStatus = motor_move_backward(&p_Robot->RR.Motor , p_Robot->RR.Speed);
+    	}
+    	else
+    	{
+    	    p_Robot->RR.Direction = FORWARD;
+    	    l_EcuStatus = motor_move_forward(&p_Robot->RR.Motor , p_Robot->RR.Speed);
+    	}
+    }
+	return l_EcuStatus;
+}
+
+
+/**
+  *
   * @brief This function move the robot depending on angle and speed
   *
   * @param p_Robot pointer to robot object
@@ -123,6 +223,10 @@ ecu_status_t robot_move(robot_t *p_Robot , float_t p_Angle , float_t p_Speed)
 		// convert velocity and angle to x and y velocity
     	l_LinearVelocityXAxis = p_Speed * cos(DEGREE_TO_RADIAN(p_Angle));
     	l_LinearVelocityYAxis = p_Speed * sin(DEGREE_TO_RADIAN(p_Angle));
+
+		p_Robot->Vx = l_LinearVelocityXAxis;
+		p_Robot->Vy = l_LinearVelocityYAxis;
+		p_Robot->Wz = l_AngularVelocityRobotBase;
 
 		// calculate the speed of each wheel
     	l_AngularVelocityFrontLeft  = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis - l_LinearVelocityYAxis -
@@ -221,6 +325,10 @@ ecu_status_t robot_rotate(robot_t *p_Robot , float_t p_Radius , float_t p_Angula
     	l_LinearVelocityYAxis = 0;
 		l_AngularVelocityRobotBase = (-1.0) * p_AngularSpeed;
 
+		p_Robot->Vx = l_LinearVelocityXAxis;
+		p_Robot->Vy = l_LinearVelocityYAxis;
+		p_Robot->Wz = l_AngularVelocityRobotBase;
+
 		// calculate the speed of each wheel
     	l_AngularVelocityFrontLeft  = ((1.0 / RADIUS_WHEEL) * (l_LinearVelocityXAxis - l_LinearVelocityYAxis -
     								  ((ROBOT_LENGHT_X + ROBOT_LENGHT_Y) * l_AngularVelocityRobotBase)));
@@ -306,6 +414,10 @@ ecu_status_t robot_stop(robot_t *p_Robot)
     	p_Robot->FR.Speed = 0.0f;
     	p_Robot->RL.Speed = 0.0f;
     	p_Robot->RR.Speed = 0.0f;
+
+		p_Robot->Vx = 0.0f;
+		p_Robot->Vy = 0.0f;
+		p_Robot->Wz = 0.0f;
 
 		// determine the direction of Front Left motor rotation then store and move it
 		p_Robot->FL.Direction = STOPED;

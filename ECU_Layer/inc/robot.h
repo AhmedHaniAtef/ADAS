@@ -76,11 +76,26 @@ typedef struct
 	PID_Controller PID_FR;
 	PID_Controller PID_RL;
 	PID_Controller PID_RR;
+  float_t Vx;
+  float_t Vy;
+  float_t Wz;
 }robot_t;
 
 /***********************************************************************************************************************
 *                                                  FUNCTION DEFINITION                                                 *
 ***********************************************************************************************************************/
+
+/**
+  *
+  * @brief This function move the robot manually using Vx, Vy and Wz
+  * 
+  * @param p_Robot pointer to robot object
+  * @param p_Vx speed in x direction (m/s)
+  * @param p_Vy speed in y direction (m/s)
+  * @param p_Wz angular speed (radian per second)
+  * @return ecu_status_t status of the operation
+ */
+ecu_status_t robot_manual_move(robot_t *p_Robot , float_t p_Vx , float_t p_Vy, float_t p_Wz);
 
 /**
   *

@@ -17,7 +17,7 @@
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
 
-#define DEFUALT_SPEED           (195.0)
+#define DEFUALT_SPEED           (195.0f)
 
 
 
@@ -41,7 +41,7 @@
 ***********************************************************************************************************************/
 
 /* defualt speed before calibration */
-float_t MaxClibratedSpeed = DEFUALT_SPEED;
+float_t MaxClibratedSpeed = DEFUALT_MOTOR_MAX_SPEED;
 
 
 

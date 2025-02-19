@@ -44,12 +44,13 @@
 *                                                     GLOBAL OBJECTS                                                   *
 ***********************************************************************************************************************/
 
+/* robot object */
 robot_t ADAS_ROBOT =
 {
 	.FL.Encoder.SelectedTimer = &htim1,
 	.FR.Encoder.SelectedTimer = &htim2,
 	.RL.Encoder.SelectedTimer = &htim3,
-	.RR.Encoder.SelectedTimer = &htim5,
+	.RR.Encoder.SelectedTimer = &htim4,
 
 	.FL.Encoder.WheelRadius = 3.0f,
 	.FR.Encoder.WheelRadius = 3.0f,
@@ -60,50 +61,37 @@ robot_t ADAS_ROBOT =
 	.FL.Motor.GpioxMotor[1]   = FL_2_GPIO_Port,
 	.FL.Motor.GpioPinMotor[0] = FL_1_Pin,
 	.FL.Motor.GpioPinMotor[1] = FL_2_Pin,
-	.FL.Motor.SelectedTimer = &htim4,
-	.FL.Motor.SelectedChannel = TIM_CHANNEL_3,
+	.FL.Motor.SelectedTimer = &htim5,
+	.FL.Motor.SelectedChannel = TIM_CHANNEL_2,
 
 	.FR.Motor.GpioxMotor[0]   = FR_1_GPIO_Port,
 	.FR.Motor.GpioxMotor[1]   = FR_2_GPIO_Port,
 	.FR.Motor.GpioPinMotor[0] = FR_1_Pin,
 	.FR.Motor.GpioPinMotor[1] = FR_2_Pin,
-	.FR.Motor.SelectedTimer = &htim4,
-	.FR.Motor.SelectedChannel = TIM_CHANNEL_4,
+	.FR.Motor.SelectedTimer = &htim5,
+	.FR.Motor.SelectedChannel = TIM_CHANNEL_3,
 
 	.RL.Motor.GpioxMotor[0]   = RL_1_GPIO_Port,
 	.RL.Motor.GpioxMotor[1]   = RL_2_GPIO_Port,
 	.RL.Motor.GpioPinMotor[0] = RL_1_Pin,
 	.RL.Motor.GpioPinMotor[1] = RL_2_Pin,
 	.RL.Motor.SelectedTimer = &htim9,
-	.RL.Motor.SelectedChannel = TIM_CHANNEL_1,
+	.RL.Motor.SelectedChannel = TIM_CHANNEL_2,
 
 	.RR.Motor.GpioxMotor[0]   = RR_1_GPIO_Port,
 	.RR.Motor.GpioxMotor[1]   = RR_2_GPIO_Port,
 	.RR.Motor.GpioPinMotor[0] = RR_1_Pin,
 	.RR.Motor.GpioPinMotor[1] = RR_2_Pin,
-	.RR.Motor.SelectedTimer = &htim9,
-	.RR.Motor.SelectedChannel = TIM_CHANNEL_2,
+	.RR.Motor.SelectedTimer = &htim11,
+	.RR.Motor.SelectedChannel = TIM_CHANNEL_1,
 };
 
-
-motor_t zeft =
-{
-	 .GpioxMotor[0]   = FL_1_GPIO_Port,
-	 .GpioxMotor[0]   = FL_1_GPIO_Port,
-	 .GpioxMotor[1]   = FL_2_GPIO_Port,
-	 .GpioPinMotor[0] = FL_1_Pin,
-	 .GpioPinMotor[1] = FL_2_Pin,
-	 .SelectedTimer = &htim4,
-	 .SelectedChannel = TIM_CHANNEL_1,
+/* CAN object  */
+Can_t CAN = {
+	.Speed = MCP_8MHz_1000kBPS,
+	.UsedSPI = &hspi2,
 };
 
-encoder_t encoder_test =
-{
-	.SelectedTimer = &htim1,
-	.WheelRadius = 3,
-};
-
-PID_Controller PID;
 
 /***********************************************************************************************************************
 *                                                     STATIC OBJECTS                                                   *

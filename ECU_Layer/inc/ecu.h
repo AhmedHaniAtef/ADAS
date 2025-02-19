@@ -19,7 +19,6 @@
 #include "CANSPI.h"
 #include "MCP2515.h"
 #include "monitoring.h"
-#include "ultrasonic.h"
 
 
 /***********************************************************************************************************************
@@ -79,10 +78,11 @@
 *                                                   EXTERN OBJECTS                                                     *
 ***********************************************************************************************************************/
 
+/* robot object extern */
 extern robot_t ADAS_ROBOT;
-extern motor_t zeft;
-extern encoder_t encoder_test;
-extern PID_Controller PID;
+
+/* CAN object extern */
+extern Can_t CAN;
 
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *
