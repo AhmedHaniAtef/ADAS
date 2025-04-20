@@ -48,7 +48,9 @@ ecu_status_t MPU6050_Init(I2C_HandleTypeDef *I2Cx,MPU6050_t *DataStruct)
     uint8_t check;
     uint8_t Data;
     ecu_status_t l_EcuStatus=ECU_OK;
-
+    HAL_GPIO_WritePin(DataStruct->GPIOx , DataStruct->GPIO_Pin , GPIO_PIN_RESET);
+    HAL_Delay(1000);
+    HAL_GPIO_WritePin(DataStruct->GPIOx , DataStruct->GPIO_Pin , GPIO_PIN_SET);
     // Check device ID WHO_AM_I
     HAL_I2C_Mem_Read(I2Cx, MPU6050_ADDR_REG, WHO_AM_I_REG, 1, &check, 1, 100);
     if ((check == 0x68)&&(NULL!=I2Cx)&&(NULL!=DataStruct)) // 0x68 will be returned by the sensor if everything goes well

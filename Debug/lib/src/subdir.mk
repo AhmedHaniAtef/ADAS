@@ -7,6 +7,7 @@
 C_SRCS += \
 ../lib/src/KalmanFilter.c \
 ../lib/src/PID.c \
+../lib/src/diff_functionalities.c \
 ../lib/src/my_list.c \
 ../lib/src/my_queue.c \
 ../lib/src/my_stack.c 
@@ -14,6 +15,7 @@ C_SRCS += \
 OBJS += \
 ./lib/src/KalmanFilter.o \
 ./lib/src/PID.o \
+./lib/src/diff_functionalities.o \
 ./lib/src/my_list.o \
 ./lib/src/my_queue.o \
 ./lib/src/my_stack.o 
@@ -21,6 +23,7 @@ OBJS += \
 C_DEPS += \
 ./lib/src/KalmanFilter.d \
 ./lib/src/PID.d \
+./lib/src/diff_functionalities.d \
 ./lib/src/my_list.d \
 ./lib/src/my_queue.d \
 ./lib/src/my_stack.d 
@@ -33,7 +36,7 @@ lib/src/%.o lib/src/%.su lib/src/%.cyclo: ../lib/src/%.c lib/src/subdir.mk
 clean: clean-lib-2f-src
 
 clean-lib-2f-src:
-	-$(RM) ./lib/src/KalmanFilter.cyclo ./lib/src/KalmanFilter.d ./lib/src/KalmanFilter.o ./lib/src/KalmanFilter.su ./lib/src/PID.cyclo ./lib/src/PID.d ./lib/src/PID.o ./lib/src/PID.su ./lib/src/my_list.cyclo ./lib/src/my_list.d ./lib/src/my_list.o ./lib/src/my_list.su ./lib/src/my_queue.cyclo ./lib/src/my_queue.d ./lib/src/my_queue.o ./lib/src/my_queue.su ./lib/src/my_stack.cyclo ./lib/src/my_stack.d ./lib/src/my_stack.o ./lib/src/my_stack.su
+	-$(RM) ./lib/src/KalmanFilter.cyclo ./lib/src/KalmanFilter.d ./lib/src/KalmanFilter.o ./lib/src/KalmanFilter.su ./lib/src/PID.cyclo ./lib/src/PID.d ./lib/src/PID.o ./lib/src/PID.su ./lib/src/diff_functionalities.cyclo ./lib/src/diff_functionalities.d ./lib/src/diff_functionalities.o ./lib/src/diff_functionalities.su ./lib/src/my_list.cyclo ./lib/src/my_list.d ./lib/src/my_list.o ./lib/src/my_list.su ./lib/src/my_queue.cyclo ./lib/src/my_queue.d ./lib/src/my_queue.o ./lib/src/my_queue.su ./lib/src/my_stack.cyclo ./lib/src/my_stack.d ./lib/src/my_stack.o ./lib/src/my_stack.su
 
 .PHONY: clean-lib-2f-src
 

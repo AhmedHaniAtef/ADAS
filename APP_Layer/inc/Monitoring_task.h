@@ -57,6 +57,12 @@ typedef struct
     monitoring_t *M_Kf_qBias;
     monitoring_t *M_Kf_qAngle;
     monitoring_t *M_Kf_rMeasure;
+    monitoring_t *M_vx_kp;
+    monitoring_t *M_vx_ki;    
+    monitoring_t *M_vx_kd;
+    monitoring_t *M_vx_n; 
+    monitoring_t *M_wanted_speed;
+    monitoring_t *M_max_speed;   
 }monitor_values_t;
 
 

@@ -233,7 +233,53 @@ monitoring_t r_measure =
     .Data.OriginalData = NULL,
 };
 
+monitoring_t vx_kp = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
 
+monitoring_t vx_ki = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+monitoring_t vx_kd = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+monitoring_t vx_n = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+monitoring_t wanted_speed = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
+
+monitoring_t max_speed = 
+{
+    .Size = 0,
+    .UsedUART = &huart2,
+    .MonitorUpdateData_CALLBACK = NULL,
+    .Data.OriginalData = NULL,
+};
 
 /* Controller Objects */
 control_t Controller =
@@ -244,14 +290,14 @@ control_t Controller =
 
 /* Ultrasonic Objects */
 
-float_t sensor_0_dis = 0;
-float_t sensor_45_dis = 0;
-float_t sensor_90_dis = 0;
-float_t sensor_135_dis = 0;
-float_t sensor_180_dis = 0;
-float_t sensor_225_dis = 0;
-float_t sensor_270_dis = 0;
-float_t sensor_315_dis = 0;
+float_t sensor_0_dis   = 0.0f;
+float_t sensor_45_dis  = 0.0f;
+float_t sensor_90_dis  = 0.0f;
+float_t sensor_135_dis = 0.0f;
+float_t sensor_180_dis = 0.0f;
+float_t sensor_225_dis = 0.0f;
+float_t sensor_270_dis = 0.0f;
+float_t sensor_315_dis = 0.0f;
 
 UltrasonicSensor sensor_0 =
 {

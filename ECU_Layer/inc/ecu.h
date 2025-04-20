@@ -115,6 +115,13 @@ extern monitoring_t q_bias;
 extern monitoring_t q_angle;
 extern monitoring_t r_measure;
 extern monitoring_t CRC_frame;
+extern monitoring_t vx_kp;
+extern monitoring_t vx_ki;
+extern monitoring_t vx_kd;
+extern monitoring_t vx_n;
+extern monitoring_t wanted_speed;
+extern monitoring_t max_speed;
+
 
 /* Controller Objects */
 extern control_t Controller;

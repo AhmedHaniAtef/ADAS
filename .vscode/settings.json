@@ -32,6 +32,7 @@
         "stdlib.h": "c",
         "stm32f4xx_hal_tim.h": "c",
         "pid.h": "c",
-        "kalmanfilter.h": "c"
+        "kalmanfilter.h": "c",
+        "acc_feature.h": "c"
     }
 }

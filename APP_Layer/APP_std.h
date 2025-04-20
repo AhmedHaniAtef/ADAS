@@ -17,6 +17,7 @@
 #include <math.h>
 #include "../../lib/inc/my_list.h"
 #include "../../lib/inc/my_queue.h"
+#include "../../lib/inc/diff_functionalities.h"
 
 
 

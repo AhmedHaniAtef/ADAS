@@ -1,3 +1,3 @@
 ../APP_Layer/src/Monitoring_task.c:75:14:monitor_task_init	2
-../APP_Layer/src/Monitoring_task.c:143:14:monitor_update_task	3
-../APP_Layer/src/Monitoring_task.c:213:13:update	1
+../APP_Layer/src/Monitoring_task.c:154:14:monitor_update_task	3
+../APP_Layer/src/Monitoring_task.c:228:13:update	1

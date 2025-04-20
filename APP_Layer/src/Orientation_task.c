@@ -130,9 +130,9 @@ app_status_t Orientation_PID_task(orientation_t *p_Orientaion, float_t *p_Wz, fl
     {
         float_t temp = 0;
         temp = PID_Compute(&p_Orientaion->PID, p_SetPoint, p_Orientaion->FilteredYAW);
-        temp = temp * 100.0f;
+        temp = temp * 20.0f;
         temp = (temp > (floor(temp)+0.5f)) ? ceil(temp) : floor(temp);
-        temp = temp / 100.0f;
+        temp = temp / -20.0f;
         *p_Wz = temp;
     }
     return l_AppStatus;
@@ -158,6 +158,7 @@ app_status_t Orientation_Kf_task(orientation_t *p_Orientaion)
                                                   *p_Orientaion->CompassYAW, 
                                                   l_GyroZ, 
                                                   p_Orientaion->dt);
+        p_Orientaion->FilteredYAW = (float_t)(trunc(p_Orientaion->FilteredYAW));
     }
     return l_AppStatus;
 }

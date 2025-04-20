@@ -20,17 +20,27 @@
 #include "Messages_Callbacks.h"
 #include "Control_task.h"
 #include "Orientation_task.h"
+#include "ACC_feature.h"
+#include "TSR_feature.h"
 
 
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
 
-#define MPU_PID_Kp          (-0.046999f)
+#define MPU_PID_Kp          (-0.0207f)
 #define MPU_PID_Kd          (1.4399999f)
-#define MPU_PID_Ki          (-5e-8f)
+#define MPU_PID_Ki          (0.0f)
 #define MPU_PID_N           (1.0299999f)
-#define MPU_PID_TIME_STEP   (10.0f)
+// #define MPU_PID_Kp          (-0.02f)
+// #define MPU_PID_Kd          (-100.0f)
+// #define MPU_PID_Ki          (-5e-8f)
+// #define MPU_PID_N           (10000.0f)
+//#define MPU_PID_Kp          (-0.025f)
+//#define MPU_PID_Kd          (0.03f)
+//#define MPU_PID_Ki          (0.0f)
+//#define MPU_PID_N           (0.0f)
+#define MPU_PID_TIME_STEP   (100.0f)
 #define MPU_PID_MIN_OUT     (-10.0f)
 #define MPU_PID_MAX_OUT     (10.0f)
 
@@ -41,10 +51,34 @@
 #define DEFUALT_ROBOT_MAX_ANGULAR_SPEED (3.0f)
 
 #define OUTLIER_WINDOW_SIZE     (5)
-#define OUTLIER_THRESHOLD       (250.0f)
+#define OUTLIER_THRESHOLD       (400.0f)
 #define ULTRASONIC_MAX_READING  (400.0f)
 
+#define ACC_MIN_DISTANCE        (50.0f)
+#define ACC_MARGIN              (3.0f)
+#define Vx_Kp                   (1.5f)
+#define Vx_Ki                   (0.0f)
+#define Vx_Kd                   (21.0f)
+#define Vx_N                    (22.8f)
+#define Vx_MAX_OUT              (1.0f)
+#define Vx_MIN_OUT              (-1.0f)
+#define Vy_Kp                   (100.0f)
+#define Vy_Ki                   (0.5f)
+#define Vy_Kd                   (0.8f)
+#define Vy_N                    (100.0f)
+#define Vy_MAX_OUT              (0.6f)
+#define Vy_MIN_OUT              (-0.6f)
+#define PID_MIN_SP              (20.0f)
 
+#define SPEED_30_PERCENTAGE      (20.0f)
+#define SPEED_40_PERCENTAGE      (30.0f)
+#define SPEED_50_PERCENTAGE      (40.0f)
+#define SPEED_60_PERCENTAGE      (50.0f)
+#define SPEED_70_PERCENTAGE      (60.0f)
+#define SPEED_80_PERCENTAGE      (70.0f)
+#define SPEED_90_PERCENTAGE      (80.0f)
+#define SPEED_100_PERCENTAGE     (90.0f)
+#define SPEED_120_PERCENTAGE     (100.0f)
 /***********************************************************************************************************************
 *                                                   MACRO FUNCTIONS                                                    *
 ***********************************************************************************************************************/
@@ -59,6 +93,8 @@
 /* speeds - angles - etc objects */
 extern float_t Car_Wanted_Angle;
 extern float_t Car_Wanted_Speed;
+extern float_t Car_Max_Forced_Angle;
+extern float_t Car_Max_Forced_Speed;
 extern float_t Car_Wanted_direction;
 extern float_t Car_Wanted_Angular_Speed;
 extern float_t Car_Wanted_Rotate_Radius;
@@ -87,6 +123,8 @@ extern controller_t Main_Controller;
 /* Orientation objects */
 extern orientation_t Main_Orientation;
 
+/* Adaptive cruise control */
+extern ACC_t ACC_Object;
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *
 ***********************************************************************************************************************/

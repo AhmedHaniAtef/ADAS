@@ -44,6 +44,11 @@ extern can_msg_t msg_robot_stop;
 /* Message for robot updating the value of omega z */
 extern can_msg_t msg_robot_Wz;
 
+/* Message for Traffic Sign Recognition Feature detects a Sign */
+extern can_msg_t msg_sign_detected;
+
+/* Message for Auto Lane Change (Not Completed)*/
+extern can_msg_t msg_lane_update;
 
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *
@@ -56,6 +61,11 @@ extern can_msg_t msg_robot_Wz;
 *                                                  FUNCTION DEFINITION                                                 *
 ***********************************************************************************************************************/
 
+/**
+ * @brief responsible for adding messages to the list of expected messages to receive via CAN bus
+ * @return app_status_t status of operation
+ */
+app_status_t messages_init(void);
 
 
 

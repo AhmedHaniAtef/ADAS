@@ -51,13 +51,16 @@ APP_Layer/src/Messages_Callbacks.o: ../APP_Layer/src/Messages_Callbacks.c \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/qmc5883l.h \
  ../APP_Layer/src/../inc/../APP_std.h ../Core/Inc/../../lib/inc/my_list.h \
  ../Core/Inc/../../lib/inc/my_queue.h ../Core/Inc/../../lib/inc/my_list.h \
+ ../Core/Inc/../../lib/inc/diff_functionalities.h \
  ../APP_Layer/src/../inc/APP.h ../APP_Layer/src/../inc/MPU_task.h \
  ../APP_Layer/src/../inc/Ultrasonic_task.h \
  ../APP_Layer/src/../inc/Monitoring_task.h \
  ../APP_Layer/src/../inc/Messages_Callbacks.h \
  ../APP_Layer/src/../inc/Control_task.h \
  ../APP_Layer/src/../inc/Orientation_task.h \
- ../APP_Layer/src/../inc/../../lib/inc/KalmanFilter.h
+ ../APP_Layer/src/../inc/../../lib/inc/KalmanFilter.h \
+ ../APP_Layer/src/../inc/ACC_feature.h \
+ ../APP_Layer/src/../inc/TSR_feature.h
 ../APP_Layer/src/../inc/Messages_Callbacks.h:
 ../APP_Layer/src/../inc/CAN_task.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/ecu.h:
@@ -112,6 +115,7 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../Core/Inc/../../lib/inc/my_list.h:
 ../Core/Inc/../../lib/inc/my_queue.h:
 ../Core/Inc/../../lib/inc/my_list.h:
+../Core/Inc/../../lib/inc/diff_functionalities.h:
 ../APP_Layer/src/../inc/APP.h:
 ../APP_Layer/src/../inc/MPU_task.h:
 ../APP_Layer/src/../inc/Ultrasonic_task.h:
@@ -120,3 +124,5 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../APP_Layer/src/../inc/Control_task.h:
 ../APP_Layer/src/../inc/Orientation_task.h:
 ../APP_Layer/src/../inc/../../lib/inc/KalmanFilter.h:
+../APP_Layer/src/../inc/ACC_feature.h:
+../APP_Layer/src/../inc/TSR_feature.h:

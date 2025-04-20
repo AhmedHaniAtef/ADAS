@@ -89,6 +89,23 @@ app_status_t controller_wait_receive(controller_t *p_UsedController);
  */
 app_status_t controller_task(controller_t *p_UsedController);
 
+/**
+ * @brief get the control of orientation from the car while in manual driving
+ * 
+ * @param p_UsedController pointer to the controller 
+ * @param get_yaw_control_yaw pointer to the callback function which get the control of the yaw angle
+ * @return app_status_t status of operation
+ */
+app_status_t controller_get_yaw_control_init(controller_t *p_UsedController, void (get_yaw_control_yaw)(void));
+
+/**
+ * @brief initalize the callback pointer which gives the control of orientation from the car while in manual driving
+ * 
+ * @param p_UsedController pointer to the controller 
+ * @param get_yaw_control_yaw pointer to the callback function which give the control of the yaw angle
+ * @return app_status_t status of operation
+ */
+app_status_t controller_give_yaw_control_init(controller_t *p_UsedController, void (* give_yaw_control_yaw)(void));
 
 /***********************************************************************************************************************
 * AUTHOR                |* NOTE                                                                                        *

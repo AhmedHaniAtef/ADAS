@@ -103,6 +103,13 @@ app_status_t monitor_task_init(monitor_values_t *p_AllMonitoredValues)
         p_AllMonitoredValues->M_Kf_qBias->Size      = 4;
         p_AllMonitoredValues->M_Kf_qAngle->Size     = 4;
         p_AllMonitoredValues->M_Kf_rMeasure->Size   = 4;
+        p_AllMonitoredValues->M_vx_kp->Size         = 4;       
+        p_AllMonitoredValues->M_vx_ki->Size         = 4;       
+        p_AllMonitoredValues->M_vx_kd->Size         = 4;           
+        p_AllMonitoredValues->M_vx_n->Size          = 4;
+        p_AllMonitoredValues->M_wanted_speed->Size  = 4;           
+        p_AllMonitoredValues->M_max_speed->Size     = 4;         
+        
 
 
         p_AllMonitoredValues->M_sync->Data.OriginalData             = &sync_bytes;
@@ -115,10 +122,8 @@ app_status_t monitor_task_init(monitor_values_t *p_AllMonitoredValues)
         p_AllMonitoredValues->M_ul135->Data.OriginalData            = Main_Ultrasonics.UL_135->Distance;
         p_AllMonitoredValues->M_ul180->Data.OriginalData            = Main_Ultrasonics.UL_180->Distance;
         p_AllMonitoredValues->M_ul225->Data.OriginalData            = Main_Ultrasonics.UL_225->Distance;
-        //p_AllMonitoredValues->M_ul270->Data.OriginalData            = Main_Ultrasonics.UL_270->Distance;
-        //p_AllMonitoredValues->M_ul315->Data.OriginalData            = Main_Ultrasonics.UL_315->Distance;
-        p_AllMonitoredValues->M_ul270->Data.OriginalData            = &Main_MPU.mpu->Gz;
-        p_AllMonitoredValues->M_ul315->Data.OriginalData            = Main_Orientation.CompassYAW;
+        p_AllMonitoredValues->M_ul270->Data.OriginalData            = Main_Ultrasonics.UL_270->Distance;
+        p_AllMonitoredValues->M_ul315->Data.OriginalData            = Main_Ultrasonics.UL_315->Distance;
         p_AllMonitoredValues->M_Wz->Data.OriginalData               = &Omega_z;
         p_AllMonitoredValues->M_mpu_kp->Data.OriginalData           = &Main_Orientation.PID.Kp;
         p_AllMonitoredValues->M_mpu_ki->Data.OriginalData           = &Main_Orientation.PID.Ki;
@@ -129,6 +134,12 @@ app_status_t monitor_task_init(monitor_values_t *p_AllMonitoredValues)
         p_AllMonitoredValues->M_Kf_qBias->Data.OriginalData         = &Main_Orientation.Kf_YAW.Q_angle;
         p_AllMonitoredValues->M_Kf_qAngle->Data.OriginalData        = &Main_Orientation.Kf_YAW.Q_bias;
         p_AllMonitoredValues->M_Kf_rMeasure->Data.OriginalData      = &Main_Orientation.Kf_YAW.R_measure;
+        p_AllMonitoredValues->M_vx_kp->Data.OriginalData            = &ACC_Object.PID_Vx.Kp;
+        p_AllMonitoredValues->M_vx_ki->Data.OriginalData            = &ACC_Object.PID_Vx.Ki;
+        p_AllMonitoredValues->M_vx_kd->Data.OriginalData            = &ACC_Object.PID_Vx.Kd;
+        p_AllMonitoredValues->M_vx_n->Data.OriginalData             = &ACC_Object.PID_Vx.N;
+        p_AllMonitoredValues->M_wanted_speed->Data.OriginalData     = &Car_Wanted_Speed;
+        p_AllMonitoredValues->M_max_speed->Data.OriginalData        = &Car_Max_Forced_Speed;
 
         p_AllMonitoredValues->all->MonitorUpdateData_CALLBACK = update;
     }
@@ -149,22 +160,23 @@ app_status_t monitor_update_task(monitor_values_t *p_AllMonitoredValues)
     }   
     else
     {
-        memcpy(&temp_monitor_buffer[0],  p_AllMonitoredValues->M_mpu->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[1],  p_AllMonitoredValues->M_ul0->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[2],  p_AllMonitoredValues->M_ul45->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[3],  p_AllMonitoredValues->M_ul90->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[4],  p_AllMonitoredValues->M_ul135->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[5],  p_AllMonitoredValues->M_ul180->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[6],  p_AllMonitoredValues->M_ul225->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[7],  p_AllMonitoredValues->M_ul270->Data.SendData, 4);
-        // memcpy(&temp_monitor_buffer[8],  p_AllMonitoredValues->M_ul315->Data.SendData, 4);
-        memcpy(&temp_monitor_buffer[1], p_AllMonitoredValues->M_mpu_sp->Data.SendData, 4);
-        memcpy(&temp_monitor_buffer[2], p_AllMonitoredValues->M_Kf_Yaw->Data.SendData, 4);
-        memcpy(&temp_monitor_buffer[3], p_AllMonitoredValues->M_Kf_qBias->Data.SendData, 4);
-        memcpy(&temp_monitor_buffer[4], p_AllMonitoredValues->M_Kf_qAngle->Data.SendData, 4);
-        memcpy(&temp_monitor_buffer[5], p_AllMonitoredValues->M_Kf_rMeasure->Data.SendData, 4);
-        memcpy(&temp_monitor_buffer[6],  p_AllMonitoredValues->M_ul315->Data.SendData, 4);
-        memcpy(&temp_monitor_buffer[7],  p_AllMonitoredValues->M_ul270->Data.SendData, 4);
+        memcpy(&temp_monitor_buffer[0],  p_AllMonitoredValues->M_mpu->Data.SendData,    4);
+        memcpy(&temp_monitor_buffer[1],  p_AllMonitoredValues->M_Kf_Yaw->Data.SendData, 4);
+        memcpy(&temp_monitor_buffer[2],  p_AllMonitoredValues->M_mpu_sp->Data.SendData, 4);
+        memcpy(&temp_monitor_buffer[3],  p_AllMonitoredValues->M_ul0->Data.SendData,    4);
+        memcpy(&temp_monitor_buffer[4],  p_AllMonitoredValues->M_ul45->Data.SendData,   4);
+        memcpy(&temp_monitor_buffer[5],  p_AllMonitoredValues->M_ul90->Data.SendData,   4);
+        memcpy(&temp_monitor_buffer[6],  p_AllMonitoredValues->M_ul135->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[7],  p_AllMonitoredValues->M_ul180->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[8],  p_AllMonitoredValues->M_ul225->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[9],  p_AllMonitoredValues->M_ul270->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[10], p_AllMonitoredValues->M_ul315->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[11], p_AllMonitoredValues->M_vx_kp->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[12], p_AllMonitoredValues->M_vx_ki->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[13], p_AllMonitoredValues->M_vx_kd->Data.SendData,  4);
+        memcpy(&temp_monitor_buffer[14], p_AllMonitoredValues->M_vx_n->Data.SendData,   4);        
+        memcpy(&temp_monitor_buffer[15], p_AllMonitoredValues->M_wanted_speed->Data.SendData,   4);        
+        memcpy(&temp_monitor_buffer[16], p_AllMonitoredValues->M_max_speed->Data.SendData,   4);        
 
 
         /* Reset CRC Unit */
@@ -174,28 +186,31 @@ app_status_t monitor_update_task(monitor_values_t *p_AllMonitoredValues)
         for (uint8_t counter = 0; counter < 1; counter++)
         {
 
-            CRC_Value = HAL_CRC_Accumulate(&hcrc, &temp_monitor_buffer[counter], 8);
+            CRC_Value = HAL_CRC_Accumulate(&hcrc, &temp_monitor_buffer[counter], 17);
         }
         memset(temp_monitor_buffer, 0, 100);
 
 
         l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_sync);
+
         l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_mpu);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul0);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul45);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul90);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul135);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul180);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul225);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul270);
-        // l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul315);
-        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_mpu_sp);
         l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_Kf_Yaw);
-        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_Kf_qBias);
-        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_Kf_qAngle);
-        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_Kf_rMeasure);
-        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul315);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_mpu_sp);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul0);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul45);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul90);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul135);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul180);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul225);
         l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul270);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_ul315);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_vx_kp);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_vx_ki);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_vx_kd);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_vx_n);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_wanted_speed);
+        l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_max_speed);
+        
         l_AppStatus |= monitoring_send_data(p_AllMonitoredValues->M_crc);
         
 

@@ -52,6 +52,7 @@ APP_Layer/src/Ultrasonic_task.o: ../APP_Layer/src/Ultrasonic_task.c \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../APP_std.h \
  ../Core/Inc/../../lib/inc/my_list.h ../Core/Inc/../../lib/inc/my_queue.h \
  ../Core/Inc/../../lib/inc/my_list.h \
+ ../Core/Inc/../../lib/inc/diff_functionalities.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/MPU_task.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Ultrasonic_task.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Monitoring_task.h \
@@ -59,6 +60,8 @@ APP_Layer/src/Ultrasonic_task.o: ../APP_Layer/src/Ultrasonic_task.c \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Control_task.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Orientation_task.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../lib/inc/KalmanFilter.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/ACC_feature.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/TSR_feature.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Ultrasonic_task.h
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/APP.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/ecu.h:
@@ -114,6 +117,7 @@ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../APP_std.h:
 ../Core/Inc/../../lib/inc/my_list.h:
 ../Core/Inc/../../lib/inc/my_queue.h:
 ../Core/Inc/../../lib/inc/my_list.h:
+../Core/Inc/../../lib/inc/diff_functionalities.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/MPU_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Ultrasonic_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Monitoring_task.h:
@@ -121,4 +125,6 @@ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Messages_Callbacks.h
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Control_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Orientation_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../lib/inc/KalmanFilter.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/ACC_feature.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/TSR_feature.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Ultrasonic_task.h:

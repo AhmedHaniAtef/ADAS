@@ -48,7 +48,8 @@
 *                                                     STATIC OBJECTS                                                   *
 ***********************************************************************************************************************/
 
-
+static void (*manual_control_yaw) (void) = NULL;
+static void (*auto_control_yaw)   (void) = NULL;
 
 
 
@@ -162,7 +163,6 @@ app_status_t controller_task(controller_t *p_UsedController)
     else
     {
         Push_Button_Joy_Stick_Data l_PushButton;
-        uint8_t l_Selected;
         two_float_conv temp;
         one_float_conv temp_angle;
         switch (p_UsedController->UsedController->Data[0])
@@ -171,27 +171,25 @@ app_status_t controller_task(controller_t *p_UsedController)
                 memcpy(temp.data, &p_UsedController->UsedController->Data[1], 8);
 				Car_Wanted_Speed = ((temp.value[0]) * DEFUALT_ROBOT_MAX_SPEED) / 100.0;
                 Car_Wanted_direction = temp.value[1];
-                Car_Wanted_Angle = Main_MPU.YAW;
                 /* send CAN Message of strafe */
                 l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
 				break;
 
 			case(RIGHT_JOY_STICK):
                 memcpy(temp.data, &p_UsedController->UsedController->Data[1], 8);
-				l_Selected = RIGHT_JOY_STICK;
                 Car_Wanted_Angular_Speed = ((temp.value[0]) * DEFUALT_ROBOT_MAX_ANGULAR_SPEED) / 100.0;
-                Car_Wanted_Angle = Main_MPU.YAW;
-                if(temp.value[1] > 180)
-                {
-                    Car_Wanted_Rotate_Radius = ((360 - (temp.value[1])) * DEFUALT_ROBOT_MAX_RADIUS) / 180.0 ;
-                    Car_Wanted_Angular_Speed *= -1.0f;
-                }
-                else if(temp.value[1] < 180)
-                {
-                    Car_Wanted_Rotate_Radius = ((temp.value[1]) * DEFUALT_ROBOT_MAX_RADIUS) / 180.0;
-                }
+                Car_Wanted_Rotate_Radius = ((temp.value[1]) * DEFUALT_ROBOT_MAX_RADIUS) / 100.0;
+                Car_Wanted_Angle = Main_Orientation.FilteredYAW;
                 /* send CAN Message of rotate */
                 l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_rotate);
+                if ((Car_Wanted_Angular_Speed == 0) && (Car_Wanted_Rotate_Radius == 0))
+                {
+                    auto_control_yaw();
+                }
+                else
+                {
+                    manual_control_yaw();
+                }
 				break;
 
 			case(PUSH_BUTTON):
@@ -246,6 +244,49 @@ app_status_t controller_task(controller_t *p_UsedController)
 				l_AppStatus = APP_ERROR;
 			break;
 		}
+    }
+    return l_AppStatus;
+}
+
+/**
+ * @brief initalize the callback pointer which gets the control of orientation from the car while in manual driving
+ * 
+ * @param p_UsedController pointer to the controller 
+ * @param get_yaw_control_yaw pointer to the callback function which get the control of the yaw angle
+ * @return app_status_t status of operation
+ */
+app_status_t controller_get_yaw_control_init(controller_t *p_UsedController, void (* get_yaw_control_yaw)(void))
+{
+    app_status_t l_AppStatus = APP_OK;
+    if ((NULL == p_UsedController) || (NULL == get_yaw_control_yaw))
+    {
+        l_AppStatus = APP_ERROR;
+    }
+    else
+    {
+        manual_control_yaw = get_yaw_control_yaw;
+    }
+    return l_AppStatus;
+}
+
+
+/**
+ * @brief initalize the callback pointer which gives the control of orientation from the car while in manual driving
+ * 
+ * @param p_UsedController pointer to the controller 
+ * @param get_yaw_control_yaw pointer to the callback function which give the control of the yaw angle
+ * @return app_status_t status of operation
+ */
+app_status_t controller_give_yaw_control_init(controller_t *p_UsedController, void (* give_yaw_control_yaw)(void))
+{
+    app_status_t l_AppStatus = APP_OK;
+    if ((NULL == p_UsedController) || (NULL == give_yaw_control_yaw))
+    {
+        l_AppStatus = APP_ERROR;
+    }
+    else
+    {
+        auto_control_yaw = give_yaw_control_yaw;
     }
     return l_AppStatus;
 }

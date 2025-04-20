@@ -68,52 +68,66 @@ osThreadId_t CAN_taskHandle;
 const osThreadAttr_t CAN_task_attributes = {
   .name = "CAN_task",
   .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityHigh3,
+  .priority = (osPriority_t) osPriorityHigh5,
 };
 /* Definitions for MONITORING_task */
 osThreadId_t MONITORING_taskHandle;
 const osThreadAttr_t MONITORING_task_attributes = {
   .name = "MONITORING_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh6,
-};
-/* Definitions for OrientationTask */
-osThreadId_t OrientationTaskHandle;
-const osThreadAttr_t OrientationTask_attributes = {
-  .name = "OrientationTask",
-  .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityHigh2,
+  .priority = (osPriority_t) osPriorityHigh4,
 };
 /* Definitions for Ultrasonic_task */
 osThreadId_t Ultrasonic_taskHandle;
 const osThreadAttr_t Ultrasonic_task_attributes = {
   .name = "Ultrasonic_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh2,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for CONTROL_task */
 osThreadId_t CONTROL_taskHandle;
 const osThreadAttr_t CONTROL_task_attributes = {
   .name = "CONTROL_task",
   .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityHigh7,
+};
+/* Definitions for YawKalman_task */
+osThreadId_t YawKalman_taskHandle;
+const osThreadAttr_t YawKalman_task_attributes = {
+  .name = "YawKalman_task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityHigh2,
+};
+/* Definitions for YawPID_task */
+osThreadId_t YawPID_taskHandle;
+const osThreadAttr_t YawPID_task_attributes = {
+  .name = "YawPID_task",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityHigh5,
 };
-/* Definitions for TempPIDmoveTask */
-osThreadId_t TempPIDmoveTaskHandle;
-const osThreadAttr_t TempPIDmoveTask_attributes = {
-  .name = "TempPIDmoveTask",
+/* Definitions for ACC_Task */
+osThreadId_t ACC_TaskHandle;
+const osThreadAttr_t ACC_Task_attributes = {
+  .name = "ACC_Task",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityRealtime,
+};
+/* Definitions for TSR_Task */
+osThreadId_t TSR_TaskHandle;
+const osThreadAttr_t TSR_Task_attributes = {
+  .name = "TSR_Task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh,
+  .priority = (osPriority_t) osPriorityHigh4,
+};
+/* Definitions for Timer_test */
+osTimerId_t Timer_testHandle;
+const osTimerAttr_t Timer_test_attributes = {
+  .name = "Timer_test"
 };
 /* Definitions for MPU_sema */
 osSemaphoreId_t MPU_semaHandle;
 const osSemaphoreAttr_t MPU_sema_attributes = {
   .name = "MPU_sema"
-};
-/* Definitions for Orientation_sema */
-osSemaphoreId_t Orientation_semaHandle;
-const osSemaphoreAttr_t Orientation_sema_attributes = {
-  .name = "Orientation_sema"
 };
 /* Definitions for CONTROL_sema */
 osSemaphoreId_t CONTROL_semaHandle;
@@ -125,15 +139,25 @@ osSemaphoreId_t PID_tune_semaHandle;
 const osSemaphoreAttr_t PID_tune_sema_attributes = {
   .name = "PID_tune_sema"
 };
-/* Definitions for OrientationReady_sema */
-osSemaphoreId_t OrientationReady_semaHandle;
-const osSemaphoreAttr_t OrientationReady_sema_attributes = {
-  .name = "OrientationReady_sema"
+/* Definitions for KalmanReady_sema */
+osSemaphoreId_t KalmanReady_semaHandle;
+const osSemaphoreAttr_t KalmanReady_sema_attributes = {
+  .name = "KalmanReady_sema"
+};
+/* Definitions for YawPIDReady_sema */
+osSemaphoreId_t YawPIDReady_semaHandle;
+const osSemaphoreAttr_t YawPIDReady_sema_attributes = {
+  .name = "YawPIDReady_sema"
 };
 /* Definitions for CAN_sema */
 osSemaphoreId_t CAN_semaHandle;
 const osSemaphoreAttr_t CAN_sema_attributes = {
   .name = "CAN_sema"
+};
+/* Definitions for Orientation_sema */
+osSemaphoreId_t Orientation_semaHandle;
+const osSemaphoreAttr_t Orientation_sema_attributes = {
+  .name = "Orientation_sema"
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -146,15 +170,21 @@ void Increase_Ki(void *);
 void Increase_Kd(void *);
 void Increase_N(void *);
 void Reset_PID(void *);
+
+void Yaw_PID_suspend(void);
+void Yaw_PID_resume(void);
 /* USER CODE END FunctionPrototypes */
 
 void MPUtask(void *argument);
 void CANtask(void *argument);
 void MONITORINGtask(void *argument);
-void Orientationtask(void *argument);
 void ULTRASONICtask(void *argument);
 void CONTROLtask(void *argument);
-void TempPIDmove_Task(void *argument);
+void YawKalmanTask(void *argument);
+void YawPIDtask(void *argument);
+void ACCtask(void *argument);
+void TSRtask(void *argument);
+void callback_test(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -176,24 +206,31 @@ void MX_FREERTOS_Init(void) {
   /* creation of MPU_sema */
   MPU_semaHandle = osSemaphoreNew(1, 0, &MPU_sema_attributes);
 
-  /* creation of Orientation_sema */
-  Orientation_semaHandle = osSemaphoreNew(1, 0, &Orientation_sema_attributes);
-
   /* creation of CONTROL_sema */
   CONTROL_semaHandle = osSemaphoreNew(1, 0, &CONTROL_sema_attributes);
 
   /* creation of PID_tune_sema */
   PID_tune_semaHandle = osSemaphoreNew(1, 0, &PID_tune_sema_attributes);
 
-  /* creation of OrientationReady_sema */
-  OrientationReady_semaHandle = osSemaphoreNew(1, 0, &OrientationReady_sema_attributes);
+  /* creation of KalmanReady_sema */
+  KalmanReady_semaHandle = osSemaphoreNew(1, 0, &KalmanReady_sema_attributes);
+
+  /* creation of YawPIDReady_sema */
+  YawPIDReady_semaHandle = osSemaphoreNew(1, 0, &YawPIDReady_sema_attributes);
 
   /* creation of CAN_sema */
   CAN_semaHandle = osSemaphoreNew(2, 0, &CAN_sema_attributes);
 
+  /* creation of Orientation_sema */
+  Orientation_semaHandle = osSemaphoreNew(2, 0, &Orientation_sema_attributes);
+
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
+
+  /* Create the timer(s) */
+  /* creation of Timer_test */
+  Timer_testHandle = osTimerNew(callback_test, osTimerPeriodic, NULL, &Timer_test_attributes);
 
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
@@ -213,17 +250,23 @@ void MX_FREERTOS_Init(void) {
   /* creation of MONITORING_task */
   MONITORING_taskHandle = osThreadNew(MONITORINGtask, NULL, &MONITORING_task_attributes);
 
-  /* creation of OrientationTask */
-  OrientationTaskHandle = osThreadNew(Orientationtask, NULL, &OrientationTask_attributes);
-
   /* creation of Ultrasonic_task */
   Ultrasonic_taskHandle = osThreadNew(ULTRASONICtask, NULL, &Ultrasonic_task_attributes);
 
   /* creation of CONTROL_task */
   CONTROL_taskHandle = osThreadNew(CONTROLtask, NULL, &CONTROL_task_attributes);
 
-  /* creation of TempPIDmoveTask */
-  TempPIDmoveTaskHandle = osThreadNew(TempPIDmove_Task, NULL, &TempPIDmoveTask_attributes);
+  /* creation of YawKalman_task */
+  YawKalman_taskHandle = osThreadNew(YawKalmanTask, NULL, &YawKalman_task_attributes);
+
+  /* creation of YawPID_task */
+  YawPID_taskHandle = osThreadNew(YawPIDtask, NULL, &YawPID_task_attributes);
+
+  /* creation of ACC_Task */
+  ACC_TaskHandle = osThreadNew(ACCtask, NULL, &ACC_Task_attributes);
+
+  /* creation of TSR_Task */
+  TSR_TaskHandle = osThreadNew(TSRtask, NULL, &TSR_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -256,7 +299,8 @@ void MPUtask(void *argument)
     t_AppStatus |= Orientation_Gyro_calibration(&Main_Orientation);
   }
   Main_Orientation.GyroBias /= 1000.0f;
-  osSemaphoreRelease(OrientationReady_semaHandle);
+  osSemaphoreRelease(KalmanReady_semaHandle);
+  osSemaphoreRelease(YawPIDReady_semaHandle);
   /* Infinite loop */
   for(;;)
   {
@@ -278,6 +322,7 @@ void CANtask(void *argument)
 {
   /* USER CODE BEGIN CANtask */
   app_status_t t_AppStatus = CAN_task_init(&Main_CAN);
+  t_AppStatus |= messages_init();
   /* Infinite loop */
   for(;;)
   {
@@ -307,30 +352,6 @@ void MONITORINGtask(void *argument)
     osDelay(100);
   }
   /* USER CODE END MONITORINGtask */
-}
-
-/* USER CODE BEGIN Header_Orientationtask */
-/**
-* @brief Function implementing the OrientationTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_Orientationtask */
-void Orientationtask(void *argument)
-{
-  /* USER CODE BEGIN Orientationtask */
-  app_status_t t_AppStatus = Orientation_task_init(&Main_Orientation);
-  osSemaphoreRelease(Orientation_semaHandle);
-  osSemaphoreAcquire(OrientationReady_semaHandle, osWaitForever);
-  /* Infinite loop */
-  for(;;)
-  {
-    t_AppStatus |= Orientation_Kf_task(&Main_Orientation);
-    t_AppStatus |= Orientation_PID_task(&Main_Orientation, &Omega_z, Car_Wanted_Angle);
-    t_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_Wz);
-    osDelay(1);
-  }
-  /* USER CODE END Orientationtask */
 }
 
 /* USER CODE BEGIN Header_ULTRASONICtask */
@@ -379,6 +400,8 @@ void CONTROLtask(void *argument)
 {
   /* USER CODE BEGIN CONTROLtask */
   app_status_t t_AppStatus = APP_OK;
+  t_AppStatus |= controller_get_yaw_control_init(&Main_Controller, Yaw_PID_suspend);
+  t_AppStatus |= controller_give_yaw_control_init(&Main_Controller, Yaw_PID_resume);
   t_AppStatus |= controller_add_callback(&Main_Controller, UP, Robot_Stop_PID_tunning);
   t_AppStatus |= controller_add_callback(&Main_Controller, DOWN, Robot_Start_PID_tunning);
   t_AppStatus |= controller_add_callback(&Main_Controller, LEFT, Increase_Set_Point_angle);
@@ -397,26 +420,99 @@ void CONTROLtask(void *argument)
   /* USER CODE END CONTROLtask */
 }
 
-/* USER CODE BEGIN Header_TempPIDmove_Task */
+/* USER CODE BEGIN Header_YawKalmanTask */
 /**
-* @brief Function implementing the TempPIDmoveTask thread.
+* @brief Function implementing the YawKalman_task thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_TempPIDmove_Task */
-void TempPIDmove_Task(void *argument)
+/* USER CODE END Header_YawKalmanTask */
+void YawKalmanTask(void *argument)
 {
-  /* USER CODE BEGIN TempPIDmove_Task */
+  /* USER CODE BEGIN YawKalmanTask */
+  app_status_t t_AppStatus = Orientation_task_init(&Main_Orientation);
+  osSemaphoreRelease(Orientation_semaHandle);
+  osSemaphoreAcquire(KalmanReady_semaHandle, osWaitForever);
   /* Infinite loop */
   for(;;)
   {
-    osSemaphoreAcquire(PID_tune_semaHandle, osWaitForever);
-    Car_Wanted_Speed = 0.2;
-    Car_Wanted_direction = 0;
-    CAN_send_message(&Main_CAN, &msg_robot_strafe);
-    osDelay(1000);
+    t_AppStatus |= Orientation_Kf_task(&Main_Orientation);
+    osDelay(1);
   }
-  /* USER CODE END TempPIDmove_Task */
+  /* USER CODE END YawKalmanTask */
+}
+
+/* USER CODE BEGIN Header_YawPIDtask */
+/**
+* @brief Function implementing the YawPID_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_YawPIDtask */
+void YawPIDtask(void *argument)
+{
+  /* USER CODE BEGIN YawPIDtask */
+  app_status_t t_AppStatus = APP_OK;
+  osSemaphoreAcquire(YawPIDReady_semaHandle, osWaitForever);
+  float_t Omega_z_flag = 0;
+  /* Infinite loop */
+  for(;;)
+  {
+	Omega_z_flag = Omega_z;
+    t_AppStatus |= Orientation_PID_task(&Main_Orientation, &Omega_z, Car_Wanted_Angle);
+    if (Omega_z_flag != Omega_z)
+    	t_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_Wz);
+    osDelay(100);
+  }
+  /* USER CODE END YawPIDtask */
+}
+
+/* USER CODE BEGIN Header_ACCtask */
+/**
+* @brief Function implementing the ACC_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_ACCtask */
+void ACCtask(void *argument)
+{
+  /* USER CODE BEGIN ACCtask */
+  app_status_t t_AppStatus = ACC_task_init(&ACC_Object);
+  /* Infinite loop */
+  for(;;)
+  {
+    t_AppStatus |= ACC_relative_task(&ACC_Object);
+    osDelay(100);
+  }
+  /* USER CODE END ACCtask */
+}
+
+/* USER CODE BEGIN Header_TSRtask */
+/**
+* @brief Function implementing the TSR_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_TSRtask */
+void TSRtask(void *argument)
+{
+  /* USER CODE BEGIN TSRtask */
+  app_status_t t_AppStatus = APP_OK;
+  /* Infinite loop */
+  for(;;)
+  {
+    t_AppStatus = TSR_task();
+    osDelay(500);
+  }
+  /* USER CODE END TSRtask */
+}
+
+/* callback_test function */
+void callback_test(void *argument)
+{
+  /* USER CODE BEGIN callback_test */
+
+  /* USER CODE END callback_test */
 }
 
 /* Private application code --------------------------------------------------*/
@@ -429,7 +525,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
   if (GPIO_Pin == MPU_INT_Pin)
   {
-     osSemaphoreRelease(MPU_semaHandle);
+    osSemaphoreRelease(MPU_semaHandle);
   }
 }
 
@@ -438,10 +534,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   osSemaphoreRelease(CONTROL_semaHandle);
 }
 
-float qbias = 0.003f;
-float qangle = 0.001f;
-float rmeasure = 0;
-float n = 1;
+float kp = 0;
+float ki = 0;
+float kd = 0;
+float n = 0;
+float times = 1;
+int flag_times = 0;
 void Robot_Stop_PID_tunning(void *)
 {
   Car_Wanted_Speed = 0;
@@ -452,41 +550,64 @@ void Robot_Stop_PID_tunning(void *)
 
 void Robot_Start_PID_tunning(void *)
 {
-  osSemaphoreRelease(PID_tune_semaHandle);
+  Car_Wanted_Speed = 0.45f;
+  CAN_send_message(&Main_CAN, &msg_robot_strafe);
 }
 
 void Increase_Set_Point_angle(void *)
 {
-  Car_Wanted_Angle += -10;
+  if (flag_times == 0)
+    times = 10;
+  else if (flag_times == 1)
+    times = -10;
+  else if (flag_times == 2)
+    times = 1;
+  else if (flag_times == 3)
+    times = -1;
+
+  flag_times++;
+  if (flag_times >= 4)
+    flag_times = 0;
 }
 
 void Increase_Kp(void *)
 {
-  qbias += 0.0001 * n;
-
-  Main_Orientation.Kf_YAW.Q_bias = qbias;
+  kp += 0.1 * times;
+  ACC_Object.PID_Vx.Kp = kp;
 }
 
 void Increase_Ki(void *)
 {
-  qangle += 0.0001f * n;
-  Main_Orientation.Kf_YAW.Q_angle = qangle;
+  ki += 0.0001 * times;
+  ACC_Object.PID_Vx.Ki = ki;
 }
 
 void Increase_Kd(void *)
 {
-  rmeasure += 0.0001f * n;
-  Main_Orientation.Kf_YAW.R_measure = rmeasure;
+  kd += 0.1 * times;
+  ACC_Object.PID_Vx.Kd = kd;
 }
 
 void Increase_N(void *)
 {
-  n *= -1;
+  n += 0.1 * times;
+  ACC_Object.PID_Vx.N = n;
 }
 
 void Reset_PID(void *)
 {
-  Kalman_Init(&Main_Orientation.Kf_YAW);
+  PID_Init(&ACC_Object.PID_Vx, Vx_Kp, Vx_Ki, Vx_Kd, Vx_N, 100, Vx_MIN_OUT, Vx_MAX_OUT);
 }
+
+void Yaw_PID_suspend(void)
+{
+  osThreadSuspend(YawPID_taskHandle);
+}
+
+void Yaw_PID_resume(void)
+{
+  osThreadResume(YawPID_taskHandle);
+}
+
 /* USER CODE END Application */
 

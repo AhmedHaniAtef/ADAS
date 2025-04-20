@@ -42,6 +42,8 @@
 /* speeds - angles - etc objects */
 float_t Car_Wanted_Angle = 0.0f;
 float_t Car_Wanted_Speed = 0.0f;
+float_t Car_Max_Forced_Angle = 0.0f;
+float_t Car_Max_Forced_Speed = 0.6f;
 float_t Car_Wanted_direction = 0.0f;
 float_t Car_Wanted_Angular_Speed = 0.0f;
 float_t Car_Wanted_Rotate_Radius = 0.0f;
@@ -103,6 +105,12 @@ monitor_values_t Main_Monitor_values =
     .M_Kf_qBias     = &q_bias,
     .M_Kf_qAngle    = &q_angle,
     .M_Kf_rMeasure  = &r_measure,
+    .M_vx_kp        = &vx_kp,
+    .M_vx_ki        = &vx_ki,
+    .M_vx_kd        = &vx_kd,
+    .M_vx_n         = &vx_n,  
+    .M_wanted_speed = &wanted_speed,
+    .M_max_speed    = &max_speed,
 };
 
 /* Controller objects */
@@ -128,6 +136,15 @@ orientation_t Main_Orientation =
     .FilteredYAW = 0.0f,
     .GyroBias = 0.0f,
     .MpuWz = &MpuGz,
+};
+
+/* Adaptive cruise control */
+ACC_t ACC_Object =
+{
+    .dt = 100,
+    .Front_UL = &sensor_0_dis,
+    .Left_UL = &sensor_315_dis,
+    .Right_UL = &sensor_45_dis,
 };
 
 /***********************************************************************************************************************

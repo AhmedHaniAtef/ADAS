@@ -1,4 +1,7 @@
-../APP_Layer/src/Messages_Callbacks.c:111:13:msg_robot_strafe_clb	24	static
-../APP_Layer/src/Messages_Callbacks.c:123:13:msg_robot_rotate_clb	24	static
-../APP_Layer/src/Messages_Callbacks.c:135:13:msg_robot_stop_clb	24	static
-../APP_Layer/src/Messages_Callbacks.c:145:13:msg_robot_Wz_clb	24	static
+../APP_Layer/src/Messages_Callbacks.c:123:14:messages_init	16	static
+../APP_Layer/src/Messages_Callbacks.c:138:13:msg_robot_strafe_clb	24	static
+../APP_Layer/src/Messages_Callbacks.c:157:13:msg_robot_rotate_clb	24	static
+../APP_Layer/src/Messages_Callbacks.c:169:13:msg_robot_stop_clb	24	static
+../APP_Layer/src/Messages_Callbacks.c:179:13:msg_robot_Wz_clb	24	static
+../APP_Layer/src/Messages_Callbacks.c:190:13:msg_sign_detected_clb	24	static
+../APP_Layer/src/Messages_Callbacks.c:202:13:msg_lane_update_clb	16	static

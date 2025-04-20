@@ -59,6 +59,8 @@ typedef struct
     float_t Roll;	/**< Roll angle calculated from Kalman filter. */
     float_t Pitch;	/**< Pitch angle calculated from Kalman filter. */
     float_t Yaw;     /**< Yaw angle calculated from gyroscope data. */
+    GPIO_TypeDef* GPIOx;
+    uint16_t GPIO_Pin;
 } MPU6050_t;
 
 /**
