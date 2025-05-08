@@ -80,41 +80,48 @@ app_status_t TSR_handle(traffic_sign_t p_Speed, traffic_sign_t p_Sign)
     
     case SPEED_40:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_40_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
     
     case SPEED_50:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_50_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
     
     case SPEED_60:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_60_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
     
     case SPEED_70:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_70_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
     
     case SPEED_80:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_80_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
     
     case SPEED_90:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_90_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
     
     case SPEED_100:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_100_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
     
     case SPEED_120:
         Car_Max_Forced_Speed = Max_speed_responsible(SPEED_120_PERCENTAGE * DEFUALT_ROBOT_MAX_SPEED, TSR);
+        l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
         break;
 
     default:
         break;
     }
-    l_AppStatus |= CAN_send_message(&Main_CAN, &msg_robot_strafe);
-
+    
     switch (p_Sign)
     {
     case DIRECTION:
@@ -136,6 +143,7 @@ app_status_t TSR_handle(traffic_sign_t p_Speed, traffic_sign_t p_Sign)
     default:
         break;
     }
+    return l_AppStatus;
 }
 
 /**

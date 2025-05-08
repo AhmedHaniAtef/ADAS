@@ -1,0 +1,3 @@
+../ECU_Layer/src/logic.c:73:14:logic_set	24	static
+../ECU_Layer/src/logic.c:93:14:logic_reset	24	static
+../ECU_Layer/src/logic.c:113:14:logic_toogle	24	static

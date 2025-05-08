@@ -48,6 +48,7 @@ APP_Layer/src/CAN_task.o: ../APP_Layer/src/CAN_task.c \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/mpu.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/Control.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/qmc5883l.h \
+ ../APP_Layer/src/../inc/../../ECU_Layer/inc/logic.h \
  ../APP_Layer/src/../inc/../APP_std.h ../Core/Inc/../../lib/inc/my_list.h \
  ../Core/Inc/../../lib/inc/my_queue.h ../Core/Inc/../../lib/inc/my_list.h \
  ../Core/Inc/../../lib/inc/diff_functionalities.h
@@ -100,6 +101,7 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/mpu.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/Control.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/qmc5883l.h:
+../APP_Layer/src/../inc/../../ECU_Layer/inc/logic.h:
 ../APP_Layer/src/../inc/../APP_std.h:
 ../Core/Inc/../../lib/inc/my_list.h:
 ../Core/Inc/../../lib/inc/my_queue.h:

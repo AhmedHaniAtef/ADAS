@@ -1,7 +1,8 @@
-../APP_Layer/src/Messages_Callbacks.c:123:14:messages_init	1
-../APP_Layer/src/Messages_Callbacks.c:138:13:msg_robot_strafe_clb	2
-../APP_Layer/src/Messages_Callbacks.c:157:13:msg_robot_rotate_clb	1
-../APP_Layer/src/Messages_Callbacks.c:169:13:msg_robot_stop_clb	1
-../APP_Layer/src/Messages_Callbacks.c:179:13:msg_robot_Wz_clb	1
-../APP_Layer/src/Messages_Callbacks.c:190:13:msg_sign_detected_clb	1
-../APP_Layer/src/Messages_Callbacks.c:202:13:msg_lane_update_clb	1
+../APP_Layer/src/Messages_Callbacks.c:133:14:messages_init	1
+../APP_Layer/src/Messages_Callbacks.c:149:13:msg_robot_strafe_clb	2
+../APP_Layer/src/Messages_Callbacks.c:168:13:msg_robot_rotate_clb	1
+../APP_Layer/src/Messages_Callbacks.c:180:13:msg_robot_stop_clb	1
+../APP_Layer/src/Messages_Callbacks.c:190:13:msg_robot_Wz_clb	1
+../APP_Layer/src/Messages_Callbacks.c:201:13:msg_sign_detected_clb	1
+../APP_Layer/src/Messages_Callbacks.c:213:13:msg_lane_update_clb	1
+../APP_Layer/src/Messages_Callbacks.c:219:13:msg_update_encoder_clb	1

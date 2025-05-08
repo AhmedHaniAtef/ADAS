@@ -35,16 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-// QMC5883L_t qmc =
-// {
-//   .UsedI2C = &hi2c2,
-//   .DRDY = DRDY_INT_DISABLE, 
-//   .FullScale = RNG_8G,
-//   .Mode = CONTINUOUS,
-//   .OutputDataRate = ODR_200,
-//   .OverSampleRatio = OSR_512,
-// };
-// float_t angle = 0;
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -55,55 +46,59 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 
+uint8_t ACC_Flag = 0;
+uint8_t TSR_Flag = 0;
+uint8_t BSD_Flag = 0;
+
 /* USER CODE END Variables */
 /* Definitions for MPU_task */
 osThreadId_t MPU_taskHandle;
 const osThreadAttr_t MPU_task_attributes = {
   .name = "MPU_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh5,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for CAN_task */
 osThreadId_t CAN_taskHandle;
 const osThreadAttr_t CAN_task_attributes = {
   .name = "CAN_task",
   .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityHigh5,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for MONITORING_task */
 osThreadId_t MONITORING_taskHandle;
 const osThreadAttr_t MONITORING_task_attributes = {
   .name = "MONITORING_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh4,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for Ultrasonic_task */
 osThreadId_t Ultrasonic_taskHandle;
 const osThreadAttr_t Ultrasonic_task_attributes = {
   .name = "Ultrasonic_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityHigh7,
 };
 /* Definitions for CONTROL_task */
 osThreadId_t CONTROL_taskHandle;
 const osThreadAttr_t CONTROL_task_attributes = {
   .name = "CONTROL_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh7,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for YawKalman_task */
 osThreadId_t YawKalman_taskHandle;
 const osThreadAttr_t YawKalman_task_attributes = {
   .name = "YawKalman_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh2,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for YawPID_task */
 osThreadId_t YawPID_taskHandle;
 const osThreadAttr_t YawPID_task_attributes = {
   .name = "YawPID_task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh5,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for ACC_Task */
 osThreadId_t ACC_TaskHandle;
@@ -117,7 +112,21 @@ osThreadId_t TSR_TaskHandle;
 const osThreadAttr_t TSR_Task_attributes = {
   .name = "TSR_Task",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityHigh4,
+  .priority = (osPriority_t) osPriorityRealtime,
+};
+/* Definitions for BSD_task */
+osThreadId_t BSD_taskHandle;
+const osThreadAttr_t BSD_task_attributes = {
+  .name = "BSD_task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityRealtime,
+};
+/* Definitions for BUZZ_task */
+osThreadId_t BUZZ_taskHandle;
+const osThreadAttr_t BUZZ_task_attributes = {
+  .name = "BUZZ_task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* Definitions for Timer_test */
 osTimerId_t Timer_testHandle;
@@ -162,17 +171,21 @@ const osSemaphoreAttr_t Orientation_sema_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-void Robot_Stop_PID_tunning(void *);
-void Robot_Start_PID_tunning(void *);
-void Increase_Set_Point_angle(void *);
-void Increase_Kp(void *);
-void Increase_Ki(void *);
-void Increase_Kd(void *);
+void Adaptive_Cruise_Control(void *);
+void Traffic_Sign_Recognition(void *);
+void Blind_Spot_Detection(void *);
+void Change_Lane_Left(void *);
+void Change_Lane_Right(void *);
+void Park(void *);
 void Increase_N(void *);
 void Reset_PID(void *);
 
 void Yaw_PID_suspend(void);
 void Yaw_PID_resume(void);
+
+void BuzzerDelay(uint32_t ticks);
+void BuzzerResume(void);
+void BuzzerSuspend(void);
 /* USER CODE END FunctionPrototypes */
 
 void MPUtask(void *argument);
@@ -184,6 +197,8 @@ void YawKalmanTask(void *argument);
 void YawPIDtask(void *argument);
 void ACCtask(void *argument);
 void TSRtask(void *argument);
+void BSDtask(void *argument);
+void BUZZtask(void *argument);
 void callback_test(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -268,6 +283,12 @@ void MX_FREERTOS_Init(void) {
   /* creation of TSR_Task */
   TSR_TaskHandle = osThreadNew(TSRtask, NULL, &TSR_Task_attributes);
 
+  /* creation of BSD_task */
+  BSD_taskHandle = osThreadNew(BSDtask, NULL, &BSD_task_attributes);
+
+  /* creation of BUZZ_task */
+  BUZZ_taskHandle = osThreadNew(BUZZtask, NULL, &BUZZ_task_attributes);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -291,14 +312,14 @@ void MPUtask(void *argument)
   osDelay(100);
   app_status_t t_AppStatus = MPU_task_init(&Main_MPU);
   osSemaphoreAcquire(Orientation_semaHandle, osWaitForever);
-  for (uint32_t i = 0; i < 1000; i++)
+  for (uint32_t i = 0; i < 100; i++)
   {
     osSemaphoreAcquire(MPU_semaHandle, osWaitForever);
     t_AppStatus |= MPU_update_task(&Main_MPU);
     MpuGz = Main_MPU.mpu->Gz;
     t_AppStatus |= Orientation_Gyro_calibration(&Main_Orientation);
   }
-  Main_Orientation.GyroBias /= 1000.0f;
+  Main_Orientation.GyroBias /= 100.0f;
   osSemaphoreRelease(KalmanReady_semaHandle);
   osSemaphoreRelease(YawPIDReady_semaHandle);
   /* Infinite loop */
@@ -369,19 +390,19 @@ void ULTRASONICtask(void *argument)
   for(;;)
   {
     t_AppStatus |= ultrasonics_update_task_X(&Main_Ultrasonics);
-    osDelay(20);
+    osDelay(50);
     t_AppStatus |= ultrasonics_outlier_detect_X(&Main_Ultrasonics);
 
     t_AppStatus |= ultrasonics_update_task_Y(&Main_Ultrasonics);
-    osDelay(20);
+    osDelay(50);
     t_AppStatus |= ultrasonics_outlier_detect_Y(&Main_Ultrasonics);
 
     t_AppStatus |= ultrasonics_update_task_U(&Main_Ultrasonics);
-    osDelay(20);
+    osDelay(50);
     t_AppStatus |= ultrasonics_outlier_detect_U(&Main_Ultrasonics);
 
     t_AppStatus |= ultrasonics_update_task_V(&Main_Ultrasonics);
-    osDelay(20);
+    osDelay(50);
     t_AppStatus |= ultrasonics_outlier_detect_V(&Main_Ultrasonics);
 
 
@@ -402,12 +423,12 @@ void CONTROLtask(void *argument)
   app_status_t t_AppStatus = APP_OK;
   t_AppStatus |= controller_get_yaw_control_init(&Main_Controller, Yaw_PID_suspend);
   t_AppStatus |= controller_give_yaw_control_init(&Main_Controller, Yaw_PID_resume);
-  t_AppStatus |= controller_add_callback(&Main_Controller, UP, Robot_Stop_PID_tunning);
-  t_AppStatus |= controller_add_callback(&Main_Controller, DOWN, Robot_Start_PID_tunning);
-  t_AppStatus |= controller_add_callback(&Main_Controller, LEFT, Increase_Set_Point_angle);
-  t_AppStatus |= controller_add_callback(&Main_Controller, RIGHT, Increase_Kp);
-  t_AppStatus |= controller_add_callback(&Main_Controller, SELECT, Increase_Ki);
-  t_AppStatus |= controller_add_callback(&Main_Controller, START, Increase_Kd);
+  t_AppStatus |= controller_add_callback(&Main_Controller, UP, Adaptive_Cruise_Control);
+  t_AppStatus |= controller_add_callback(&Main_Controller, DOWN, Traffic_Sign_Recognition);
+  t_AppStatus |= controller_add_callback(&Main_Controller, LEFT, Blind_Spot_Detection);
+  t_AppStatus |= controller_add_callback(&Main_Controller, RIGHT, Change_Lane_Left);
+  t_AppStatus |= controller_add_callback(&Main_Controller, SELECT, Change_Lane_Right);
+  t_AppStatus |= controller_add_callback(&Main_Controller, START, Park);
   t_AppStatus |= controller_add_callback(&Main_Controller, LEFT_STICK, Increase_N);
   t_AppStatus |= controller_add_callback(&Main_Controller, RITHT_STICK, Reset_PID);
   /* Infinite loop */
@@ -437,7 +458,7 @@ void YawKalmanTask(void *argument)
   for(;;)
   {
     t_AppStatus |= Orientation_Kf_task(&Main_Orientation);
-    osDelay(1);
+    osDelay(10);
   }
   /* USER CODE END YawKalmanTask */
 }
@@ -453,7 +474,7 @@ void YawPIDtask(void *argument)
 {
   /* USER CODE BEGIN YawPIDtask */
   app_status_t t_AppStatus = APP_OK;
-  osSemaphoreAcquire(YawPIDReady_semaHandle, osWaitForever);
+  //osSemaphoreAcquire(YawPIDReady_semaHandle, osWaitForever);
   float_t Omega_z_flag = 0;
   /* Infinite loop */
   for(;;)
@@ -478,6 +499,7 @@ void ACCtask(void *argument)
 {
   /* USER CODE BEGIN ACCtask */
   app_status_t t_AppStatus = ACC_task_init(&ACC_Object);
+  osThreadSuspend(ACC_TaskHandle);
   /* Infinite loop */
   for(;;)
   {
@@ -498,13 +520,57 @@ void TSRtask(void *argument)
 {
   /* USER CODE BEGIN TSRtask */
   app_status_t t_AppStatus = APP_OK;
+  osThreadSuspend(TSR_TaskHandle);
   /* Infinite loop */
   for(;;)
   {
     t_AppStatus = TSR_task();
-    osDelay(500);
+    osDelay(200);
   }
   /* USER CODE END TSRtask */
+}
+
+/* USER CODE BEGIN Header_BSDtask */
+/**
+* @brief Function implementing the BSD_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_BSDtask */
+void BSDtask(void *argument)
+{
+  /* USER CODE BEGIN BSDtask */
+  app_status_t t_AppStatus = BSD_init(&BSD_Object, BuzzerDelay, BuzzerSuspend, BuzzerResume);
+  osDelay(2000);
+  /* Infinite loop */
+  for(;;)
+  {
+    t_AppStatus |= BSD_task(&BSD_Object);
+    osDelay(100);
+  }
+  /* USER CODE END BSDtask */
+}
+
+/* USER CODE BEGIN Header_BUZZtask */
+/**
+* @brief Function implementing the BUZZ_task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_BUZZtask */
+void BUZZtask(void *argument)
+{
+  /* USER CODE BEGIN BUZZtask */
+  app_status_t t_AppStatus = APP_OK;
+  BuzzerSuspend();
+  /* Infinite loop */
+  for(;;)
+  {
+    t_AppStatus |= BSD_buzzer_task(&BSD_Object);
+    if (BSD_Flag == 0)
+      BuzzerSuspend()
+  }
+  /* USER CODE END BUZZtask */
 }
 
 /* callback_test function */
@@ -534,69 +600,98 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   osSemaphoreRelease(CONTROL_semaHandle);
 }
 
-float kp = 0;
-float ki = 0;
-float kd = 0;
-float n = 0;
-float times = 1;
-int flag_times = 0;
-void Robot_Stop_PID_tunning(void *)
+
+
+
+
+/******************************************** Buttons CallBacks *******************************************************/
+
+/**
+ * @brief the callback function which will be called when the adaptive cruise control button will be pressed
+ */
+void Adaptive_Cruise_Control(void *)
 {
-  Car_Wanted_Speed = 0;
-  Car_Wanted_direction = 0;
-  Car_Wanted_Angle = 0;
-  CAN_send_message(&Main_CAN, &msg_robot_stop);
+  if (ACC_Flag == 0)
+  {
+    // move the car in front direction with the maximum allowed speed
+    Car_Wanted_Speed = DEFUALT_ROBOT_MAX_SPEED;
+    Car_Wanted_direction = 0;
+    CAN_send_message(&Main_CAN, &msg_robot_strafe);
+
+    osThreadResume(ACC_TaskHandle);
+
+    ACC_Flag = 1; // wait for turnning off the feature
+  }
+  else if (ACC_Flag == 1)
+  {
+    osThreadSuspend(ACC_TaskHandle);
+
+    ACC_Flag = 0; // wait for turnning on the feature
+  }
 }
 
-void Robot_Start_PID_tunning(void *)
+/**
+ * @brief the callback function which will be called when the traffic sign recognition button will be pressed
+ */
+void Traffic_Sign_Recognition(void *)
 {
-  Car_Wanted_Speed = 0.45f;
-  CAN_send_message(&Main_CAN, &msg_robot_strafe);
+  if (TSR_Flag == 0)
+  {
+    osThreadResume(TSR_TaskHandle);   
+
+    TSR_Flag = 1; // wait for turnning off the feature
+  }
+  else if (TSR_Flag == 1)
+  {
+    osThreadSuspend(TSR_TaskHandle);
+
+    TSR_Flag = 0; // wait for turnning on the feature
+  }
 }
 
-void Increase_Set_Point_angle(void *)
+/**
+ * @brief the callback function which will be called when the blind spot detection button will be pressed
+ * 
+ */
+void Blind_Spot_Detection(void *)
 {
-  if (flag_times == 0)
-    times = 10;
-  else if (flag_times == 1)
-    times = -10;
-  else if (flag_times == 2)
-    times = 1;
-  else if (flag_times == 3)
-    times = -1;
+  if (BSD_Flag == 0)
+  {
+    osThreadResume(BSD_taskHandle);   
 
-  flag_times++;
-  if (flag_times >= 4)
-    flag_times = 0;
+    BSD_Flag = 1; // wait for turnning off the feature
+  }
+  else if (BSD_Flag == 1)
+  {
+    osThreadSuspend(BSD_taskHandle);
+
+    BSD_Flag = 0; // wait for turnning on the feature
+  }
 }
 
-void Increase_Kp(void *)
+void Change_Lane_Left(void *)
 {
-  kp += 0.1 * times;
-  ACC_Object.PID_Vx.Kp = kp;
+  ALC_Change_Lane(LEFT);
 }
 
-void Increase_Ki(void *)
+void Change_Lane_Right(void *)
 {
-  ki += 0.0001 * times;
-  ACC_Object.PID_Vx.Ki = ki;
+  ALC_Change_Lane(RIGHT);
 }
 
-void Increase_Kd(void *)
+void Park(void *)
 {
-  kd += 0.1 * times;
-  ACC_Object.PID_Vx.Kd = kd;
+  /* Reserved */
 }
 
 void Increase_N(void *)
 {
-  n += 0.1 * times;
-  ACC_Object.PID_Vx.N = n;
+
 }
 
 void Reset_PID(void *)
 {
-  PID_Init(&ACC_Object.PID_Vx, Vx_Kp, Vx_Ki, Vx_Kd, Vx_N, 100, Vx_MIN_OUT, Vx_MAX_OUT);
+
 }
 
 void Yaw_PID_suspend(void)
@@ -607,6 +702,21 @@ void Yaw_PID_suspend(void)
 void Yaw_PID_resume(void)
 {
   osThreadResume(YawPID_taskHandle);
+}
+
+void BuzzerDelay(uint32_t ticks)
+{
+  osDelay(ticks);
+}
+
+void BuzzerResume(void)
+{
+  osThreadResume(BUZZ_taskHandle);
+}
+
+void BuzzerSuspend(void)
+{
+  osThreadSuspend(BUZZ_taskHandle);
 }
 
 /* USER CODE END Application */

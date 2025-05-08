@@ -132,7 +132,7 @@ controller_t Main_Controller =
 orientation_t Main_Orientation =
 {
     .CompassYAW = &CompasAngle,
-    .dt = 0.001f,
+    .dt = 0.1f,
     .FilteredYAW = 0.0f,
     .GyroBias = 0.0f,
     .MpuWz = &MpuGz,
@@ -145,6 +145,18 @@ ACC_t ACC_Object =
     .Front_UL = &sensor_0_dis,
     .Left_UL = &sensor_315_dis,
     .Right_UL = &sensor_45_dis,
+};
+
+/* Auto Parking objects */
+float_t FL_Encoder_pos = 0.0f;
+float_t FR_Encoder_pos = 0.0f;
+
+/* Blind Spot Detection Objects*/
+BSD_t BSD_Object = 
+{
+    .Buzzer = &buzzer,
+    .LeftLed = &led_left,
+    .RightLed = &led_right,
 };
 
 /***********************************************************************************************************************

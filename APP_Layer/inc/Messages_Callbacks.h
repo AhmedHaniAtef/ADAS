@@ -47,7 +47,7 @@ extern can_msg_t msg_robot_Wz;
 /* Message for Traffic Sign Recognition Feature detects a Sign */
 extern can_msg_t msg_sign_detected;
 
-/* Message for Auto Lane Change (Not Completed)*/
+/* Message for Auto Lane Change */
 extern can_msg_t msg_lane_update;
 
 /***********************************************************************************************************************

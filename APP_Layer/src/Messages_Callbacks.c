@@ -49,6 +49,9 @@ static void msg_sign_detected_clb(uCAN_MSG *p_Message);
 /* Message for Auto Lane Change callback (Not Completed)*/
 static void msg_lane_update_clb(uCAN_MSG *p_Message);
 
+/* Message for update encoder position callback */
+static void msg_update_encoder_clb(uCAN_MSG *p_Message);
+
 
 /***********************************************************************************************************************
 *                                                     GLOBAL OBJECTS                                                   *
@@ -89,11 +92,18 @@ can_msg_t msg_sign_detected =
     .CallBack = msg_sign_detected_clb,
 };
 
-/* Message for Auto Lane Change (Not Completed)*/
+/* Message for Auto Lane Change*/
 can_msg_t msg_lane_update =
 {
     .ID = 0x105,
     .CallBack = msg_lane_update_clb,
+};
+
+/* Message for Updating the position of the encoder */
+can_msg_t msg_update_encoder =
+{
+    .ID = 0x106,
+    .CallBack = msg_update_encoder_clb,
 };
 
 /***********************************************************************************************************************
@@ -123,7 +133,8 @@ can_msg_t msg_lane_update =
 app_status_t messages_init(void)
 {
     app_status_t l_AppStatus = APP_OK;
-    l_AppStatus |= CAN_add_msg_rx(&Main_CAN, &msg_sign_detected);
+    l_AppStatus |= CAN_add_msg_rx(&Main_CAN, &msg_sign_detected);   
+    l_AppStatus |= CAN_add_msg_rx(&Main_CAN, &msg_update_encoder);   
     return l_AppStatus;
 }
 
@@ -201,7 +212,25 @@ static void msg_sign_detected_clb(uCAN_MSG *p_Message)
 /* Message for Auto Lane Change callback (Not Completed)*/
 static void msg_lane_update_clb(uCAN_MSG *p_Message)
 {
+    uint8_t temp[2] = {0};
+    memcpy(temp, p_Message->frame.data, 2);
+
+    Lane_Received_t l_Speed = temp[0];
+    Lane_Received_t l_Sign = temp[1];
+
+    ALC_handle(l_Speed, l_Sign);
+}
+
+/* Message for update encoder position callback */
+static void msg_update_encoder_clb(uCAN_MSG *p_Message)
+{
+    two_float_conv temp = {0};
+    memcpy(&temp.data, p_Message->frame.data, 8);
+    float l_fl_encoder = temp.value[0];
+    float l_fr_encoder = temp.value[1];
     
+    FL_Encoder_pos = l_fl_encoder;
+    FR_Encoder_pos = l_fr_encoder;
 }
 
 

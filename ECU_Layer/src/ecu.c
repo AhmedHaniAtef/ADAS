@@ -372,7 +372,23 @@ UltrasonicSensor sensor_315 =
 };
 
 
+logic_t buzzer =
+{
+    .logic_Port = BUZZER_GPIO_Port,
+    .logic_pin = BUZZER_Pin,
+};
 
+logic_t led_left =
+{
+    .logic_Port = LED_LEFT_GPIO_Port,
+    .logic_pin = LED_LEFT_Pin,
+};
+
+logic_t led_right =
+{
+    .logic_Port = LED_RIGHT_GPIO_Port,
+    .logic_pin = LED_RIGHT_Pin,
+};
 
 /***********************************************************************************************************************
 *                                                     STATIC OBJECTS                                                   *

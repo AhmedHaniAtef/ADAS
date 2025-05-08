@@ -132,7 +132,7 @@ app_status_t Orientation_PID_task(orientation_t *p_Orientaion, float_t *p_Wz, fl
         temp = PID_Compute(&p_Orientaion->PID, p_SetPoint, p_Orientaion->FilteredYAW);
         temp = temp * 20.0f;
         temp = (temp > (floor(temp)+0.5f)) ? ceil(temp) : floor(temp);
-        temp = temp / -20.0f;
+        temp = temp / 20.0f;
         *p_Wz = temp;
     }
     return l_AppStatus;

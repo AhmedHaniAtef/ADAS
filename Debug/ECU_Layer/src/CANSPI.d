@@ -43,7 +43,8 @@ ECU_Layer/src/CANSPI.o: ../ECU_Layer/src/CANSPI.c \
  ../ECU_Layer/src/../inc/CANSPI.h ../ECU_Layer/src/../inc/MCP2515.h \
  ../ECU_Layer/src/../inc/monitoring.h \
  ../ECU_Layer/src/../inc/ultrasonic.h ../ECU_Layer/src/../inc/mpu.h \
- ../ECU_Layer/src/../inc/Control.h ../ECU_Layer/src/../inc/qmc5883l.h
+ ../ECU_Layer/src/../inc/Control.h ../ECU_Layer/src/../inc/qmc5883l.h \
+ ../ECU_Layer/src/../inc/logic.h
 ../ECU_Layer/src/../inc/CANSPI.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -94,3 +95,4 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../ECU_Layer/src/../inc/mpu.h:
 ../ECU_Layer/src/../inc/Control.h:
 ../ECU_Layer/src/../inc/qmc5883l.h:
+../ECU_Layer/src/../inc/logic.h:

@@ -93,6 +93,12 @@ void Error_Handler(void);
 #define ESP32_TX_GPIO_Port GPIOA
 #define ESP32_RX_Pin GPIO_PIN_10
 #define ESP32_RX_GPIO_Port GPIOA
+#define BUZZER_Pin GPIO_PIN_11
+#define BUZZER_GPIO_Port GPIOA
+#define LED_LEFT_Pin GPIO_PIN_12
+#define LED_LEFT_GPIO_Port GPIOA
+#define LED_RIGHT_Pin GPIO_PIN_15
+#define LED_RIGHT_GPIO_Port GPIOA
 #define MPU_SDA_Pin GPIO_PIN_3
 #define MPU_SDA_GPIO_Port GPIOB
 #define UL_0_Pin GPIO_PIN_4

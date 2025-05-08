@@ -48,6 +48,7 @@ APP_Layer/src/ACC_feature.o: ../APP_Layer/src/ACC_feature.c \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/mpu.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/Control.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/qmc5883l.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/logic.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/CAN_task.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../APP_std.h \
  ../Core/Inc/../../lib/inc/my_list.h ../Core/Inc/../../lib/inc/my_queue.h \
@@ -62,6 +63,7 @@ APP_Layer/src/ACC_feature.o: ../APP_Layer/src/ACC_feature.c \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../lib/inc/KalmanFilter.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/ACC_feature.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/TSR_feature.h \
+ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/BSD_feature.h \
  D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/ACC_feature.h
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/APP.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/ecu.h:
@@ -112,6 +114,7 @@ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/mpu.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/Control.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/qmc5883l.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../ECU_Layer/inc/logic.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/CAN_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../APP_std.h:
 ../Core/Inc/../../lib/inc/my_list.h:
@@ -127,4 +130,5 @@ D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/Orientation_task.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/../../lib/inc/KalmanFilter.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/ACC_feature.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/TSR_feature.h:
+D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/BSD_feature.h:
 D:/studying/Graduation_Project/Baremetal/ADAS/APP_Layer/inc/ACC_feature.h:

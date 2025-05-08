@@ -23,6 +23,7 @@
 #include "mpu.h"
 #include "Control.h"
 #include "qmc5883l.h"
+#include "logic.h"
 
 
 /***********************************************************************************************************************
@@ -37,8 +38,8 @@
 #define ADD_N_VALUE             (LAST_ADD_USED_FLASH - 16)
 
 #define TIMER_AUTO_RELOAD_VAL   (4199)
-#define ROBOT_LENGHT_X          (0.15)
-#define ROBOT_LENGHT_Y          (0.1)
+#define ROBOT_LENGHT_X          (0.0925)
+#define ROBOT_LENGHT_Y          (0.085)
 #define RADIUS_WHEEL            (0.03)
 
 #define DEFUALT_Kp_VALUE        (0.85f)
@@ -145,6 +146,10 @@ extern float_t sensor_225_dis;
 extern float_t sensor_270_dis;
 extern float_t sensor_315_dis;
 
+/* Logic Objects */
+extern logic_t buzzer;
+extern logic_t led_left;
+extern logic_t led_right;
 
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *

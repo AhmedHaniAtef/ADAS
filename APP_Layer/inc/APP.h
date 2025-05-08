@@ -22,14 +22,16 @@
 #include "Orientation_task.h"
 #include "ACC_feature.h"
 #include "TSR_feature.h"
+#include "BSD_feature.h"
+#include "ALC_feature.h"
 
 
 /***********************************************************************************************************************
 *                                                    MACRO DEFINES                                                     *
 ***********************************************************************************************************************/
 
-#define MPU_PID_Kp          (-0.0207f)
-#define MPU_PID_Kd          (1.4399999f)
+#define MPU_PID_Kp          (-0.0250f)
+#define MPU_PID_Kd          (1.2399999f)
 #define MPU_PID_Ki          (0.0f)
 #define MPU_PID_N           (1.0299999f)
 // #define MPU_PID_Kp          (-0.02f)
@@ -47,7 +49,7 @@
 
 #define ROBOT_STOP_FLAG                 (0xFF)
 #define DEFUALT_ROBOT_MAX_RADIUS        (0.5f)
-#define DEFUALT_ROBOT_MAX_SPEED         (0.55f)
+#define DEFUALT_ROBOT_MAX_SPEED         (0.45f)
 #define DEFUALT_ROBOT_MAX_ANGULAR_SPEED (3.0f)
 
 #define OUTLIER_WINDOW_SIZE     (5)
@@ -79,6 +81,11 @@
 #define SPEED_90_PERCENTAGE      (80.0f)
 #define SPEED_100_PERCENTAGE     (90.0f)
 #define SPEED_120_PERCENTAGE     (100.0f)
+
+#define MIN_DISTANCE    (5.0f)
+
+#define MIN_ANGLE_LANE_CHANGE (5.0f)
+#define MAX_ANGLE_LANE_CHANGE (45.0f)
 /***********************************************************************************************************************
 *                                                   MACRO FUNCTIONS                                                    *
 ***********************************************************************************************************************/
@@ -125,6 +132,14 @@ extern orientation_t Main_Orientation;
 
 /* Adaptive cruise control */
 extern ACC_t ACC_Object;
+
+/* Auto Parking objects */
+extern float_t FL_Encoder_pos;
+extern float_t FR_Encoder_pos;
+
+/* Blind Spot Detection Objects*/
+extern BSD_t BSD_Object;
+
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *
 ***********************************************************************************************************************/

@@ -47,6 +47,7 @@ APP_Layer/src/APP.o: ../APP_Layer/src/APP.c ../APP_Layer/src/../inc/APP.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/mpu.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/Control.h \
  ../APP_Layer/src/../inc/../../ECU_Layer/inc/qmc5883l.h \
+ ../APP_Layer/src/../inc/../../ECU_Layer/inc/logic.h \
  ../APP_Layer/src/../inc/CAN_task.h ../APP_Layer/src/../inc/../APP_std.h \
  ../Core/Inc/../../lib/inc/my_list.h ../Core/Inc/../../lib/inc/my_queue.h \
  ../Core/Inc/../../lib/inc/my_list.h \
@@ -59,7 +60,8 @@ APP_Layer/src/APP.o: ../APP_Layer/src/APP.c ../APP_Layer/src/../inc/APP.h \
  ../APP_Layer/src/../inc/Orientation_task.h \
  ../APP_Layer/src/../inc/../../lib/inc/KalmanFilter.h \
  ../APP_Layer/src/../inc/ACC_feature.h \
- ../APP_Layer/src/../inc/TSR_feature.h
+ ../APP_Layer/src/../inc/TSR_feature.h \
+ ../APP_Layer/src/../inc/BSD_feature.h
 ../APP_Layer/src/../inc/APP.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/ecu.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/../../Core/Inc/main.h:
@@ -109,6 +111,7 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/mpu.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/Control.h:
 ../APP_Layer/src/../inc/../../ECU_Layer/inc/qmc5883l.h:
+../APP_Layer/src/../inc/../../ECU_Layer/inc/logic.h:
 ../APP_Layer/src/../inc/CAN_task.h:
 ../APP_Layer/src/../inc/../APP_std.h:
 ../Core/Inc/../../lib/inc/my_list.h:
@@ -124,3 +127,4 @@ D:/studying/Graduation_Project/Baremetal/ADAS/ECU_Layer/ecu_std.h:
 ../APP_Layer/src/../inc/../../lib/inc/KalmanFilter.h:
 ../APP_Layer/src/../inc/ACC_feature.h:
 ../APP_Layer/src/../inc/TSR_feature.h:
+../APP_Layer/src/../inc/BSD_feature.h:

@@ -134,10 +134,10 @@ app_status_t monitor_task_init(monitor_values_t *p_AllMonitoredValues)
         p_AllMonitoredValues->M_Kf_qBias->Data.OriginalData         = &Main_Orientation.Kf_YAW.Q_angle;
         p_AllMonitoredValues->M_Kf_qAngle->Data.OriginalData        = &Main_Orientation.Kf_YAW.Q_bias;
         p_AllMonitoredValues->M_Kf_rMeasure->Data.OriginalData      = &Main_Orientation.Kf_YAW.R_measure;
-        p_AllMonitoredValues->M_vx_kp->Data.OriginalData            = &ACC_Object.PID_Vx.Kp;
-        p_AllMonitoredValues->M_vx_ki->Data.OriginalData            = &ACC_Object.PID_Vx.Ki;
-        p_AllMonitoredValues->M_vx_kd->Data.OriginalData            = &ACC_Object.PID_Vx.Kd;
-        p_AllMonitoredValues->M_vx_n->Data.OriginalData             = &ACC_Object.PID_Vx.N;
+        p_AllMonitoredValues->M_vx_kp->Data.OriginalData            = &Main_Orientation.PID.Kp;
+        p_AllMonitoredValues->M_vx_ki->Data.OriginalData            = &Main_Orientation.PID.Ki;
+        p_AllMonitoredValues->M_vx_kd->Data.OriginalData            = &Main_Orientation.PID.Kd;
+        p_AllMonitoredValues->M_vx_n->Data.OriginalData             = &Main_Orientation.PID.N;
         p_AllMonitoredValues->M_wanted_speed->Data.OriginalData     = &Car_Wanted_Speed;
         p_AllMonitoredValues->M_max_speed->Data.OriginalData        = &Car_Max_Forced_Speed;
 

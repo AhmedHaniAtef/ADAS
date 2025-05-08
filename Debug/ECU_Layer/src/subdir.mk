@@ -10,6 +10,7 @@ C_SRCS += \
 ../ECU_Layer/src/MCP2515.c \
 ../ECU_Layer/src/ecu.c \
 ../ECU_Layer/src/encoder.c \
+../ECU_Layer/src/logic.c \
 ../ECU_Layer/src/monitoring.c \
 ../ECU_Layer/src/motor.c \
 ../ECU_Layer/src/mpu.c \
@@ -23,6 +24,7 @@ OBJS += \
 ./ECU_Layer/src/MCP2515.o \
 ./ECU_Layer/src/ecu.o \
 ./ECU_Layer/src/encoder.o \
+./ECU_Layer/src/logic.o \
 ./ECU_Layer/src/monitoring.o \
 ./ECU_Layer/src/motor.o \
 ./ECU_Layer/src/mpu.o \
@@ -36,6 +38,7 @@ C_DEPS += \
 ./ECU_Layer/src/MCP2515.d \
 ./ECU_Layer/src/ecu.d \
 ./ECU_Layer/src/encoder.d \
+./ECU_Layer/src/logic.d \
 ./ECU_Layer/src/monitoring.d \
 ./ECU_Layer/src/motor.d \
 ./ECU_Layer/src/mpu.d \
@@ -51,7 +54,7 @@ ECU_Layer/src/%.o ECU_Layer/src/%.su ECU_Layer/src/%.cyclo: ../ECU_Layer/src/%.c
 clean: clean-ECU_Layer-2f-src
 
 clean-ECU_Layer-2f-src:
-	-$(RM) ./ECU_Layer/src/CANSPI.cyclo ./ECU_Layer/src/CANSPI.d ./ECU_Layer/src/CANSPI.o ./ECU_Layer/src/CANSPI.su ./ECU_Layer/src/Control.cyclo ./ECU_Layer/src/Control.d ./ECU_Layer/src/Control.o ./ECU_Layer/src/Control.su ./ECU_Layer/src/MCP2515.cyclo ./ECU_Layer/src/MCP2515.d ./ECU_Layer/src/MCP2515.o ./ECU_Layer/src/MCP2515.su ./ECU_Layer/src/ecu.cyclo ./ECU_Layer/src/ecu.d ./ECU_Layer/src/ecu.o ./ECU_Layer/src/ecu.su ./ECU_Layer/src/encoder.cyclo ./ECU_Layer/src/encoder.d ./ECU_Layer/src/encoder.o ./ECU_Layer/src/encoder.su ./ECU_Layer/src/monitoring.cyclo ./ECU_Layer/src/monitoring.d ./ECU_Layer/src/monitoring.o ./ECU_Layer/src/monitoring.su ./ECU_Layer/src/motor.cyclo ./ECU_Layer/src/motor.d ./ECU_Layer/src/motor.o ./ECU_Layer/src/motor.su ./ECU_Layer/src/mpu.cyclo ./ECU_Layer/src/mpu.d ./ECU_Layer/src/mpu.o ./ECU_Layer/src/mpu.su ./ECU_Layer/src/qmc5883l.cyclo ./ECU_Layer/src/qmc5883l.d ./ECU_Layer/src/qmc5883l.o ./ECU_Layer/src/qmc5883l.su ./ECU_Layer/src/robot.cyclo ./ECU_Layer/src/robot.d ./ECU_Layer/src/robot.o ./ECU_Layer/src/robot.su ./ECU_Layer/src/ultrasonic.cyclo ./ECU_Layer/src/ultrasonic.d ./ECU_Layer/src/ultrasonic.o ./ECU_Layer/src/ultrasonic.su
+	-$(RM) ./ECU_Layer/src/CANSPI.cyclo ./ECU_Layer/src/CANSPI.d ./ECU_Layer/src/CANSPI.o ./ECU_Layer/src/CANSPI.su ./ECU_Layer/src/Control.cyclo ./ECU_Layer/src/Control.d ./ECU_Layer/src/Control.o ./ECU_Layer/src/Control.su ./ECU_Layer/src/MCP2515.cyclo ./ECU_Layer/src/MCP2515.d ./ECU_Layer/src/MCP2515.o ./ECU_Layer/src/MCP2515.su ./ECU_Layer/src/ecu.cyclo ./ECU_Layer/src/ecu.d ./ECU_Layer/src/ecu.o ./ECU_Layer/src/ecu.su ./ECU_Layer/src/encoder.cyclo ./ECU_Layer/src/encoder.d ./ECU_Layer/src/encoder.o ./ECU_Layer/src/encoder.su ./ECU_Layer/src/logic.cyclo ./ECU_Layer/src/logic.d ./ECU_Layer/src/logic.o ./ECU_Layer/src/logic.su ./ECU_Layer/src/monitoring.cyclo ./ECU_Layer/src/monitoring.d ./ECU_Layer/src/monitoring.o ./ECU_Layer/src/monitoring.su ./ECU_Layer/src/motor.cyclo ./ECU_Layer/src/motor.d ./ECU_Layer/src/motor.o ./ECU_Layer/src/motor.su ./ECU_Layer/src/mpu.cyclo ./ECU_Layer/src/mpu.d ./ECU_Layer/src/mpu.o ./ECU_Layer/src/mpu.su ./ECU_Layer/src/qmc5883l.cyclo ./ECU_Layer/src/qmc5883l.d ./ECU_Layer/src/qmc5883l.o ./ECU_Layer/src/qmc5883l.su ./ECU_Layer/src/robot.cyclo ./ECU_Layer/src/robot.d ./ECU_Layer/src/robot.o ./ECU_Layer/src/robot.su ./ECU_Layer/src/ultrasonic.cyclo ./ECU_Layer/src/ultrasonic.d ./ECU_Layer/src/ultrasonic.o ./ECU_Layer/src/ultrasonic.su
 
 .PHONY: clean-ECU_Layer-2f-src
 
