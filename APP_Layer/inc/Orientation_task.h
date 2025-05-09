@@ -40,7 +40,7 @@
     PID_Controller PID;
     float_t *MpuWz;
     float_t *CompassYAW;
-    float_t FilteredYAW;
+    float_t FilteredYAW;  
     float_t GyroBias;
     float_t dt;
  }orientation_t;

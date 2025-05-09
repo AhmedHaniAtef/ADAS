@@ -41,6 +41,8 @@
 #define ROBOT_LENGHT_X          (0.0925)
 #define ROBOT_LENGHT_Y          (0.085)
 #define RADIUS_WHEEL            (0.03)
+#define ROBOT_TOTAL_LENGTH_X    (0.4f)
+#define ROBOT_TOTAL_LENGTH_Y    (0.25f)
 
 #define DEFUALT_Kp_VALUE        (0.85f)
 #define DEFUALT_Ki_VALUE        (9.5f)

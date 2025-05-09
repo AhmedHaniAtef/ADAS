@@ -150,6 +150,7 @@ ACC_t ACC_Object =
 /* Auto Parking objects */
 float_t FL_Encoder_pos = 0.0f;
 float_t FR_Encoder_pos = 0.0f;
+APK_t APK_Object;
 
 /* Blind Spot Detection Objects*/
 BSD_t BSD_Object = 

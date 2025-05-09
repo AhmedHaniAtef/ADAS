@@ -24,6 +24,7 @@
 #include "TSR_feature.h"
 #include "BSD_feature.h"
 #include "ALC_feature.h"
+#include "APK_feature.h"
 
 
 /***********************************************************************************************************************
@@ -86,6 +87,33 @@
 
 #define MIN_ANGLE_LANE_CHANGE (5.0f)
 #define MAX_ANGLE_LANE_CHANGE (45.0f)
+
+#define MIN_DISTANCE_PARKING_X_AXIS (60.0f)   // in cm
+#define MIN_DISTANCE_PARKING_Y_AXIS (40.0f)   // in cm
+
+#define HALF_MIN_DISTANCE_PARKING_X_AXIS (0.3f)   // in m
+#define HALF_MIN_DISTANCE_PARKING_Y_AXIS (0.2f)   // in m
+
+#define AUTOPARKING_SAME_AXIS    (0.0f)    // in same axis
+#define AUTOPARKING_ROTATE_AXIS  (1.0f)    // in rotate axis
+
+#define PARKING_ROTATE_CLOCKWISE     (0.0f)    // +90
+#define PARKING_ROTATE_ANTI_CLOCKWISE (1.0f)    // -90
+
+#define RIGHT_PARKING_SIDE       (0.0f)    // in right side
+#define LEFT_PARKING_SIDE        (1.0f)    // in left side
+#define NO_PARKING_SIDE          (2.0F)    // no space to parking
+
+#define MODE_PARKING_SEARCH      (0.0f)    // search for parking
+#define MODE_PARKING_UNPARK      (1.0f)    // unpark from the parking
+#define MODE_PARKING_PARK        (2.0f)    // park in the parking
+
+#define DEFAULT_PARKING_ROTATE_ANGLE_LEFT  (90.0f)
+#define DEFAULT_PARKING_ROTATE_ANGLE_RIGHT (-90.0f)
+
+#define MIN_DISTANCE_CAR_X_AXIS (7.5f)   // in cm
+#define MIN_DISTANCE_CAR_Y_AXIS (10.0f)   // in cm
+
 /***********************************************************************************************************************
 *                                                   MACRO FUNCTIONS                                                    *
 ***********************************************************************************************************************/
@@ -128,7 +156,7 @@ extern monitor_values_t Main_Monitor_values;
 extern controller_t Main_Controller;
 
 /* Orientation objects */
-extern orientation_t Main_Orientation;
+extern orientation_t Main_Orientation; 
 
 /* Adaptive cruise control */
 extern ACC_t ACC_Object;
@@ -136,9 +164,14 @@ extern ACC_t ACC_Object;
 /* Auto Parking objects */
 extern float_t FL_Encoder_pos;
 extern float_t FR_Encoder_pos;
+extern APK_t APK_Object;
 
 /* Blind Spot Detection Objects*/
 extern BSD_t BSD_Object;
+
+
+
+
 
 /***********************************************************************************************************************
 *                                                      DATA TYPES                                                      *

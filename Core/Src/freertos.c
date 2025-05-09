@@ -128,6 +128,13 @@ const osThreadAttr_t BUZZ_task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityRealtime,
 };
+/* Definitions for APK_Task */
+osThreadId_t APK_TaskHandle;
+const osThreadAttr_t APK_Task_attributes = {
+  .name = "APK_Task",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityHigh3,
+};
 /* Definitions for Timer_test */
 osTimerId_t Timer_testHandle;
 const osTimerAttr_t Timer_test_attributes = {
@@ -199,6 +206,7 @@ void ACCtask(void *argument);
 void TSRtask(void *argument);
 void BSDtask(void *argument);
 void BUZZtask(void *argument);
+void APKtask(void *argument);
 void callback_test(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -288,6 +296,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of BUZZ_task */
   BUZZ_taskHandle = osThreadNew(BUZZtask, NULL, &BUZZ_task_attributes);
+
+  /* creation of APK_Task */
+  APK_TaskHandle = osThreadNew(APKtask, NULL, &APK_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -571,6 +582,30 @@ void BUZZtask(void *argument)
       BuzzerSuspend()
   }
   /* USER CODE END BUZZtask */
+}
+
+/* USER CODE BEGIN Header_APKtask */
+/**
+* @brief Function implementing the APK_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_APKtask */
+void APKtask(void *argument)
+{
+  /* USER CODE BEGIN APKtask */
+  app_status_t t_AppStatus = APP_OK;
+  /* Infinite loop */
+  for(;;)
+  {
+    t_AppStatus |= APK_Task(&APK_Object);
+    if(APK_Object.Mode_Parking == MODE_PARKING_PARK)
+    {
+      osThreadSuspend(APK_TaskHandle);
+    }
+    osDelay(50);
+  }
+  /* USER CODE END APKtask */
 }
 
 /* callback_test function */
