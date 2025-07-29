@@ -45,7 +45,7 @@ All modules are deployed on a two-tier embedded platform: **STM32F401** for real
 | MCU | STM32CubeIDE, HAL, FreeRTOS |
 | SBC | Python, OpenCV, TensorFlow Lite, YOLOv5 |
 | Communication | CAN, SPI, I2C, UART |
-| GUI | PyQt5 for monitoring/control |
+| GUI | Custom Tkinter for monitoring/control |
 | AI | Custom-trained models with Roboflow & TensorFlow |
 
 ---
