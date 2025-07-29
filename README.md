@@ -65,11 +65,11 @@ All modules are deployed on a two-tier embedded platform: **STM32F401** for real
 ### ✅ Driver Drowsiness Detection (DDD)
 - Facial landmarks detection via TensorFlow Lite
 - Eye closure, yawning, and head orientation tracking
-- Real-time inference on Raspberry Pi
+- Real-time inference on PC
 
 ### ✅ Traffic Sign Recognition (TSR)
 - Custom YOLOv5 model trained via Roboflow
-- Real-time camera feed processing
+- Real-time camera feed processing on Raspberry Pi 5
 - CAN-integrated command generation
 
 ### ✅ Auto Parking
