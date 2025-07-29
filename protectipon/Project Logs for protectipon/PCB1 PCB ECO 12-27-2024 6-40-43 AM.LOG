@@ -1,0 +1,31 @@
+Removed Pin From Net: NetName=3.3 Pin=P1-2
+Removed Pin From Net: NetName=GND Pin=P2-1
+Removed Pin From Net: NetName=GND Pin=U1-3
+Removed Pin From Net: NetName=GND Pin=U2-3
+Removed Pin From Net: NetName=GND Pin=U3-3
+Removed Pin From Net: NetName=GND Pin=U4-3
+Removed Pin From Net: NetName=GND Pin=U5-3
+Removed Pin From Net: NetName=GND Pin=U6-3
+Removed Pin From Net: NetName=GND Pin=U7-3
+Removed Pin From Net: NetName=GND Pin=U8-3
+Removed Pin From Net: NetName=GND Pin=U9-3
+Removed Pin From Net: NetName=GND Pin=U10-3
+Removed Pin From Net: NetName=GND Pin=U11-3
+Removed Pin From Net: NetName=GND Pin=U12-3
+Added Pin To Net: NetName=3.3 Pin=P2-1
+Added Pin To Net: NetName=GND5 Pin=P1-2
+Added Pin To Net: NetName=GND5 Pin=U1-3
+Added Pin To Net: NetName=GND5 Pin=U2-3
+Added Pin To Net: NetName=GND5 Pin=U3-3
+Added Pin To Net: NetName=GND5 Pin=U4-3
+Added Pin To Net: NetName=GND5 Pin=U5-3
+Added Pin To Net: NetName=GND5 Pin=U6-3
+Added Pin To Net: NetName=GND5 Pin=U7-3
+Added Pin To Net: NetName=GND5 Pin=U8-3
+Added Pin To Net: NetName=GND5 Pin=U9-3
+Added Pin To Net: NetName=GND5 Pin=U10-3
+Added Pin To Net: NetName=GND5 Pin=U11-3
+Added Pin To Net: NetName=GND5 Pin=U12-3
+Added Net: Name=GND5
+Added Member To Class: ClassName=Sheet1 Member=Component R8 Res2
+Added Room: Name=Sheet1

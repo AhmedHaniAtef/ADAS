@@ -1,0 +1,48 @@
+Change Component Designator: OldDesignator=R? NewDesignator=R1
+Change Component Designator: OldDesignator=R? NewDesignator=R2
+Change Component Designator: OldDesignator=R? NewDesignator=R3
+Change Component Designator: OldDesignator=R? NewDesignator=R4
+Change Component Designator: OldDesignator=R? NewDesignator=R5
+Change Component Designator: OldDesignator=R? NewDesignator=R6
+Change Component Designator: OldDesignator=R? NewDesignator=R7
+Change Component Designator: OldDesignator=R? NewDesignator=R8
+Change Component Designator: OldDesignator=R? NewDesignator=R9
+Change Component Designator: OldDesignator=R? NewDesignator=R10
+Change Component Designator: OldDesignator=R? NewDesignator=R11
+Change Component Designator: OldDesignator=R? NewDesignator=R12
+Change Component Designator: OldDesignator=R? NewDesignator=R13
+Change Component Designator: OldDesignator=R? NewDesignator=R14
+Change Component Designator: OldDesignator=R? NewDesignator=R15
+Change Component Designator: OldDesignator=R? NewDesignator=R16
+Change Component Designator: OldDesignator=R? NewDesignator=R17
+Change Component Designator: OldDesignator=R? NewDesignator=R18
+Change Component Designator: OldDesignator=R? NewDesignator=R19
+Change Component Designator: OldDesignator=R? NewDesignator=R20
+Change Component Designator: OldDesignator=R? NewDesignator=R21
+Change Component Designator: OldDesignator=R? NewDesignator=R22
+Change Component Designator: OldDesignator=R? NewDesignator=R23
+Change Component Designator: OldDesignator=R? NewDesignator=R24
+Added Member To Class: ClassName=Sheet1 Member=Component R1 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R2 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R3 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R4 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R5 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R6 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R7 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R8 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R9 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R10 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R11 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R12 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R13 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R14 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R15 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R16 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R17 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R18 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R20 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R21 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R22 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R23 Res2
+Added Member To Class: ClassName=Sheet1 Member=Component R24 Res2
+Added Room: Name=Sheet1

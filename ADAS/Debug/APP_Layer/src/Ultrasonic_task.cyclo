@@ -1,0 +1,11 @@
+../APP_Layer/src/Ultrasonic_task.c:96:14:ultrasonics_task_init	3
+../APP_Layer/src/Ultrasonic_task.c:129:14:ultrasonics_update_task_X	3
+../APP_Layer/src/Ultrasonic_task.c:157:14:ultrasonics_update_task_U	3
+../APP_Layer/src/Ultrasonic_task.c:185:14:ultrasonics_update_task_Y	3
+../APP_Layer/src/Ultrasonic_task.c:213:14:ultrasonics_update_task_V	3
+../APP_Layer/src/Ultrasonic_task.c:242:14:ultrasonics_outlier_detect_X	2
+../APP_Layer/src/Ultrasonic_task.c:269:14:ultrasonics_outlier_detect_U	2
+../APP_Layer/src/Ultrasonic_task.c:296:14:ultrasonics_outlier_detect_Y	2
+../APP_Layer/src/Ultrasonic_task.c:323:14:ultrasonics_outlier_detect_V	2
+../APP_Layer/src/Ultrasonic_task.c:354:13:shift_readings	2
+../APP_Layer/src/Ultrasonic_task.c:372:16:outlier_detect	5

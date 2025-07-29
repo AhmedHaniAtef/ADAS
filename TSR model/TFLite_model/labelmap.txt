@@ -1,0 +1,14 @@
+stop
+red
+green
+crosswalk
+direction
+speed30
+speed40
+speed50
+speed60
+speed70
+speed80
+speed90
+speed100
+speed120

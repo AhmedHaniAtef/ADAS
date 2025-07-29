@@ -1,0 +1,8 @@
+../lib/src/my_list.c:5:7:list_create	2
+../lib/src/my_list.c:14:6:list_destroy	4
+../lib/src/my_list.c:28:6:list_append	5
+../lib/src/my_list.c:46:6:list_prepend	5
+../lib/src/my_list.c:64:7:list_remove_head	4
+../lib/src/my_list.c:80:7:list_remove_tail	4
+../lib/src/my_list.c:96:8:list_size	2
+../lib/src/my_list.c:101:7:list_find	5

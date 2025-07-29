@@ -1,0 +1,6 @@
+../ECU_Layer/src/motor.c:74:14:motor_init	5
+../ECU_Layer/src/motor.c:101:14:motor_move_forward	2
+../ECU_Layer/src/motor.c:123:14:motor_move_backward	2
+../ECU_Layer/src/motor.c:144:14:motor_stop	2
+../ECU_Layer/src/motor.c:167:14:motor_change_speed	5
+../ECU_Layer/src/motor.c:191:14:motor_calibrate	4

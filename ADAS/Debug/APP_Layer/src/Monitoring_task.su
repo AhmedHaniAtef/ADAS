@@ -1,0 +1,3 @@
+../APP_Layer/src/Monitoring_task.c:75:14:monitor_task_init	24	static
+../APP_Layer/src/Monitoring_task.c:160:14:monitor_update_task	24	static
+../APP_Layer/src/Monitoring_task.c:231:13:update	16	static

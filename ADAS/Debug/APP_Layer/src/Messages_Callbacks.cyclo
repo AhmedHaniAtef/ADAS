@@ -1,0 +1,8 @@
+../APP_Layer/src/Messages_Callbacks.c:132:14:messages_init	1
+../APP_Layer/src/Messages_Callbacks.c:151:13:msg_robot_strafe_clb	3
+../APP_Layer/src/Messages_Callbacks.c:181:13:msg_robot_rotate_clb	1
+../APP_Layer/src/Messages_Callbacks.c:193:13:msg_robot_stop_clb	1
+../APP_Layer/src/Messages_Callbacks.c:206:13:msg_robot_Wz_clb	1
+../APP_Layer/src/Messages_Callbacks.c:217:13:msg_sign_detected_clb	1
+../APP_Layer/src/Messages_Callbacks.c:232:13:msg_lane_update_clb	1
+../APP_Layer/src/Messages_Callbacks.c:244:13:msg_update_encoder_clb	1

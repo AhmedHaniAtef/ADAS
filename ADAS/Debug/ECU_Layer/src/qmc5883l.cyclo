@@ -1,0 +1,6 @@
+../ECU_Layer/src/qmc5883l.c:94:14:QMC5883L_init	5
+../ECU_Layer/src/qmc5883l.c:143:14:QMC5883L_read_raw	6
+../ECU_Layer/src/qmc5883l.c:182:14:QMC5883L_read_angle	5
+../ECU_Layer/src/qmc5883l.c:224:21:QMC5883L_read_reg	5
+../ECU_Layer/src/qmc5883l.c:257:21:QMC5883L_write_reg	4
+../ECU_Layer/src/qmc5883l.c:282:14:read_control_register	2

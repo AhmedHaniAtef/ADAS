@@ -1,0 +1,5 @@
+../lib/src/my_queue.c:5:8:queue_create	16	static
+../lib/src/my_queue.c:18:6:queue_destroy	16	static
+../lib/src/my_queue.c:26:6:queue_enqueue	16	static
+../lib/src/my_queue.c:33:7:queue_dequeue	16	static
+../lib/src/my_queue.c:40:8:queue_size	16	static

@@ -1,0 +1,6 @@
+../APP_Layer/src/CAN_task.c:76:14:CAN_task_init	24	static
+../APP_Layer/src/CAN_task.c:103:14:CAN_add_msg_rx	24	static
+../APP_Layer/src/CAN_task.c:124:14:CAN_rx_task	48	static
+../APP_Layer/src/CAN_task.c:158:14:CAN_send_message	24	static
+../APP_Layer/src/CAN_task.c:197:6:CAN_CLEAR_INT	16	static
+../APP_Layer/src/CAN_task.c:214:12:find_msg_with_id	24	static

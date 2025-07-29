@@ -1,0 +1,8 @@
+Adaptive cruise control|push|1
+Traffic Sign Recognition|push|2
+Blind Spot Detection|push|3
+Change Lane Left|push|4
+Change Lane Right|push|6
+Park|push|5
+Start Car  (30% speed)|push|7
+Stop Car|push|8

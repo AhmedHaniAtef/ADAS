@@ -1,0 +1,7 @@
+../Core/Src/freertos.c:104:13:configureTimerForRunTimeStats	4	static
+../Core/Src/freertos.c:109:22:getRunTimeCounterValue	4	static
+../Core/Src/freertos.c:120:6:MX_FREERTOS_Init	8	static
+../Core/Src/freertos.c:178:6:PIDtask	24	static
+../Core/Src/freertos.c:199:6:CANtask	24	static
+../Core/Src/freertos.c:222:6:EncoderTask	24	static
+../Core/Src/freertos.c:246:6:HAL_GPIO_EXTI_Callback	16	static

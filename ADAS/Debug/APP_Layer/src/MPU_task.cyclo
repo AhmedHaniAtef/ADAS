@@ -1,0 +1,2 @@
+../APP_Layer/src/MPU_task.c:72:14:MPU_task_init	3
+../APP_Layer/src/MPU_task.c:95:14:MPU_update_task	3

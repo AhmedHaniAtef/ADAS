@@ -1,0 +1,6 @@
+../ECU_Layer/src/robot.c:105:14:robot_move	64	static
+../ECU_Layer/src/robot.c:200:14:robot_rotate	64	static
+../ECU_Layer/src/robot.c:295:14:robot_stop	24	static
+../ECU_Layer/src/robot.c:334:14:robot_init	24	static
+../ECU_Layer/src/robot.c:386:14:robot_calibrate	32	static
+../ECU_Layer/src/robot.c:457:14:robot_PID	24	static

@@ -1,0 +1,6 @@
+../APP_Layer/src/CAN_task.c:76:14:CAN_task_init	4
+../APP_Layer/src/CAN_task.c:103:14:CAN_add_msg_rx	3
+../APP_Layer/src/CAN_task.c:124:14:CAN_rx_task	4
+../APP_Layer/src/CAN_task.c:158:14:CAN_send_message	7
+../APP_Layer/src/CAN_task.c:202:6:CAN_CLEAR_INT	1
+../APP_Layer/src/CAN_task.c:219:12:find_msg_with_id	2

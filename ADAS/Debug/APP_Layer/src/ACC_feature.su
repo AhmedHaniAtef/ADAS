@@ -1,0 +1,6 @@
+../APP_Layer/src/ACC_feature.c:96:14:ACC_relative_task	32	static
+../APP_Layer/src/ACC_feature.c:131:14:ACC_task_init	24	static
+../APP_Layer/src/ACC_feature.c:153:9:Max_speed_responsible	24	static
+../APP_Layer/src/ACC_feature.c:182:21:ACC_action_task_x	32	static
+../APP_Layer/src/ACC_feature.c:206:21:ACC_action_task_y_neg	32	static
+../APP_Layer/src/ACC_feature.c:228:21:ACC_action_task_y_pos	32	static
